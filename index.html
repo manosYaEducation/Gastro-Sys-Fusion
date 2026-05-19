@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gastro-Sys-Fusion — Plataforma gastronómica inteligente. Descubre nuestra selección de platos gourmet preparados por chefs expertos." />
+  <title>Gastro-Sys-Fusion | Menú Gourmet</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="frontend/css/base/index.css" />
+
+  <!-- Favicon inline SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+</head>
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+
+      <ul class="navbar__nav" role="list">
+        <li><a href="#menu" id="nav-menu-link">Menú</a></li>
+        <li><a href="#nosotros" id="nav-nosotros-link">Nosotros</a></li>
+        <li><a href="#contacto" id="nav-contacto-link">Contacto</a></li>
+        <li><a href="frontend/login.html" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===========================
+       HERO
+  ============================ -->
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="hero__eyebrow">
+        <span aria-hidden="true">✦</span>
+        Experiencia Gastronómica
+      </p>
+      <h1 class="hero__title" id="hero-title">
+        El arte de la cocina,<br />
+        <span>redefinido.</span>
+      </h1>
+      <p class="hero__subtitle">
+        Cada plato cuenta una historia. Seleccionamos los mejores ingredientes
+        y técnicas culinarias para llevarte una experiencia única en cada bocado.
+      </p>
+    </section>
+
+    <!-- ===========================
+         PLATOS / CARDS
+    ============================ -->
+    <section class="dishes-section" id="menu" aria-labelledby="dishes-label">
+      <p class="dishes-section__label" id="dishes-label">⬥ Platos destacados ⬥</p>
+
+      <!-- Las cards se renderizan dinámicamente desde la BD -->
+      <div class="dishes-grid" id="dishes-grid" role="list" aria-live="polite" aria-label="Listado de platos">
+        <!-- Estado de carga -->
+        <div class="dish-card dish-card--skeleton" aria-hidden="true"></div>
+        <div class="dish-card dish-card--skeleton" aria-hidden="true"></div>
+      </div>
+
+      <!-- Mensaje de error oculto -->
+      <p class="dishes-error" id="dishes-error" hidden>
+        ⚠️ No se pudieron cargar los platos. Verifica la conexión con la base de datos.
+      </p>
+    </section>
+  </main>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+    <ul class="footer__links" role="list">
+      <li><a href="#menu" id="footer-menu-link">Menú</a></li>
+      <li><a href="#nosotros" id="footer-nosotros-link">Nosotros</a></li>
+      <li><a href="#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="frontend/js/config.js"></script>
+  <script src="frontend/js/platos.js"></script>
+
+</body>
+</html>
