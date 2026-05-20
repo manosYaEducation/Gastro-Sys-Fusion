@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Menú completo de Gastro-Sys-Fusion — Explora nuestra carta con los mejores platos gourmet." />
+  <title>Menú Completo | Gastro-Sys-Fusion</title>
+
+  <!-- CSS: base + menu -->
+  <link rel="stylesheet" href="css/base/index.css" />
+  <link rel="stylesheet" href="css/menu.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+</head>
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+
+      <ul class="navbar__nav" role="list">
+        <li><a href="../index.html#menu" id="nav-menu-link">Inicio</a></li>
+        <li><a href="../index.html#nosotros" id="nav-nosotros-link">Nosotros</a></li>
+        <li><a href="../index.html#contacto" id="nav-contacto-link">Contacto</a></li>
+        <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===========================
+       MENU HERO
+  ============================ -->
+  <main>
+    <section class="menu-hero" aria-labelledby="menu-title">
+      <a href="../index.html" class="menu-back" id="menu-back-btn">
+        <span class="menu-back__arrow" aria-hidden="true">←</span>
+        Volver al inicio
+      </a>
+
+      <p class="menu-hero__eyebrow">
+        <span aria-hidden="true">✦</span>
+        Nuestra Carta
+      </p>
+      <h1 class="menu-hero__title" id="menu-title">
+        Menú <span>Completo</span>
+      </h1>
+      <p class="menu-hero__subtitle">
+        Descubre todos nuestros platos, cuidadosamente elaborados con ingredientes
+        de primera calidad y la pasión de nuestros chefs.
+      </p>
+    </section>
+
+    <!-- ===========================
+         CATEGORY FILTERS
+    ============================ -->
+    <div class="menu-filters" id="menu-filters" role="tablist" aria-label="Filtrar por categoría">
+      <button class="menu-filter-btn menu-filter-btn--active" data-category="all" id="filter-all" role="tab" aria-selected="true">
+        Todos
+      </button>
+      <button class="menu-filter-btn" data-category="entrada" id="filter-entrada" role="tab" aria-selected="false">
+        🥗 Entradas
+      </button>
+      <button class="menu-filter-btn" data-category="principal" id="filter-principal" role="tab" aria-selected="false">
+        🥩 Principales
+      </button>
+      <button class="menu-filter-btn" data-category="postre" id="filter-postre" role="tab" aria-selected="false">
+        🍰 Postres
+      </button>
+      <button class="menu-filter-btn" data-category="bebida" id="filter-bebida" role="tab" aria-selected="false">
+        🍷 Bebidas
+      </button>
+    </div>
+
+    <!-- ===========================
+         MENU LIST
+    ============================ -->
+    <section class="menu-list-section" id="menu-list-section" aria-label="Lista de platos del menú">
+
+      <!-- Count badge -->
+
+      <div class="menu-count" id="menu-count">
+        <span class="menu-count__badge">
+          Selecciona entre nuestros <span class="menu-count__number" id="menu-count-number">0</span> platillos, y disfruta de la gran variedad de comida, bebidas y postres
+        </span>
+      </div>
+
+      <!-- Items rendered by JS -->
+      <div id="menu-items-container" role="list" aria-live="polite">
+        <!-- Loading skeleton -->
+        <div class="menu-item" style="opacity:0.3;pointer-events:none" aria-hidden="true">
+          <div class="menu-item__number" style="background:var(--color-card)">·</div>
+          <div class="menu-item__content">
+            <div style="height:14px;width:60%;background:var(--color-card-hover);border-radius:6px;margin-bottom:8px"></div>
+            <div style="height:10px;width:80%;background:var(--color-card-hover);border-radius:6px"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+    <ul class="footer__links" role="list">
+      <li><a href="../index.html" id="footer-inicio-link">Inicio</a></li>
+      <li><a href="../index.html#nosotros" id="footer-nosotros-link">Nosotros</a></li>
+      <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- ===========================
+       MENU SCRIPT
+  ============================ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    /* ====================================================
+       DATA — 10 platos de ejemplo con categoría y precio.
+       ¡Modifica los nombres, descripciones y precios
+       directamente aquí para ir probando!
+    ==================================================== */
+    const menuData = [
+      {
+        id: 1,
+        nombre: 'Plato 1 ',
+        descripcion: 'Descripción.',
+        categoria: 'entrada',
+        precio: 8500
+      },
+      {
+        id: 2,
+        nombre: 'Plato 2',
+        descripcion: 'Descripción.',
+        categoria: 'entrada',
+        precio: 7200
+      },
+      {
+        id: 3,
+        nombre: 'Plato 3 ',
+        descripcion: 'Descripción.',
+        categoria: 'principal',
+        precio: 16900
+      },
+      {
+        id: 4,
+        nombre: 'Plato 4 ',
+        descripcion: 'Descripción.',
+        categoria: 'principal',
+        precio: 18500
+      },
+      {
+        id: 5,
+        nombre: 'Plato 5 ',
+        descripcion: 'Descripción.',
+        categoria: 'principal',
+        precio: 21000
+      },
+      {
+        id: 6,
+        nombre: 'Plato 6 ',
+        descripcion: 'Descripción.',
+        categoria: 'principal',
+        precio: 14800
+      },
+      {
+        id: 7,
+        nombre: 'Plato 7 ',
+        descripcion: 'Descripción.',
+        categoria: 'postre',
+        precio: 6500
+      },
+      {
+        id: 8,
+        nombre: 'Plato 8 ',
+        descripcion: 'Descripción.',
+        categoria: 'postre',
+        precio: 7800
+      },
+      {
+        id: 9,
+        nombre: 'Plato 9 ',
+        descripcion: 'Descripción.',
+        categoria: 'bebida',
+        precio: 4500
+      },
+      {
+        id: 10,
+        nombre: 'Plato 10 ',
+        descripcion: 'Descripción.',
+        categoria: 'bebida',
+        precio: 5200
+      }
+    ];
+
+    /* ====================================================
+       CATEGORY ICONS
+    ==================================================== */
+    const categoryIcons = {
+      entrada:   '🥗',
+      principal: '🥩',
+      postre:    '🍰',
+      bebida:    '🍷'
+    };
+
+    const categoryLabels = {
+      entrada:   'Entradas',
+      principal: 'Platos Principales',
+      postre:    'Postres',
+      bebida:    'Bebidas'
+    };
+
+    /* ====================================================
+       FORMAT PRICE — Chilean peso format
+    ==================================================== */
+    function formatPrecio(valor) {
+      return '$' + Number(valor).toLocaleString('es-CL');
+    }
+
+    /* ====================================================
+       RENDER MENU ITEMS
+    ==================================================== */
+    const container   = document.getElementById('menu-items-container');
+    const countNumber = document.getElementById('menu-count-number');
+    let activeFilter  = 'all';
+
+    function renderMenu(filter) {
+      const filtered = filter === 'all'
+        ? menuData
+        : menuData.filter(item => item.categoria === filter);
+
+      container.innerHTML = '';
+      countNumber.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="menu-empty">
+            <div class="menu-empty__icon">🍽️</div>
+            <p class="menu-empty__text">No hay platos en esta categoría por el momento.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Group by category if showing "all"
+      if (filter === 'all') {
+        const categories = ['entrada', 'principal', 'postre', 'bebida'];
+        let globalIndex = 1;
+
+        categories.forEach(cat => {
+          const items = menuData.filter(item => item.categoria === cat);
+          if (items.length === 0) return;
+
+          // Category header
+          const header = document.createElement('div');
+          header.className = 'menu-category-label';
+          header.innerHTML = `
+            <span class="menu-category-label__icon" aria-hidden="true">${categoryIcons[cat] || '🍽️'}</span>
+            ${categoryLabels[cat] || cat}
+          `;
+          container.appendChild(header);
+
+          // Items
+          items.forEach(item => {
+            container.appendChild(buildMenuItem(item, globalIndex));
+            globalIndex++;
+          });
+        });
+      } else {
+        filtered.forEach((item, i) => {
+          container.appendChild(buildMenuItem(item, i + 1));
+        });
+      }
+    }
+
+    function buildMenuItem(item, index) {
+      const row = document.createElement('div');
+      row.className = 'menu-item';
+      row.setAttribute('role', 'listitem');
+      row.setAttribute('id', `menu-item-${item.id}`);
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-label', `${item.nombre} — ${formatPrecio(item.precio)}`);
+
+      row.innerHTML = `
+        <div class="menu-item__number">${String(index).padStart(2, '0')}</div>
+        <div class="menu-item__content">
+          <span class="menu-item__category">${categoryIcons[item.categoria] || ''} ${categoryLabels[item.categoria] || item.categoria}</span>
+          <h2 class="menu-item__name">${item.nombre}</h2>
+          <p class="menu-item__desc">${item.descripcion}</p>
+        </div>
+        <div class="menu-item__dots" aria-hidden="true"></div>
+        <span class="menu-item__price">${formatPrecio(item.precio)}</span>
+      `;
+
+      return row;
+    }
+
+    /* ====================================================
+       FILTER BUTTONS
+    ==================================================== */
+    const filterBtns = document.querySelectorAll('.menu-filter-btn');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active states
+        filterBtns.forEach(b => {
+          b.classList.remove('menu-filter-btn--active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('menu-filter-btn--active');
+        btn.setAttribute('aria-selected', 'true');
+
+        activeFilter = btn.dataset.category;
+        renderMenu(activeFilter);
+      });
+    });
+
+    /* ====================================================
+       INITIAL RENDER
+    ==================================================== */
+    renderMenu('all');
+
+  });
+  </script>
+
+</body>
+</html>
