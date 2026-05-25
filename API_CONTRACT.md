@@ -97,13 +97,15 @@ GET /api/menu.php?clima=10&condicion=frio
       "precio": 16900,
       "imagen_url": "plato_pasta.png",
       "clima_recomendar": "frio",
-      "temp_min_recomendar": 0,
-      "temp_max_recomendar": 14,
+      "recomendado_por_clima": true,
+      "tiene_stock": true,
+      "insumos_agotados": 0,
       "categoria": "Pastas"
     }
   ],
   "meta": {
-    "total": 3,
+    "total": 7,
+    "total_recomendados": 4,
     "generado_en": "2026-05-25T13:00:00-04:00",
     "condicion": "frio",
     "temperatura": 10,
@@ -112,6 +114,13 @@ GET /api/menu.php?clima=10&condicion=frio
   "error": null
 }
 ```
+
+> **Reglas de negocio (T1.2):**
+> - Solo se incluyen platos con `disponible = 1` **Y** `tiene_stock = true` (stock suficiente en todos los insumos de la receta).
+> - Platos con al menos un insumo agotado (`stock_actual < cantidad_receta`) se excluyen silenciosamente.
+> - El campo `recomendado_por_clima: true/false` indica si el plato calza con la condición climática solicitada.
+> - Los platos se devuelven ordenados: recomendados primero, luego el resto (ambos grupos con stock suficiente).
+> - Si no se pasan parámetros, el endpoint auto-detecta el clima vía `/api/clima.php`.
 
 ---
 

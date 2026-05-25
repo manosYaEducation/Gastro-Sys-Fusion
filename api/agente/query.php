@@ -83,7 +83,7 @@ foreach ($palabrasProhibidas as $kw) {
 }
 
 // Limitar a tablas permitidas del dominio gastronómico
-$tablasPermitidas = ['cat_platos', 'cat_categorias', 'inv_insumos', 'inv_recetas', 'ven_pedidos', 'ven_detalle_pedido'];
+$tablasPermitidas = ['cat_platos', 'cat_categorias', 'inv_insumos', 'inv_recetas', 'ven_pedidos', 'ven_detalle_pedido', 'v_platos_disponibles'];
 $mencionaTablaPermitida = false;
 foreach ($tablasPermitidas as $tabla) {
     if (str_contains($sqlNorm, strtoupper($tabla))) {

@@ -4,19 +4,34 @@
  *
  * GET /api/menu.php?clima={temp}&condicion={lluvia|sol|frio|templado}
  *
- * Devuelve los platos recomendados según el clima actual.
- * Si no se pasan parámetros, aplica el motor de reglas automáticamente.
- *
- * Query params:
- *   clima     (float, opcional) – temperatura actual en °C
- *   condicion (string, opcional) – 'lluvia' | 'sol' | 'frio' | 'templado'
+ * Devuelve los platos del menú dinámico con:
+ *   - Filtro de clima (campo recomendado_por_clima: true/false)
+ *   - Solo platos con disponible=1 Y stock suficiente (tiene_stock=1)
+ *   - Platos agotados excluidos de la respuesta
  *
  * Respuesta exitosa:
  * {
  *   "success": true,
- *   "data":    [ { ...plato } ],
- *   "meta":    { "total": N, "generado_en": "...", "condicion": "frio", "temperatura": 10 },
- *   "error":   null
+ *   "data": [
+ *     {
+ *       "id": 1,
+ *       "nombre": "...",
+ *       "precio": 16900,
+ *       "imagen_url": "...",
+ *       "recomendado_por_clima": true,   ← NUEVO
+ *       "tiene_stock": true,              ← NUEVO (siempre true aquí)
+ *       "clima_recomendar": "frio",
+ *       ...
+ *     }
+ *   ],
+ *   "meta": {
+ *     "total": N,
+ *     "total_recomendados": M,
+ *     "condicion": "frio",
+ *     "temperatura": 10,
+ *     "generado_en": "ISO8601"
+ *   },
+ *   "error": null
  * }
  */
 
@@ -27,7 +42,6 @@ header('Access-Control-Allow-Methods: GET, OPTIONS');
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
@@ -36,23 +50,21 @@ require_once __DIR__ . '/../backend/lib/respuesta.php';
 require_once __DIR__ . '/../backend/lib/clima.php';
 
 try {
-    // --- 1. Resolver condición y temperatura ---
+    // ── 1. Resolver condición y temperatura ────────────────────────────────
     $tempParam      = isset($_GET['clima'])     ? (float)  $_GET['clima']     : null;
     $condicionParam = isset($_GET['condicion']) ? (string) $_GET['condicion'] : null;
 
     if ($condicionParam === null || $tempParam === null) {
-        // Auto-detectar con el motor de reglas
-        $climaActual    = obtenerClimaActual();
-        $temperatura    = $tempParam      ?? $climaActual['temperatura'];
-        $condicion      = $condicionParam ?? $climaActual['condicion'];
-        $fuenteClima    = $climaActual['fuente'];
+        $climaData   = obtenerClimaActual();
+        $temperatura = $tempParam      ?? $climaData['temperatura'];
+        $condicion   = $condicionParam ?? $climaData['condicion'];
+        $fuenteClima = $climaData['fuente'];
     } else {
-        $temperatura    = $tempParam;
-        $condicion      = $condicionParam;
-        $fuenteClima    = 'parametro';
+        $temperatura = $tempParam;
+        $condicion   = $condicionParam;
+        $fuenteClima = 'parametro';
     }
 
-    // Validar condicion
     $condicionesValidas = ['lluvia', 'sol', 'frio', 'templado'];
     if (!in_array($condicion, $condicionesValidas, true)) {
         respuestaError(
@@ -61,48 +73,68 @@ try {
         );
     }
 
-    // --- 2. Obtener tags de BD para esa condición ---
-    $tagsDB = condicionATagsDB($condicion);   // ej: ['lluvioso', 'todos']
+    // ── 2. Tags de BD que corresponden a esta condición ────────────────────
+    $tagsClima = condicionATagsDB($condicion);   // ej. ['frio', 'todos']
 
-    // Construir placeholders para IN(?)
-    $placeholders = implode(',', array_fill(0, count($tagsDB), '?'));
-
-    // --- 3. Consultar platos que coincidan ---
-    // Usamos FIND_IN_SET para manejar el formato 'calido,templado' en clima_recomendar
-    $condSQL = implode(' OR ', array_map(
-        fn($tag) => "FIND_IN_SET(?, p.clima_recomendar)",
-        $tagsDB
-    ));
-
+    // ── 3. Traer TODOS los platos con stock suficiente ─────────────────────
+    // Usamos la vista v_platos_disponibles que ya calcula tiene_stock.
+    // Excluimos los agotados (tiene_stock = 0).
     $sql = "
         SELECT
-            p.id,
-            p.nombre,
-            p.descripcion,
-            p.precio,
-            p.imagen_url,
-            p.calorias,
-            p.tiempo_min,
-            p.destacado,
-            p.clima_recomendar,
-            p.temp_min_recomendar,
-            p.temp_max_recomendar,
-            c.nombre AS categoria
-        FROM cat_platos p
-        LEFT JOIN cat_categorias c ON c.id = p.categoria_id
-        WHERE p.disponible = 1
-          AND ($condSQL)
-        ORDER BY p.destacado DESC, p.id ASC
+            id,
+            nombre,
+            descripcion,
+            precio,
+            imagen_url,
+            calorias,
+            tiempo_min,
+            destacado,
+            disponible,
+            clima_recomendar,
+            temp_min_recomendar,
+            temp_max_recomendar,
+            categoria,
+            tiene_stock,
+            insumos_agotados
+        FROM v_platos_disponibles
+        WHERE disponible = 1
+          AND tiene_stock = 1
+        ORDER BY destacado DESC, id ASC
     ";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($tagsDB);
+    $stmt   = $conn->query($sql);
     $platos = $stmt->fetchAll();
 
-    respuestaOk($platos, [
-        'condicion'   => $condicion,
-        'temperatura' => $temperatura,
-        'fuente_clima'=> $fuenteClima,
+    // ── 4. Calcular recomendado_por_clima para cada plato ──────────────────
+    $platosConFlag = array_map(function (array $plato) use ($tagsClima): array {
+        $campoClima = strtolower((string) ($plato['clima_recomendar'] ?? ''));
+        $tagsPlato  = array_map('trim', explode(',', $campoClima));
+
+        // Hay match si comparten algún tag
+        $esRecomendado = !empty(array_intersect($tagsPlato, $tagsClima));
+
+        return array_merge($plato, [
+            'recomendado_por_clima' => $esRecomendado,
+            'tiene_stock'           => (bool) $plato['tiene_stock'],
+        ]);
+    }, $platos);
+
+    // ── 5. Ordenar: recomendados primero, luego el resto ───────────────────
+    usort($platosConFlag, function (array $a, array $b): int {
+        // Recomendados primero
+        $orden = (int) $b['recomendado_por_clima'] <=> (int) $a['recomendado_por_clima'];
+        if ($orden !== 0) return $orden;
+        // Luego destacados
+        return (int) $b['destacado'] <=> (int) $a['destacado'];
+    });
+
+    $totalRecomendados = count(array_filter($platosConFlag, fn($p) => $p['recomendado_por_clima']));
+
+    respuestaOk($platosConFlag, [
+        'condicion'          => $condicion,
+        'temperatura'        => $temperatura,
+        'fuente_clima'       => $fuenteClima,
+        'total_recomendados' => $totalRecomendados,
     ]);
 
 } catch (\PDOException $e) {

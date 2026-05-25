@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res  = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
-      return json.success ? (json.data ?? []) : [];
+      return json.success ? (json.data ?? []).filter(p => p.recomendado_por_clima) : [];
     } catch (err) {
       console.warn('[Gastro-Clima] /api/menu.php no disponible:', err.message);
       // Filtrado local como fallback
