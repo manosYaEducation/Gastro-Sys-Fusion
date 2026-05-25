@@ -21,13 +21,16 @@ try {
             p.nombre,
             p.descripcion,
             p.precio,
-            p.imagen,
+            p.imagen_url,
             p.calorias,
             p.tiempo_min,
             p.destacado,
+            p.clima_recomendar,
+            p.temp_min_recomendar,
+            p.temp_max_recomendar,
             c.nombre AS categoria
-        FROM platos p
-        LEFT JOIN categorias c ON c.id = p.categoria_id
+        FROM cat_platos p
+        LEFT JOIN cat_categorias c ON c.id = p.categoria_id
         WHERE p.disponible = 1
     ";
 
