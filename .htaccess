@@ -50,7 +50,10 @@
   </FilesMatch>
 
   <FilesMatch "\.(html|php)$">
-    Header set Cache-Control "max-age=3600, public, must-revalidate"
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "platos\.js|config\.js">
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
   </FilesMatch>
 </IfModule>
 

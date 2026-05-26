@@ -56,6 +56,20 @@
          PLATOS / CARDS
     ============================ -->
     <section class="dishes-section" id="menu" aria-labelledby="dishes-label">
+      
+      <!-- ===========================
+           SUGERENCIAS SEGÚN EL CLIMA
+      ============================ -->
+      <div class="weather-suggestions-section" id="weather-suggestions-section" hidden>
+        <div class="weather-suggestions-section__header">
+          <h2 class="weather-suggestions-section__title">Recomendado para un Día <span id="weather-condition-span">Soleado</span></h2>
+          <p class="weather-suggestions-section__subtitle">Nuestro chef sugiere estos platos perfectos para la temperatura exterior.</p>
+        </div>
+        <div class="weather-suggestions-grid" id="weather-suggestions-grid" role="list" aria-live="polite" aria-label="Sugerencias de platos según el clima">
+          <!-- Las cards sugeridas se renderizan dinámicamente -->
+        </div>
+      </div>
+
       <p class="dishes-section__label" id="dishes-label">⬥ Platos destacados ⬥</p>
 
       <!-- Las cards se renderizan dinámicamente desde la BD -->
@@ -109,6 +123,53 @@
       <li><a href="#contacto" id="footer-contacto-link">Contacto</a></li>
     </ul>
   </footer>
+
+  <!-- ===========================
+       WIDGET DE CLIMA INTERACTIVO (Gastro-Clima)
+  ============================ -->
+  <div id="weather-widget" class="weather-widget">
+    <div class="weather-widget__header">
+      <div class="weather-widget__title">
+        <span>🌤️</span> Gastro-Clima
+      </div>
+      <button class="weather-widget__toggle-btn" id="weather-widget-toggle" title="Minimizar / Maximizar" aria-label="Minimizar">
+        ➖
+      </button>
+    </div>
+    
+    <div class="weather-widget__body" id="weather-widget-body">
+      <div class="weather-widget__content">
+        <div class="weather-widget__icon-container" id="weather-icon">☀️</div>
+        <div class="weather-widget__info">
+          <span class="weather-widget__temp" id="weather-temp">--°C</span>
+          <span class="weather-widget__desc" id="weather-desc">Detectando clima...</span>
+          <span class="weather-widget__location" id="weather-location">📍 Detectando...</span>
+        </div>
+      </div>
+      
+      <div class="weather-widget__simulator">
+        <p class="weather-widget__sim-label">Simular Clima</p>
+        <div class="weather-widget__sim-grid">
+          <button type="button" class="weather-sim-btn" data-weather="sol" id="btn-sim-sol" title="Día soleado y caluroso">
+            <span>☀️</span>
+            <span>Cálido</span>
+          </button>
+          <button type="button" class="weather-sim-btn" data-weather="frio" id="btn-sim-frio" title="Día frío e invernal">
+            <span>❄️</span>
+            <span>Frío</span>
+          </button>
+          <button type="button" class="weather-sim-btn" data-weather="lluvia" id="btn-sim-lluvia" title="Día lluvioso o tormentoso">
+            <span>🌧️</span>
+            <span>Lluvia</span>
+          </button>
+          <button type="button" class="weather-sim-btn" data-weather="templado" id="btn-sim-templado" title="Día templado y agradable">
+            <span>⛅</span>
+            <span>Templado</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="frontend/js/config.js"></script>

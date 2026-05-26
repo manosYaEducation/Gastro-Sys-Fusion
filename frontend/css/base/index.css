@@ -474,3 +474,279 @@ body::before {
   .dishes-grid { grid-template-columns: 1fr; }
   .footer { flex-direction: column; text-align: center; }
 }
+
+/* ============================================================
+   WIDGET Y RECOMENDACIÓN DE CLIMA (NUEVO)
+   ============================================================ */
+
+/* 1. Widget de Clima Flotante */
+.weather-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 320px;
+  background: rgba(26, 24, 21, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 146, 10, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65), var(--shadow-glow);
+  padding: 1.25rem;
+  transition: transform var(--transition), opacity var(--transition);
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
+.weather-widget--minimized {
+  width: auto;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}
+
+.weather-widget__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.5rem;
+}
+
+.weather-widget__title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary-lt);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.weather-widget__toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.weather-widget__toggle-btn:hover {
+  color: var(--color-text);
+}
+
+.weather-widget__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.weather-widget__icon-container {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 10px rgba(212, 146, 10, 0.4));
+  animation: pulseWeather 2s infinite ease-in-out;
+}
+
+.weather-widget__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-widget__temp {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  color: var(--color-text);
+  line-height: 1.1;
+}
+
+.weather-widget__desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.weather-widget__location {
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Selector de Simulación */
+.weather-widget__simulator {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.8rem;
+}
+
+.weather-widget__sim-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.weather-widget__sim-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.weather-sim-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 0.4rem 0.2rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: all var(--transition);
+}
+
+.weather-sim-btn span:first-child {
+  font-size: 1rem;
+}
+
+.weather-sim-btn:hover {
+  background: rgba(212, 146, 10, 0.08);
+  border-color: rgba(212, 146, 10, 0.3);
+  color: var(--color-text);
+  transform: translateY(-2px);
+}
+
+.weather-sim-btn--active {
+  background: var(--color-badge-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary-lt);
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(212, 146, 10, 0.15);
+}
+
+/* 2. Sección del Menú de Sugerencias de Clima */
+.weather-suggestions-section {
+  max-width: 900px;
+  margin: 0 auto 3.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(32, 30, 27, 0.8), rgba(20, 19, 17, 0.9));
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px dashed rgba(212, 146, 10, 0.3);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  animation: fadeInUp 0.7s ease both;
+}
+
+.weather-suggestions-section__header {
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+
+.weather-suggestions-section__title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.4rem;
+}
+
+.weather-suggestions-section__title span {
+  background: linear-gradient(90deg, var(--color-primary-lt), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.weather-suggestions-section__subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* Grid de platos sugeridos por clima */
+.weather-suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.weather-suggestions-grid .dish-card {
+  animation: fadeIn 0.5s ease both;
+}
+
+/* Badge de clima en las tarjetas tradicionales */
+.dish-card__weather-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(181, 69, 27, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 0.28rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  animation: pulseBadge 3s infinite alternate;
+  z-index: 10;
+}
+
+.dish-card__weather-badge--neutral {
+  background: rgba(40, 167, 69, 0.85);
+}
+
+/* 3. Animaciones extra del Clima */
+@keyframes pulseWeather {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 146, 10, 0.3)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 18px rgba(212, 146, 10, 0.5)); }
+}
+
+@keyframes pulseBadge {
+  0% { transform: scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+  100% { transform: scale(1.03); box-shadow: 0 4px 15px rgba(181, 69, 27, 0.5); }
+}
+
+/* Soporte para Widget Minimizado */
+.weather-widget__minimized-content {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.weather-widget__minimized-icon {
+  font-size: 1.5rem;
+}
+.weather-widget__minimized-temp {
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Responsivo para el widget */
+@media (max-width: 768px) {
+  .weather-widget {
+    bottom: 16px;
+    right: 16px;
+    width: calc(100% - 32px);
+    max-width: 320px;
+  }
+}
+
