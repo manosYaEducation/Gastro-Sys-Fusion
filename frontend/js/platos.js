@@ -124,6 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
           Agregar al pedido
         </button>
       </div>`;
+
+    const btn = article.querySelector('.dish-card__btn');
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof window.openCustomizationModal === 'function') {
+          window.openCustomizationModal(plato);
+        }
+      });
+    }
+
     return article;
   }
 

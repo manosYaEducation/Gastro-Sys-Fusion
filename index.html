@@ -8,6 +8,7 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="frontend/css/base/index.css" />
+  <link rel="stylesheet" href="frontend/css/modal.css" />
 
   <!-- Favicon inline SVG -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
@@ -111,6 +112,43 @@
   </main>
 
   <!-- ===========================
+       MODAL DE PERSONALIZACIÓN (US-H1.3)
+  ============================ -->
+  <div id="customization-modal" class="custom-modal" aria-hidden="true">
+    <div class="custom-modal__overlay" id="custom-modal-overlay"></div>
+    <div class="custom-modal__content" role="dialog" aria-modal="true" aria-labelledby="modal-dish-name">
+      <button class="custom-modal__close" id="custom-modal-close" aria-label="Cerrar modal">&times;</button>
+      
+      <div class="custom-modal__header">
+        <div class="custom-modal__image-placeholder" aria-hidden="true">🍽️</div>
+        <div class="custom-modal__header-info">
+          <h2 id="modal-dish-name" class="custom-modal__title">Nombre del plato</h2>
+          <p id="modal-dish-desc" class="custom-modal__desc">Descripción</p>
+        </div>
+      </div>
+
+      <div class="custom-modal__body">
+        <div id="modal-modifiers-container"></div>
+        
+        <div class="custom-modal__notes-group">
+          <label for="modal-notes" class="custom-modal__label">Instrucciones especiales</label>
+          <textarea id="modal-notes" class="custom-modal__textarea" placeholder="Ej: Sin cebolla, aderezo aparte..." rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="custom-modal__footer">
+        <div class="custom-modal__price-wrapper">
+          <span class="custom-modal__total-label">Total estimado</span>
+          <span id="modal-total-price" class="custom-modal__total-price">$0</span>
+        </div>
+        <button id="modal-add-btn" class="custom-modal__add-btn">
+          Agregar al Carrito
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===========================
        FOOTER
   ============================ -->
   <footer class="footer" role="contentinfo">
@@ -174,6 +212,7 @@
   <!-- Scripts -->
   <script src="frontend/js/config.js"></script>
   <script src="frontend/js/platos.js"></script>
+  <script src="frontend/js/modal.js"></script>
 
 </body>
 </html>

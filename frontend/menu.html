@@ -9,6 +9,7 @@
   <!-- CSS: base + menu -->
   <link rel="stylesheet" href="css/base/index.css" />
   <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/modal.css" />
 
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
@@ -107,6 +108,43 @@
   </main>
 
   <!-- ===========================
+       MODAL DE PERSONALIZACIÓN (US-H1.3)
+  ============================ -->
+  <div id="customization-modal" class="custom-modal" aria-hidden="true">
+    <div class="custom-modal__overlay" id="custom-modal-overlay"></div>
+    <div class="custom-modal__content" role="dialog" aria-modal="true" aria-labelledby="modal-dish-name">
+      <button class="custom-modal__close" id="custom-modal-close" aria-label="Cerrar modal">&times;</button>
+      
+      <div class="custom-modal__header">
+        <div class="custom-modal__image-placeholder" aria-hidden="true">🍽️</div>
+        <div class="custom-modal__header-info">
+          <h2 id="modal-dish-name" class="custom-modal__title">Nombre del plato</h2>
+          <p id="modal-dish-desc" class="custom-modal__desc">Descripción</p>
+        </div>
+      </div>
+
+      <div class="custom-modal__body">
+        <div id="modal-modifiers-container"></div>
+        
+        <div class="custom-modal__notes-group">
+          <label for="modal-notes" class="custom-modal__label">Instrucciones especiales</label>
+          <textarea id="modal-notes" class="custom-modal__textarea" placeholder="Ej: Sin cebolla, aderezo aparte..." rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="custom-modal__footer">
+        <div class="custom-modal__price-wrapper">
+          <span class="custom-modal__total-label">Total estimado</span>
+          <span id="modal-total-price" class="custom-modal__total-price">$0</span>
+        </div>
+        <button id="modal-add-btn" class="custom-modal__add-btn">
+          Agregar al Carrito
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===========================
        FOOTER
   ============================ -->
   <footer class="footer" role="contentinfo">
@@ -137,7 +175,18 @@
         nombre: 'Plato 1 ',
         descripcion: 'Descripción.',
         categoria: 'entrada',
-        precio: 8500
+        precio: 8500,
+        modificadores: [
+          {
+            id: 'size',
+            nombre: 'Tamaño de la porción',
+            requerido: true,
+            opciones: [
+              { id: 'normal', nombre: 'Normal', precio: 0 },
+              { id: 'grande', nombre: 'Familiar', precio: 2500 }
+            ]
+          }
+        ]
       },
       {
         id: 2,
@@ -151,7 +200,31 @@
         nombre: 'Plato 3 ',
         descripcion: 'Descripción.',
         categoria: 'principal',
-        precio: 16900
+        precio: 16900,
+        modificadores: [
+          {
+            id: 'termino',
+            nombre: 'Término de la carne',
+            requerido: true,
+            opciones: [
+              { id: 'ingles', nombre: 'A la inglesa', precio: 0 },
+              { id: 'medio', nombre: 'Término medio', precio: 0 },
+              { id: 'tres_cuartos', nombre: 'Tres cuartos', precio: 0 },
+              { id: 'bien_cocida', nombre: 'Bien cocida', precio: 0 }
+            ]
+          },
+          {
+            id: 'extras',
+            nombre: 'Agrega Extras',
+            requerido: false,
+            multiple: true,
+            opciones: [
+              { id: 'huevo', nombre: 'Huevo frito', precio: 1000 },
+              { id: 'tocino', nombre: 'Doble tocino', precio: 1500 },
+              { id: 'papas', nombre: 'Papas rústicas', precio: 2000 }
+            ]
+          }
+        ]
       },
       {
         id: 4,
@@ -331,8 +404,26 @@
     ==================================================== */
     renderMenu('all');
 
+    /* ====================================================
+       EVENT DELEGATION FOR MODAL (US-H1.3)
+    ==================================================== */
+    container.addEventListener('click', (e) => {
+      const itemNode = e.target.closest('.menu-item');
+      if (itemNode) {
+        const idStr = itemNode.getAttribute('id').replace('menu-item-', '');
+        const dishId = parseInt(idStr, 10);
+        const dishData = menuData.find(d => d.id === dishId);
+        
+        if (dishData && typeof window.openCustomizationModal === 'function') {
+          window.openCustomizationModal(dishData);
+        }
+      }
+    });
+
   });
   </script>
 
+  <!-- Script del Modal de Personalización -->
+  <script src="js/modal.js"></script>
 </body>
 </html>
