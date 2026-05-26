@@ -65,6 +65,30 @@
         <div class="dish-card dish-card--skeleton" aria-hidden="true"></div>
       </div>
 
+      <!-- Botón ver menú completo -->
+      <div style="text-align:center; margin-top:2.5rem; animation: fadeInUp 0.8s ease 0.6s both;">
+        <a href="frontend/menu.html" id="btn-ver-menu-completo" style="
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+          color: #fff;
+          text-decoration: none;
+          padding: 0.85rem 2.2rem;
+          border-radius: 50px;
+          font-family: 'Inter', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+          box-shadow: 0 4px 20px rgba(212,146,10,0.3);
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 30px rgba(212,146,10,0.4)'"
+           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(212,146,10,0.3)'">
+          Ver Menú Completo
+          <span style="font-size:1.2rem; transition: transform 0.3s ease;" aria-hidden="true">→</span>
+        </a>
+      </div>
+
       <!-- Mensaje de error oculto -->
       <p class="dishes-error" id="dishes-error" hidden>
         ⚠️ No se pudieron cargar los platos. Verifica la conexión con la base de datos.
