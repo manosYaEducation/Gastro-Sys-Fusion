@@ -1,0 +1,222 @@
+/* 
+ * cocina.css 
+ * Estilos optimizados para alto contraste y visibilidad a distancia (pantallas de cocina)
+ */
+
+ :root {
+    --bg-kitchen: #111111;
+    --card-bg: #1a1a1a;
+    --card-border: #333;
+    --color-text-kitchen: #f4f4f5;
+    --color-ready: #10b981; /* Verde */
+    --color-warning: #f59e0b; /* Naranja/Amarillo */
+    --color-danger: #ef4444; /* Rojo (atrasado) */
+}
+
+.kitchen-body {
+    background-color: var(--bg-kitchen);
+    color: var(--color-text-kitchen);
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.kitchen-header {
+    background: #000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.kitchen-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.kitchen-brand h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.kitchen-icon {
+    font-size: 2rem;
+}
+
+.kitchen-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-ready);
+}
+
+.status-indicator.live {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.kitchen-main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.kitchen-loading, .kitchen-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.kitchen-empty h2 {
+    color: var(--color-text-kitchen);
+    margin-bottom: 0.5rem;
+}
+
+.kitchen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.order-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Indicadores de tiempo */
+.order-card.status-normal { border-top: 4px solid var(--color-ready); }
+.order-card.status-warning { border-top: 4px solid var(--color-warning); }
+.order-card.status-danger { border-top: 4px solid var(--color-danger); }
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--card-border);
+    padding-bottom: 0.75rem;
+}
+
+.order-id {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.order-time {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: rgba(255,255,255,0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+}
+
+.order-card.status-danger .order-time {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger);
+    animation: urgentPulse 1s infinite alternate;
+}
+
+@keyframes urgentPulse {
+    from { opacity: 1; }
+    to { opacity: 0.6; }
+}
+
+.order-status {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #aaa;
+    font-weight: 600;
+}
+
+.order-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.order-items li {
+    font-size: 1.1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.order-items li:last-child {
+    border-bottom: none;
+}
+
+.item-qty {
+    font-weight: 700;
+    color: var(--color-primary, #d4920a);
+    background: rgba(212, 146, 10, 0.1);
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+}
+
+.item-name {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.order-actions {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+.btn-ready {
+    width: 100%;
+    background: var(--color-ready);
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-ready:hover {
+    background: #059669; /* hover más oscuro */
+}
+
+.btn-ready:active {
+    transform: scale(0.98);
+}
