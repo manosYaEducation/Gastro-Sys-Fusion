@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Cocina | Gastro-Sys-Fusion</title>
+    <!-- CSS Base -->
+    <link rel="stylesheet" href="css/base/index.css" />
+    <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/cocina.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🍳</text></svg>" />
+</head>
+<body class="kitchen-body">
+    <!-- Header Minimalista -->
+    <header class="kitchen-header">
+        <div class="kitchen-brand">
+            <span class="kitchen-icon">👨‍🍳</span>
+            <h1>Cocina en vivo</h1>
+        </div>
+        <div class="kitchen-status">
+            <span class="status-indicator live"></span>
+            Conectado - Actualizando cada 10s
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="kitchen-main">
+        <div id="loading-state" class="kitchen-loading">Cargando pedidos activos...</div>
+        <div id="empty-state" class="kitchen-empty" hidden>
+            <h2>No hay pedidos pendientes</h2>
+            <p>Buen trabajo equipo. A esperar nuevas comandas.</p>
+        </div>
+        <!-- Grilla donde se pintan los pedidos -->
+        <div id="orders-grid" class="kitchen-grid" role="list"></div>
+    </main>
+
+    <!-- Template para la tarjeta de pedido -->
+    <template id="order-card-template">
+        <article class="order-card">
+            <div class="order-header">
+                <span class="order-id">#ID</span>
+                <span class="order-time">0m</span>
+            </div>
+            <div class="order-status">Estado</div>
+            <ul class="order-items"></ul>
+            <div class="order-actions">
+                <button class="btn-ready">Marcar como Listo</button>
+            </div>
+        </article>
+    </template>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/cocina.js"></script>
+</body>
+</html>
