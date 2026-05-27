@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Inventario de insumos — Gastro-Sys-Fusion. Visualiza el stock actual y alertas de stock mínimo." />
+  <title>Inventario de Insumos | Gastro-Sys-Fusion</title>
+
+  <!-- CSS: base + inventario -->
+  <link rel="stylesheet" href="css/base/index.css" />
+  <link rel="stylesheet" href="css/inventario.css" />
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+
+      <ul class="navbar__nav" role="list">
+        <li><a href="../index.html#menu" id="nav-menu-link">Inicio</a></li>
+        <li><a href="menu.html" id="nav-carta-link">Carta</a></li>
+        <li><a href="inventario.html" id="nav-inventario-link" aria-current="page"
+            style="color:var(--color-primary-lt)">Inventario</a></li>
+        <li><a href="../index.html#contacto" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===========================
+       MAIN
+  ============================ -->
+  <main>
+
+    <!-- Hero -->
+    <section class="inv-hero" aria-labelledby="inv-title">
+      <p class="inv-hero__eyebrow">
+        <span aria-hidden="true">📦</span>
+        StockAlert — Módulo de Inventario
+      </p>
+
+      <h1 class="inv-hero__title" id="inv-title">
+        Insumos &amp; <span>Stock</span>
+      </h1>
+
+      <p class="inv-hero__subtitle">
+        Consulta en tiempo real el estado de cada insumo desde
+        <code>GET /api/inventario.php</code>
+      </p>
+    </section>
+
+    <!-- ===========================
+         CONTROLES
+    ============================ -->
+    <div class="inv-controls" id="inv-controls">
+
+      <button class="inv-btn-filtro" id="btn-filtro-alerta" aria-pressed="false">
+        <span class="inv-btn-filtro__icon" aria-hidden="true">⚠️</span>
+        <span class="inv-btn-filtro__text">Ver solo en alerta</span>
+      </button>
+
+      <button class="inv-btn-reload" id="btn-reload" aria-label="Recargar datos" title="Recargar">
+        ↻
+      </button>
+
+    </div>
+
+    <!-- ===========================
+         STATS
+    ============================ -->
+    <div class="inv-stats" id="inv-stats" aria-live="polite" aria-label="Resumen de stock">
+
+      <div class="inv-stat" id="stat-total">
+        <span class="inv-stat__num" id="stat-total-num">—</span>
+        <span class="inv-stat__label">Total</span>
+      </div>
+
+      <div class="inv-stat inv-stat--ok" id="stat-ok">
+        <span class="inv-stat__num" id="stat-ok-num">—</span>
+        <span class="inv-stat__label">Stock OK</span>
+      </div>
+
+      <div class="inv-stat inv-stat--alerta" id="stat-alerta">
+        <span class="inv-stat__num" id="stat-alerta-num">—</span>
+        <span class="inv-stat__label">En alerta</span>
+      </div>
+
+    </div>
+
+    <!-- ===========================
+         TABLA
+    ============================ -->
+    <section class="inv-table-section" aria-label="Tabla de insumos">
+
+      <!-- Loading -->
+      <div class="inv-loading" id="inv-loading" aria-live="polite">
+        <div class="inv-loading__spinner" aria-hidden="true"></div>
+        <p>Cargando insumos…</p>
+      </div>
+
+      <!-- Error -->
+      <div class="inv-error" id="inv-error" hidden>
+        <span aria-hidden="true">❌</span>
+        <p id="inv-error-msg">No se pudo conectar con la API.</p>
+        <button id="btn-retry" class="inv-btn-retry">Reintentar</button>
+      </div>
+
+      <!-- Empty -->
+      <div class="inv-empty" id="inv-empty" hidden>
+        <span aria-hidden="true">🗂️</span>
+        <p>No hay insumos que coincidan con el filtro.</p>
+      </div>
+
+      <!-- Table -->
+      <div class="inv-table-wrapper" id="inv-table-wrapper" hidden>
+        <table class="inv-table" id="inv-table" aria-label="Listado de insumos con stock">
+
+          <thead>
+            <tr>
+              <th scope="col" class="inv-th inv-th--id">#</th>
+              <th scope="col" class="inv-th">Insumo</th>
+              <th scope="col" class="inv-th inv-th--center">Unidad</th>
+              <th scope="col" class="inv-th inv-th--center">Stock actual</th>
+              <th scope="col" class="inv-th inv-th--center">Stock mínimo</th>
+              <th scope="col" class="inv-th inv-th--center">Alerta</th>
+            </tr>
+          </thead>
+
+          <tbody id="inv-tbody"></tbody>
+
+        </table>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+
+    <ul class="footer__links" role="list">
+      <li><a href="../index.html" id="footer-inicio-link">Inicio</a></li>
+      <li><a href="menu.html" id="footer-menu-link">Carta</a></li>
+      <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/inventario.js"></script>
+
+</body>
+
+</html>

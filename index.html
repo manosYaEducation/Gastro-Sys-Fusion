@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Gastro-Sys-Fusion — Plataforma gastronómica inteligente. Descubre nuestra selección de platos gourmet preparados por chefs expertos." />
+  <meta name="description"
+    content="Gastro-Sys-Fusion — Plataforma gastronómica inteligente. Descubre nuestra selección de platos gourmet preparados por chefs expertos." />
   <title>Gastro-Sys-Fusion | Menú Gourmet</title>
 
   <!-- CSS -->
@@ -11,8 +13,10 @@
   <link rel="stylesheet" href="frontend/css/modal.css" />
 
   <!-- Favicon inline SVG -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
 </head>
+
 <body>
 
   <!-- ===========================
@@ -57,16 +61,19 @@
          PLATOS / CARDS
     ============================ -->
     <section class="dishes-section" id="menu" aria-labelledby="dishes-label">
-      
+
       <!-- ===========================
            SUGERENCIAS SEGÚN EL CLIMA
       ============================ -->
       <div class="weather-suggestions-section" id="weather-suggestions-section" hidden>
         <div class="weather-suggestions-section__header">
-          <h2 class="weather-suggestions-section__title">Recomendado para un Día <span id="weather-condition-span">Soleado</span></h2>
-          <p class="weather-suggestions-section__subtitle">Nuestro chef sugiere estos platos perfectos para la temperatura exterior.</p>
+          <h2 class="weather-suggestions-section__title">Recomendado para un Día <span
+              id="weather-condition-span">Soleado</span></h2>
+          <p class="weather-suggestions-section__subtitle">Nuestro chef sugiere estos platos perfectos para la
+            temperatura exterior.</p>
         </div>
-        <div class="weather-suggestions-grid" id="weather-suggestions-grid" role="list" aria-live="polite" aria-label="Sugerencias de platos según el clima">
+        <div class="weather-suggestions-grid" id="weather-suggestions-grid" role="list" aria-live="polite"
+          aria-label="Sugerencias de platos según el clima">
           <!-- Las cards sugeridas se renderizan dinámicamente -->
         </div>
       </div>
@@ -98,7 +105,7 @@
           transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
           box-shadow: 0 4px 20px rgba(212,146,10,0.3);
         " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 30px rgba(212,146,10,0.4)'"
-           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(212,146,10,0.3)'">
+          onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(212,146,10,0.3)'">
           Ver Menú Completo
           <span style="font-size:1.2rem; transition: transform 0.3s ease;" aria-hidden="true">→</span>
         </a>
@@ -170,11 +177,12 @@
       <div class="weather-widget__title">
         <span>🌤️</span> Gastro-Clima
       </div>
-      <button class="weather-widget__toggle-btn" id="weather-widget-toggle" title="Minimizar / Maximizar" aria-label="Minimizar">
+      <button class="weather-widget__toggle-btn" id="weather-widget-toggle" title="Minimizar / Maximizar"
+        aria-label="Minimizar">
         ➖
       </button>
     </div>
-    
+
     <div class="weather-widget__body" id="weather-widget-body">
       <div class="weather-widget__content">
         <div class="weather-widget__icon-container" id="weather-icon">☀️</div>
@@ -184,23 +192,27 @@
           <span class="weather-widget__location" id="weather-location">📍 Detectando...</span>
         </div>
       </div>
-      
+
       <div class="weather-widget__simulator">
         <p class="weather-widget__sim-label">Simular Clima</p>
         <div class="weather-widget__sim-grid">
-          <button type="button" class="weather-sim-btn" data-weather="sol" id="btn-sim-sol" title="Día soleado y caluroso">
+          <button type="button" class="weather-sim-btn" data-weather="sol" id="btn-sim-sol"
+            title="Día soleado y caluroso">
             <span>☀️</span>
             <span>Cálido</span>
           </button>
-          <button type="button" class="weather-sim-btn" data-weather="frio" id="btn-sim-frio" title="Día frío e invernal">
+          <button type="button" class="weather-sim-btn" data-weather="frio" id="btn-sim-frio"
+            title="Día frío e invernal">
             <span>❄️</span>
             <span>Frío</span>
           </button>
-          <button type="button" class="weather-sim-btn" data-weather="lluvia" id="btn-sim-lluvia" title="Día lluvioso o tormentoso">
+          <button type="button" class="weather-sim-btn" data-weather="lluvia" id="btn-sim-lluvia"
+            title="Día lluvioso o tormentoso">
             <span>🌧️</span>
             <span>Lluvia</span>
           </button>
-          <button type="button" class="weather-sim-btn" data-weather="templado" id="btn-sim-templado" title="Día templado y agradable">
+          <button type="button" class="weather-sim-btn" data-weather="templado" id="btn-sim-templado"
+            title="Día templado y agradable">
             <span>⛅</span>
             <span>Templado</span>
           </button>
@@ -215,4 +227,5 @@
   <script src="frontend/js/modal.js"></script>
 
 </body>
+
 </html>
