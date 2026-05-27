@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Menú Presencial de Gastro-Sys-Fusion — Platos recomendados según el clima y carta completa para comensales." />
+  <title>Menú Presencial | Gastro-Sys-Fusion</title>
+
+  <!-- CSS: base + menu + presencial -->
+  <link rel="stylesheet" href="css/base/index.css" />
+  <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/menu-presencial.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+</head>
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+
+      <ul class="navbar__nav" role="list">
+        <li><a href="../index.html#menu" id="nav-menu-link">Inicio</a></li>
+        <li><a href="../index.html#nosotros" id="nav-nosotros-link">Nosotros</a></li>
+        <li><a href="../index.html#contacto" id="nav-contacto-link">Contacto</a></li>
+        <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===========================
+       HERO
+  ============================ -->
+  <main>
+    <section class="menu-hero" aria-labelledby="menu-title">
+      <a href="../index.html" class="menu-back" id="menu-back-btn">
+        <span class="menu-back__arrow" aria-hidden="true">←</span>
+        Volver al inicio
+      </a>
+
+      <p class="menu-hero__eyebrow">
+        <span aria-hidden="true">✦</span>
+        Menú Presencial
+      </p>
+      <h1 class="menu-hero__title" id="menu-title">
+        Menú del <span>Día</span>
+      </h1>
+      <p class="menu-hero__subtitle">
+        Platos seleccionados especialmente para ti según el clima de hoy.
+        Disfruta de nuestra recomendación o explora toda la carta.
+      </p>
+    </section>
+
+    <!-- ===========================
+         CLIMA BAR
+    ============================ -->
+    <div class="clima-bar" id="clima-bar" aria-label="Información climática actual">
+      <div class="clima-bar__icon" id="clima-icon" aria-hidden="true">⛅</div>
+      <div class="clima-bar__info">
+        <span class="clima-bar__temp" id="clima-temp">--°C</span>
+        <span class="clima-bar__desc" id="clima-desc">Cargando clima…</span>
+      </div>
+      <div class="clima-bar__divider" aria-hidden="true"></div>
+      <span class="clima-bar__location" id="clima-location">📍 Detectando…</span>
+    </div>
+
+    <!-- ===========================
+         VIEW TOGGLE
+    ============================ -->
+    <div class="view-toggle" id="view-toggle" role="tablist" aria-label="Alternar vista del menú">
+      <button class="view-toggle__btn view-toggle__btn--active"
+              data-view="recomendados" id="toggle-recomendados"
+              role="tab" aria-selected="true" aria-controls="panel-recomendados">
+        🌤️ Recomendados
+      </button>
+      <button class="view-toggle__btn"
+              data-view="completo" id="toggle-completo"
+              role="tab" aria-selected="false" aria-controls="panel-completo">
+        📋 Menú Completo
+      </button>
+    </div>
+
+    <!-- ===========================
+         PANEL: RECOMENDADOS
+    ============================ -->
+    <div class="view-panel view-panel--active" id="panel-recomendados" role="tabpanel" aria-labelledby="toggle-recomendados">
+      <section class="recomendados-section" aria-label="Platos recomendados para hoy">
+
+        <div class="recomendados-header">
+          <div class="recomendados-header__badge" id="recomendados-badge">
+            <span aria-hidden="true">🍽️</span>
+            <span id="recomendados-clima-label">Cargando…</span>
+          </div>
+          <h2 class="recomendados-header__title">
+            Ideal para el <span>clima de hoy</span>
+          </h2>
+        </div>
+
+        <div class="recomendados-grid" id="recomendados-grid" role="list" aria-live="polite">
+          <!-- Loading state -->
+          <div class="loading-spinner" id="loading-recomendados">
+            <div class="loading-spinner__ring"></div>
+            <span class="loading-spinner__text">Buscando las mejores opciones…</span>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ===========================
+         PANEL: MENÚ COMPLETO
+    ============================ -->
+    <div class="view-panel" id="panel-completo" role="tabpanel" aria-labelledby="toggle-completo">
+
+      <!-- Category filters -->
+      <div class="menu-filters" id="menu-filters" role="tablist" aria-label="Filtrar por categoría">
+        <button class="menu-filter-btn menu-filter-btn--active" data-category="all" id="filter-all" role="tab" aria-selected="true">
+          Todos
+        </button>
+        <!-- Dynamic category buttons inserted by JS -->
+      </div>
+
+      <section class="menu-list-section" id="menu-list-section" aria-label="Lista de platos del menú">
+        <div class="menu-count" id="menu-count">
+          <span class="menu-count__badge">
+            Selecciona entre nuestros <span class="menu-count__number" id="menu-count-number">0</span> platillos
+          </span>
+        </div>
+
+        <div id="menu-items-container" role="list" aria-live="polite">
+          <!-- Loading state -->
+          <div class="loading-spinner" id="loading-completo">
+            <div class="loading-spinner__ring"></div>
+            <span class="loading-spinner__text">Cargando menú completo…</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+    <ul class="footer__links" role="list">
+      <li><a href="../index.html" id="footer-inicio-link">Inicio</a></li>
+      <li><a href="../index.html#nosotros" id="footer-nosotros-link">Nosotros</a></li>
+      <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- ===========================
+       CONFIG
+  ============================ -->
+  <script src="js/config.js"></script>
+
+  <!-- ===========================
+       MENU PRESENCIAL SCRIPT
+  ============================ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    /* ====================================================
+       CONFIG & DOM REFS
+    ==================================================== */
+    const API     = window.API    || {};
+    const imgBase = window.API_URL || 'http://localhost/Gastro-Sys-Fusion/';
+
+    const URL_CLIMA  = API.clima  || `${imgBase}api/clima.php`;
+    const URL_MENU   = API.menu   || `${imgBase}api/menu.php`;
+    const URL_PLATOS = API.platos || `${imgBase}api/platos.php`;
+
+    // Clima bar
+    const climaIcon     = document.getElementById('clima-icon');
+    const climaTemp     = document.getElementById('clima-temp');
+    const climaDesc     = document.getElementById('clima-desc');
+    const climaLocation = document.getElementById('clima-location');
+
+    // Toggle
+    const toggleBtns = document.querySelectorAll('.view-toggle__btn');
+
+    // Recomendados
+    const recomendadosGrid       = document.getElementById('recomendados-grid');
+    const recomendadosBadge      = document.getElementById('recomendados-badge');
+    const recomendadosClimaLabel = document.getElementById('recomendados-clima-label');
+    const loadingRecomendados    = document.getElementById('loading-recomendados');
+
+    // Menú completo
+    const filtersContainer    = document.getElementById('menu-filters');
+    const menuItemsContainer  = document.getElementById('menu-items-container');
+    const menuCountNumber     = document.getElementById('menu-count-number');
+    const loadingCompleto     = document.getElementById('loading-completo');
+
+    /* ====================================================
+       STATE
+    ==================================================== */
+    let todosLosPlatos  = [];
+    let platosClima     = [];
+    let climaActual     = { condicion: 'templado', temperatura: 18 };
+    let activeFilter    = 'all';
+    let categoriasMap   = {};  // { nombre_lower: { nombre, icono } }
+
+    /* ====================================================
+       CLIMA CONFIG
+    ==================================================== */
+    const CLIMAS = {
+      sol:      { nombre: 'Soleado y Cálido',    icono: '☀️' },
+      frio:     { nombre: 'Frío e Invernal',      icono: '❄️' },
+      lluvia:   { nombre: 'Lluvioso o Húmedo',    icono: '🌧️' },
+      templado: { nombre: 'Templado y Agradable', icono: '⛅' },
+    };
+
+    /* ====================================================
+       CATEGORY ICONS — mapped from DB category names
+    ==================================================== */
+    const CATEGORY_ICONS = {
+      'pastas':              '🍝',
+      'pescados':            '🐟',
+      'sopas & cremas':      '🍲',
+      'sopas &amp; cremas':  '🍲',
+      'ensaladas & frescos': '🥗',
+      'ensaladas &amp; frescos': '🥗',
+      'postres':             '🍰',
+      'bebidas':             '🍷',
+      'entrada':             '🥗',
+      'entradas':            '🥗',
+      'principal':           '🥩',
+      'principales':         '🥩',
+    };
+
+    function getCategoryIcon(catName) {
+      if (!catName) return '🍽️';
+      return CATEGORY_ICONS[catName.toLowerCase()] || '🍽️';
+    }
+
+    /* ====================================================
+       HELPERS
+    ==================================================== */
+    function formatPrecio(valor) {
+      return '$' + Number(valor).toLocaleString('es-CL');
+    }
+
+    function platoCoincidesConClima(plato, condicion) {
+      const campo = (plato.clima_recomendar || '').toLowerCase();
+      if (!campo) return false;
+      const tags = campo.split(',').map(t => t.trim());
+      const mapaContrato = {
+        lluvia:   ['lluvioso', 'todos'],
+        sol:      ['calido',   'todos'],
+        frio:     ['frio',     'todos'],
+        templado: ['templado', 'calido', 'todos'],
+      };
+      const permitidos = mapaContrato[condicion] ?? ['todos'];
+      return tags.some(t => permitidos.includes(t));
+    }
+
+    /* ====================================================
+       VIEW TOGGLE
+    ==================================================== */
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        toggleBtns.forEach(b => {
+          b.classList.remove('view-toggle__btn--active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('view-toggle__btn--active');
+        btn.setAttribute('aria-selected', 'true');
+
+        const view = btn.dataset.view;
+        document.querySelectorAll('.view-panel').forEach(panel => {
+          panel.classList.remove('view-panel--active');
+        });
+        document.getElementById(`panel-${view}`).classList.add('view-panel--active');
+      });
+    });
+
+    /* ====================================================
+       RENDER: RECOMMENDED CARDS (dish-card style)
+    ==================================================== */
+    function buildRecommendedCard(plato, index) {
+      const imgSrc = plato.imagen_url
+        ? `${imgBase}assets/img/${plato.imagen_url}`
+        : `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='240'%3E%3Crect width='100%25' height='100%25' fill='%231a1815'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-size='48'%3E🍽️%3C/text%3E%3C/svg%3E`;
+
+      const badge = plato.destacado == 1 ? 'Destacado' : (plato.categoria ?? 'Plato');
+      const cfg   = CLIMAS[climaActual.condicion] ?? CLIMAS.templado;
+
+      const article = document.createElement('article');
+      article.className = 'dish-card';
+      article.setAttribute('role', 'listitem');
+      article.setAttribute('id', `rec-card-${plato.id}`);
+      article.setAttribute('tabindex', '0');
+      article.setAttribute('aria-label', `${plato.nombre} — ${formatPrecio(plato.precio)}`);
+      article.style.animationDelay = `${0.1 + index * 0.1}s`;
+
+      article.innerHTML = `
+        <div class="dish-card__img-wrapper">
+          <img class="dish-card__img" src="${imgSrc}" alt="${plato.nombre}"
+               width="480" height="240" loading="eager"
+               onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22480%22 height=%22240%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%231a1815%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2248%22%3E🍽️%3C/text%3E%3C/svg%3E'" />
+          <div class="dish-card__overlay" aria-hidden="true"></div>
+          <span class="dish-card__badge">${badge}</span>
+          <div class="dish-card__clima-badge" title="Recomendado para ${cfg.nombre}">
+            <span>${cfg.icono}</span> Ideal hoy
+          </div>
+        </div>
+        <div class="dish-card__body">
+          <p class="dish-card__category">${plato.categoria ?? 'Sin categoría'}</p>
+          <h2 class="dish-card__name">${plato.nombre}</h2>
+          <p class="dish-card__desc">${plato.descripcion ?? ''}</p>
+          <div class="dish-card__meta">
+            <span class="dish-card__price">${formatPrecio(plato.precio)}</span>
+            <div class="dish-card__info">
+              ${plato.tiempo_min ? `<span class="dish-card__pill" title="Tiempo de preparación">⏱ ${plato.tiempo_min} min</span>` : ''}
+              ${plato.calorias   ? `<span class="dish-card__pill" title="Calorías">🔥 ${plato.calorias} kcal</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+      return article;
+    }
+
+    function renderRecomendados() {
+      recomendadosGrid.innerHTML = '';
+
+      if (!platosClima.length) {
+        recomendadosGrid.innerHTML = `
+          <div class="recomendados-empty">
+            <div class="recomendados-empty__icon">🍽️</div>
+            <p class="recomendados-empty__text">
+              No hay recomendaciones específicas para el clima actual.<br>
+              ¡Explora nuestro menú completo!
+            </p>
+          </div>`;
+        return;
+      }
+
+      platosClima.forEach((p, i) => {
+        recomendadosGrid.appendChild(buildRecommendedCard(p, i));
+      });
+    }
+
+    /* ====================================================
+       RENDER: FULL MENU (menu.html list style)
+    ==================================================== */
+    function buildMenuItem(item, index) {
+      const catIcon  = getCategoryIcon(item.categoria);
+      const catLabel = item.categoria || 'Sin categoría';
+
+      const row = document.createElement('div');
+      row.className = 'menu-item';
+      row.setAttribute('role', 'listitem');
+      row.setAttribute('id', `menu-item-${item.id}`);
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-label', `${item.nombre} — ${formatPrecio(item.precio)}`);
+
+      row.innerHTML = `
+        <div class="menu-item__number">${String(index).padStart(2, '0')}</div>
+        <div class="menu-item__content">
+          <span class="menu-item__category">${catIcon} ${catLabel}</span>
+          <h2 class="menu-item__name">${item.nombre}</h2>
+          <p class="menu-item__desc">${item.descripcion ?? ''}</p>
+        </div>
+        <div class="menu-item__dots" aria-hidden="true"></div>
+        <span class="menu-item__price">${formatPrecio(item.precio)}</span>`;
+
+      return row;
+    }
+
+    function renderMenuCompleto(filter) {
+      const filtered = filter === 'all'
+        ? todosLosPlatos
+        : todosLosPlatos.filter(item => (item.categoria || '').toLowerCase() === filter);
+
+      menuItemsContainer.innerHTML = '';
+      menuCountNumber.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        menuItemsContainer.innerHTML = `
+          <div class="menu-empty">
+            <div class="menu-empty__icon">🍽️</div>
+            <p class="menu-empty__text">No hay platos en esta categoría por el momento.</p>
+          </div>`;
+        return;
+      }
+
+      // Group by category if showing "all"
+      if (filter === 'all') {
+        const seen = [];
+        todosLosPlatos.forEach(p => {
+          const cat = (p.categoria || 'Sin categoría').toLowerCase();
+          if (!seen.includes(cat)) seen.push(cat);
+        });
+
+        let globalIndex = 1;
+        seen.forEach(cat => {
+          const items = todosLosPlatos.filter(p => (p.categoria || '').toLowerCase() === cat);
+          if (items.length === 0) return;
+
+          const catName = items[0].categoria || 'Sin categoría';
+          const header = document.createElement('div');
+          header.className = 'menu-category-label';
+          header.innerHTML = `
+            <span class="menu-category-label__icon" aria-hidden="true">${getCategoryIcon(cat)}</span>
+            ${catName}`;
+          menuItemsContainer.appendChild(header);
+
+          items.forEach(item => {
+            menuItemsContainer.appendChild(buildMenuItem(item, globalIndex));
+            globalIndex++;
+          });
+        });
+      } else {
+        filtered.forEach((item, i) => {
+          menuItemsContainer.appendChild(buildMenuItem(item, i + 1));
+        });
+      }
+    }
+
+    /* ====================================================
+       DYNAMIC CATEGORY FILTER BUTTONS
+    ==================================================== */
+    function buildFilterButtons() {
+      // Keep the "Todos" button, remove any old dynamic ones
+      const existingDynamic = filtersContainer.querySelectorAll('.menu-filter-btn[data-dynamic]');
+      existingDynamic.forEach(b => b.remove());
+
+      const seen = [];
+      todosLosPlatos.forEach(p => {
+        const cat = (p.categoria || '').toLowerCase();
+        if (cat && !seen.includes(cat)) seen.push(cat);
+      });
+
+      seen.forEach(cat => {
+        const catName = todosLosPlatos.find(p => (p.categoria || '').toLowerCase() === cat)?.categoria || cat;
+        const btn = document.createElement('button');
+        btn.className = 'menu-filter-btn';
+        btn.dataset.category = cat;
+        btn.dataset.dynamic = 'true';
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', 'false');
+        btn.id = `filter-${cat.replace(/[^a-z0-9]/g, '-')}`;
+        btn.textContent = `${getCategoryIcon(cat)} ${catName}`;
+        filtersContainer.appendChild(btn);
+      });
+
+      // Attach click listeners to ALL filter buttons
+      filtersContainer.querySelectorAll('.menu-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filtersContainer.querySelectorAll('.menu-filter-btn').forEach(b => {
+            b.classList.remove('menu-filter-btn--active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('menu-filter-btn--active');
+          btn.setAttribute('aria-selected', 'true');
+
+          activeFilter = btn.dataset.category;
+          renderMenuCompleto(activeFilter);
+        });
+      });
+    }
+
+    /* ====================================================
+       CLIMA BAR UPDATE
+    ==================================================== */
+    function actualizarClimaBar(clima) {
+      const cfg = CLIMAS[clima.condicion] ?? CLIMAS.templado;
+      climaIcon.textContent     = cfg.icono;
+      climaTemp.textContent     = `${clima.temperatura}°C`;
+      climaDesc.textContent     = clima.descripcion ?? cfg.nombre;
+      climaLocation.textContent = `📍 ${clima.ciudad ?? 'Santiago, CL'}`;
+
+      // Update recommendation label
+      recomendadosClimaLabel.textContent = `${cfg.nombre} ${cfg.icono}`;
+    }
+
+    /* ====================================================
+       API CALLS
+    ==================================================== */
+    async function fetchClima() {
+      try {
+        const res  = await fetch(URL_CLIMA);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (json.success && json.data?.[0]) return json.data[0];
+      } catch (err) {
+        console.warn('[Menú Presencial] /api/clima.php no disponible:', err.message);
+      }
+      // Fallback estacional Santiago
+      const m = new Date().getMonth();
+      if (m >= 11 || m <= 1) return { temperatura: 28, condicion: 'sol',      descripcion: 'Verano (estimado)',   ciudad: 'Santiago, CL' };
+      if (m >= 5 && m <= 7)  return { temperatura: 10, condicion: 'frio',     descripcion: 'Invierno (estimado)', ciudad: 'Santiago, CL' };
+      return                        { temperatura: 18, condicion: 'templado', descripcion: 'Templado (estimado)', ciudad: 'Santiago, CL' };
+    }
+
+    async function fetchMenuClima(condicion, temperatura) {
+      try {
+        const url  = `${URL_MENU}?clima=${temperatura}&condicion=${condicion}`;
+        const res  = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        return json.success ? (json.data ?? []).filter(p => p.recomendado_por_clima) : [];
+      } catch (err) {
+        console.warn('[Menú Presencial] /api/menu.php no disponible, filtrado local:', err.message);
+        return todosLosPlatos.filter(p => platoCoincidesConClima(p, condicion));
+      }
+    }
+
+    async function fetchTodosLosPlatos() {
+      const res  = await fetch(`${URL_PLATOS}?disponible=true`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json.success || !Array.isArray(json.data)) throw new Error('Respuesta inesperada');
+      return json.data;
+    }
+
+    /* ====================================================
+       INIT
+    ==================================================== */
+    async function init() {
+      try {
+        // 1. Load all dishes
+        todosLosPlatos = await fetchTodosLosPlatos();
+
+        // 2. Get weather
+        const climaData = await fetchClima();
+        climaActual = climaData;
+        actualizarClimaBar(climaData);
+
+        // 3. Get climate-based recommendations
+        platosClima = await fetchMenuClima(climaData.condicion, climaData.temperatura);
+
+        // 4. Render recommendations
+        if (loadingRecomendados) loadingRecomendados.remove();
+        renderRecomendados();
+
+        // 5. Prepare full menu
+        if (loadingCompleto) loadingCompleto.remove();
+        buildFilterButtons();
+        renderMenuCompleto('all');
+
+      } catch (err) {
+        console.error('[Menú Presencial] Error de inicialización:', err);
+
+        // Remove loaders
+        if (loadingRecomendados) loadingRecomendados.remove();
+        if (loadingCompleto) loadingCompleto.remove();
+
+        // Show error in recommendations
+        recomendadosGrid.innerHTML = `
+          <div class="recomendados-empty">
+            <div class="recomendados-empty__icon">⚠️</div>
+            <p class="recomendados-empty__text">
+              No se pudo cargar el menú. Verifica la conexión con el servidor.
+            </p>
+          </div>`;
+
+        menuItemsContainer.innerHTML = `
+          <div class="menu-empty">
+            <div class="menu-empty__icon">⚠️</div>
+            <p class="menu-empty__text">No se pudieron cargar los platos. Verifica la conexión con la base de datos.</p>
+          </div>`;
+      }
+    }
+
+    init();
+
+  });
+  </script>
+
+</body>
+</html>
