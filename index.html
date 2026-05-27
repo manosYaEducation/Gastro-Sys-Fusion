@@ -11,8 +11,9 @@
   <!-- CSS -->
   <link rel="stylesheet" href="frontend/css/base/index.css" />
   <link rel="stylesheet" href="frontend/css/modal.css" />
+  <link rel="stylesheet" href="frontend/css/cart.css" />
 
-  <!-- Favicon inline SVG -->
+  <!-- Favicon -->
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
 </head>
@@ -30,11 +31,12 @@
       </a>
 
       <ul class="navbar__nav" role="list">
-        <li><a href="#menu" id="nav-menu-link">Menú</a></li>
-        <li><a href="#nosotros" id="nav-nosotros-link">Nosotros</a></li>
-        <li><a href="#contacto" id="nav-contacto-link">Contacto</a></li>
-        <li><a href="frontend/login.html" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
-        <li><a href="frontend/cocina.html" class="navbar__cta" style="background: #10b981; border: none; color: white;">Cocina</a></li>
+        <li><a href="#menu"                id="nav-menu-link">Menú</a></li>
+        <li><a href="#nosotros"            id="nav-nosotros-link">Nosotros</a></li>
+        <li><a href="#contacto"            id="nav-contacto-link">Contacto</a></li>
+        <li><a href="frontend/login.html"      class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+        <li><a href="frontend/cocina.html"     class="navbar__cta navbar__cta--green">Cocina</a></li>
+        <li><a href="frontend/inventario.html" class="navbar__cta navbar__cta--amber">Inventario</a></li>
       </ul>
     </nav>
   </header>
@@ -63,56 +65,39 @@
     ============================ -->
     <section class="dishes-section" id="menu" aria-labelledby="dishes-label">
 
-      <!-- ===========================
-           SUGERENCIAS SEGÚN EL CLIMA
-      ============================ -->
+      <!-- Sugerencias según el clima -->
       <div class="weather-suggestions-section" id="weather-suggestions-section" hidden>
         <div class="weather-suggestions-section__header">
-          <h2 class="weather-suggestions-section__title">Recomendado para un Día <span
-              id="weather-condition-span">Soleado</span></h2>
-          <p class="weather-suggestions-section__subtitle">Nuestro chef sugiere estos platos perfectos para la
-            temperatura exterior.</p>
+          <h2 class="weather-suggestions-section__title">
+            Recomendado para un Día <span id="weather-condition-span">Soleado</span>
+          </h2>
+          <p class="weather-suggestions-section__subtitle">
+            Nuestro chef sugiere estos platos perfectos para la temperatura exterior.
+          </p>
         </div>
-        <div class="weather-suggestions-grid" id="weather-suggestions-grid" role="list" aria-live="polite"
-          aria-label="Sugerencias de platos según el clima">
-          <!-- Las cards sugeridas se renderizan dinámicamente -->
+        <div class="weather-suggestions-grid" id="weather-suggestions-grid"
+             role="list" aria-live="polite" aria-label="Sugerencias de platos según el clima">
         </div>
       </div>
 
       <p class="dishes-section__label" id="dishes-label">⬥ Platos destacados ⬥</p>
 
-      <!-- Las cards se renderizan dinámicamente desde la BD -->
-      <div class="dishes-grid" id="dishes-grid" role="list" aria-live="polite" aria-label="Listado de platos">
-        <!-- Estado de carga -->
+      <!-- Cards dinámicas -->
+      <div class="dishes-grid" id="dishes-grid"
+           role="list" aria-live="polite" aria-label="Listado de platos">
         <div class="dish-card dish-card--skeleton" aria-hidden="true"></div>
         <div class="dish-card dish-card--skeleton" aria-hidden="true"></div>
       </div>
 
-      <!-- Botón ver menú completo -->
+      <!-- Botón Ver Menú Completo -->
       <div style="text-align:center; margin-top:2.5rem; animation: fadeInUp 0.8s ease 0.6s both;">
-        <a href="frontend/menu.html" id="btn-ver-menu-completo" style="
-          display: inline-flex;
-          align-items: center;
-          gap: 0.6rem;
-          background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-          color: #fff;
-          text-decoration: none;
-          padding: 0.85rem 2.2rem;
-          border-radius: 50px;
-          font-family: 'Inter', sans-serif;
-          font-size: 0.95rem;
-          font-weight: 600;
-          letter-spacing: 0.03em;
-          transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
-          box-shadow: 0 4px 20px rgba(212,146,10,0.3);
-        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 30px rgba(212,146,10,0.4)'"
-          onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(212,146,10,0.3)'">
+        <a href="frontend/menu.html" id="btn-ver-menu-completo" class="btn-ver-menu">
           Ver Menú Completo
-          <span style="font-size:1.2rem; transition: transform 0.3s ease;" aria-hidden="true">→</span>
+          <span aria-hidden="true">→</span>
         </a>
       </div>
 
-      <!-- Mensaje de error oculto -->
+      <!-- Error -->
       <p class="dishes-error" id="dishes-error" hidden>
         ⚠️ No se pudieron cargar los platos. Verifica la conexión con la base de datos.
       </p>
@@ -126,21 +111,21 @@
     <div class="custom-modal__overlay" id="custom-modal-overlay"></div>
     <div class="custom-modal__content" role="dialog" aria-modal="true" aria-labelledby="modal-dish-name">
       <button class="custom-modal__close" id="custom-modal-close" aria-label="Cerrar modal">&times;</button>
-      
+
       <div class="custom-modal__header">
         <div class="custom-modal__image-placeholder" aria-hidden="true">🍽️</div>
         <div class="custom-modal__header-info">
           <h2 id="modal-dish-name" class="custom-modal__title">Nombre del plato</h2>
-          <p id="modal-dish-desc" class="custom-modal__desc">Descripción</p>
+          <p  id="modal-dish-desc" class="custom-modal__desc">Descripción</p>
         </div>
       </div>
 
       <div class="custom-modal__body">
         <div id="modal-modifiers-container"></div>
-        
         <div class="custom-modal__notes-group">
           <label for="modal-notes" class="custom-modal__label">Instrucciones especiales</label>
-          <textarea id="modal-notes" class="custom-modal__textarea" placeholder="Ej: Sin cebolla, aderezo aparte..." rows="3"></textarea>
+          <textarea id="modal-notes" class="custom-modal__textarea"
+                    placeholder="Ej: Sin cebolla, aderezo aparte..." rows="3"></textarea>
         </div>
       </div>
 
@@ -149,9 +134,7 @@
           <span class="custom-modal__total-label">Total estimado</span>
           <span id="modal-total-price" class="custom-modal__total-price">$0</span>
         </div>
-        <button id="modal-add-btn" class="custom-modal__add-btn">
-          Agregar al Carrito
-        </button>
+        <button id="modal-add-btn" class="custom-modal__add-btn">Agregar al Carrito</button>
       </div>
     </div>
   </div>
@@ -164,32 +147,30 @@
       © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
     </p>
     <ul class="footer__links" role="list">
-      <li><a href="#menu" id="footer-menu-link">Menú</a></li>
-      <li><a href="#nosotros" id="footer-nosotros-link">Nosotros</a></li>
-      <li><a href="#contacto" id="footer-contacto-link">Contacto</a></li>
+      <li><a href="#menu"      id="footer-menu-link">Menú</a></li>
+      <li><a href="#nosotros"  id="footer-nosotros-link">Nosotros</a></li>
+      <li><a href="#contacto"  id="footer-contacto-link">Contacto</a></li>
     </ul>
   </footer>
 
   <!-- ===========================
-       WIDGET DE CLIMA INTERACTIVO (Gastro-Clima)
+       WIDGET DE CLIMA (Gastro-Clima) — bottom right
   ============================ -->
   <div id="weather-widget" class="weather-widget">
     <div class="weather-widget__header">
       <div class="weather-widget__title">
         <span>🌤️</span> Gastro-Clima
       </div>
-      <button class="weather-widget__toggle-btn" id="weather-widget-toggle" title="Minimizar / Maximizar"
-        aria-label="Minimizar">
-        ➖
-      </button>
+      <button class="weather-widget__toggle-btn" id="weather-widget-toggle"
+              title="Minimizar / Maximizar" aria-label="Minimizar">➖</button>
     </div>
 
     <div class="weather-widget__body" id="weather-widget-body">
       <div class="weather-widget__content">
         <div class="weather-widget__icon-container" id="weather-icon">☀️</div>
         <div class="weather-widget__info">
-          <span class="weather-widget__temp" id="weather-temp">--°C</span>
-          <span class="weather-widget__desc" id="weather-desc">Detectando clima...</span>
+          <span class="weather-widget__temp"     id="weather-temp">--°C</span>
+          <span class="weather-widget__desc"     id="weather-desc">Detectando clima...</span>
           <span class="weather-widget__location" id="weather-location">📍 Detectando...</span>
         </div>
       </div>
@@ -197,35 +178,65 @@
       <div class="weather-widget__simulator">
         <p class="weather-widget__sim-label">Simular Clima</p>
         <div class="weather-widget__sim-grid">
-          <button type="button" class="weather-sim-btn" data-weather="sol" id="btn-sim-sol"
-            title="Día soleado y caluroso">
-            <span>☀️</span>
-            <span>Cálido</span>
-          </button>
-          <button type="button" class="weather-sim-btn" data-weather="frio" id="btn-sim-frio"
-            title="Día frío e invernal">
-            <span>❄️</span>
-            <span>Frío</span>
-          </button>
-          <button type="button" class="weather-sim-btn" data-weather="lluvia" id="btn-sim-lluvia"
-            title="Día lluvioso o tormentoso">
-            <span>🌧️</span>
-            <span>Lluvia</span>
-          </button>
-          <button type="button" class="weather-sim-btn" data-weather="templado" id="btn-sim-templado"
-            title="Día templado y agradable">
-            <span>⛅</span>
-            <span>Templado</span>
-          </button>
+          <button type="button" class="weather-sim-btn" data-weather="sol"      id="btn-sim-sol"      title="Día soleado y caluroso"><span>☀️</span><span>Cálido</span></button>
+          <button type="button" class="weather-sim-btn" data-weather="frio"     id="btn-sim-frio"     title="Día frío e invernal"><span>❄️</span><span>Frío</span></button>
+          <button type="button" class="weather-sim-btn" data-weather="lluvia"   id="btn-sim-lluvia"   title="Día lluvioso o tormentoso"><span>🌧️</span><span>Lluvia</span></button>
+          <button type="button" class="weather-sim-btn" data-weather="templado" id="btn-sim-templado" title="Día templado y agradable"><span>⛅</span><span>Templado</span></button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- ===========================
+       CARRITO FLOTANTE (Gastro-Carrito) — bottom left
+  ============================ -->
+  <div id="cart-widget" class="cart-widget">
+    <button class="cart-widget__btn" id="cart-widget-toggle"
+            title="Ver Carrito de Compras" aria-label="Ver Carrito de Compras">
+      <span class="cart-widget__icon">🛒</span>
+      <span class="cart-widget__badge" id="cart-badge-count">0</span>
+    </button>
+  </div>
+
+  <div id="cart-sidebar-overlay" class="cart-sidebar__overlay"></div>
+
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-sidebar__header">
+      <h2 class="cart-sidebar__title"><span>🛒</span> Tu Pedido</h2>
+      <button class="cart-sidebar__close-btn" id="cart-sidebar-close" aria-label="Cerrar carrito">&times;</button>
+    </div>
+
+    <div class="cart-sidebar__body" id="cart-sidebar-body"></div>
+
+    <div class="cart-sidebar__footer" id="cart-sidebar-footer">
+      <div class="cart-total-row">
+        <span class="cart-total-label">Total Estimado</span>
+        <span class="cart-total-price" id="cart-total-price">$0</span>
+      </div>
+      <button id="cart-checkout-btn" class="cart-checkout-btn">Confirmar Pedido ➔</button>
+      <button id="cart-clear-btn"    class="cart-clear-btn">Vaciar Carrito</button>
+    </div>
+
+    <!-- Pantalla de éxito (envío a cocina) -->
+    <div id="cart-success-overlay" class="cart-success-overlay">
+      <div id="cart-success-icon" class="cart-success-icon">🍳</div>
+      <h3 id="cart-success-title" class="cart-success-title">Enviando a cocina...</h3>
+      <p  id="cart-success-desc"  class="cart-success-desc">
+        Preparando la conexión segura con los fogones de Gastro-Sys-Fusion...
+      </p>
+      <div class="cart-success-bar-wrap">
+        <div id="cart-success-progress" class="cart-success-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===========================
+       SCRIPTS
+  ============================ -->
   <script src="frontend/js/config.js"></script>
   <script src="frontend/js/platos.js"></script>
   <script src="frontend/js/modal.js"></script>
+  <script src="frontend/js/cart.js"></script>
 
 </body>
 

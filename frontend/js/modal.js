@@ -165,6 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.log('✅ PLATO LISTO PARA EL CARRITO (US-1.2):');
       console.log(JSON.stringify(cartItem, null, 2));
+
+      // Guardar en localStorage y disparar evento custom para el widget de carrito
+      try {
+        const currentCart = JSON.parse(localStorage.getItem('gastro_cart') || '[]');
+        currentCart.push(cartItem);
+        localStorage.setItem('gastro_cart', JSON.stringify(currentCart));
+        window.dispatchEvent(new CustomEvent('cart-updated'));
+      } catch (e) {
+        console.error('Error al guardar en el carrito:', e);
+      }
       
       // Provide some visual feedback
       const originalText = addBtn.innerHTML;
