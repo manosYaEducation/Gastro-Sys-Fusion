@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Pedidos | Gastro-Sys-Fusion</title>
+    <!-- CSS Base del sistema (hereda colores, navbar, footer) -->
+    <link rel="stylesheet" href="css/base/index.css" />
+    <link rel="stylesheet" href="css/menu.css" />
+    <!-- CSS Específico de Historial -->
+    <link rel="stylesheet" href="css/mis-pedidos.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+</head>
+<body>
+    
+    <!-- ===========================
+         NAVBAR IDÉNTICA A INDEX.HTML
+    ============================ -->
+    <header>
+        <nav class="navbar" role="navigation" aria-label="Navegación principal">
+            <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+                <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+                <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+            </a>
+
+            <ul class="navbar__nav" role="list">
+                <li><a href="menu.html" id="nav-menu-link">Menú</a></li>
+                <li><a href="../index.html#nosotros" id="nav-nosotros-link">Nosotros</a></li>
+                <li><a href="../index.html#contacto" id="nav-contacto-link">Contacto</a></li>
+                <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Header de sección con clase hero para igualar estética -->
+    <section class="hero" style="min-height: 25vh; padding: 4rem 1rem 2rem;">
+        <p class="hero__eyebrow">
+            <span aria-hidden="true">✦</span>
+            Tu Historial
+        </p>
+        <h1 class="hero__title" style="font-size: 3rem;">
+            Mis <span>Pedidos</span>
+        </h1>
+        <p class="hero__subtitle">
+            Revisa tus compras anteriores y vuelve a pedir tus favoritos con un solo clic.
+        </p>
+    </section>
+
+    <!-- Contenedor Principal -->
+    <main class="history-container">
+        <div id="loading-history" class="history-message">Cargando tus pedidos...</div>
+        <div id="empty-history" class="history-message" hidden>Aún no has realizado pedidos con nosotros.</div>
+        
+        <!-- Lista donde se inyectarán los pedidos -->
+        <div id="history-list" class="history-list"></div>
+    </main>
+
+    <!-- ===========================
+         FOOTER IDÉNTICO A INDEX.HTML
+    ============================ -->
+    <footer class="footer" role="contentinfo">
+        <p class="footer__copy">
+            © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+        </p>
+        <ul class="footer__links" role="list">
+            <li><a href="menu.html" id="footer-menu-link">Menú</a></li>
+            <li><a href="../index.html#nosotros" id="footer-nosotros-link">Nosotros</a></li>
+            <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+        </ul>
+    </footer>
+
+    <!-- Template para la tarjeta de historial -->
+    <template id="history-card-template">
+        <div class="history-card">
+            <div class="history-card__header">
+                <div>
+                    <h3 class="history-card__date">Fecha</h3>
+                    <span class="history-card__status">Estado</span>
+                </div>
+                <div class="history-card__total">Total: $0</div>
+            </div>
+            
+            <div class="history-card__body">
+                <ul class="history-card__items">
+                    <!-- Se llenará con JS -->
+                </ul>
+            </div>
+            
+            <div class="history-card__footer">
+                <button class="btn btn-primary btn-repeat-order" style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+                    color: #fff;
+                    border: none;
+                    text-decoration: none;
+                    padding: 0.85rem 2.2rem;
+                    border-radius: 50px;
+                    font-family: 'Inter', sans-serif;
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    letter-spacing: 0.03em;
+                    cursor: pointer;
+                    transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+                    box-shadow: 0 4px 20px rgba(212,146,10,0.3);
+                " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 30px rgba(212,146,10,0.4)'"
+                   onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(212,146,10,0.3)'">
+                    <span class="icon" aria-hidden="true">🔄</span> Pedir Nuevamente
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/mis-pedidos.js"></script>
+</body>
+</html>
