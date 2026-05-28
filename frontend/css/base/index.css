@@ -141,8 +141,9 @@ body::before {
 .navbar__cta:hover  { opacity: 0.9; transform: translateY(-1px); }
 
 /* Variantes de color para botones de acceso rápido */
-.navbar__cta--green { background: #10b981 !important; }
-.navbar__cta--amber { background: #f59e0b !important; }
+.navbar__cta--green  { background: #10b981 !important; }
+.navbar__cta--amber  { background: #f59e0b !important; }
+.navbar__cta--danger { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; box-shadow: 0 0 14px rgba(239,68,68,0.25); }
 
 /* ============================================================
    HERO

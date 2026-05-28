@@ -1,0 +1,603 @@
+/* ============================================================
+   mermas.css
+   Estilos específicos para frontend/mermas.html (T2.3 US-2.3).
+   Tokens globales vienen de css/base/index.css.
+   ============================================================ */
+
+/* ============================================================
+   VARIABLES LOCALES DE MERMAS
+   ============================================================ */
+:root {
+  --mrm-danger:      #ff3b30;
+  --mrm-danger-lt:   #ff6b63;
+  --mrm-danger-bg:   rgba(255, 59, 48, 0.08);
+  --mrm-warn:        #ff9500;
+  --mrm-warn-lt:     #ffb340;
+  --mrm-warn-bg:     rgba(255, 149, 0, 0.08);
+  --mrm-yellow:      #ffd60a;
+  --mrm-yellow-bg:   rgba(255, 214, 10, 0.08);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.mrm-hero {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 5rem 1.5rem 2.5rem;
+  animation: fadeInDown 0.6s ease both;
+}
+
+.mrm-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--mrm-danger-bg);
+  border: 1px solid rgba(255, 59, 48, 0.25);
+  border-radius: var(--radius-badge);
+  padding: 0.35rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--mrm-danger-lt);
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+
+.mrm-hero__title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.9rem;
+}
+
+.mrm-hero__title span {
+  background: linear-gradient(135deg, var(--mrm-danger-lt) 0%, var(--mrm-warn) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.mrm-hero__subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.mrm-hero__subtitle code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.15em 0.5em;
+  color: var(--mrm-danger-lt);
+}
+
+/* ============================================================
+   STATS BAR
+   ============================================================ */
+.mrm-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 1.5rem 2.5rem;
+  flex-wrap: wrap;
+}
+
+.mrm-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.1rem 2rem;
+  min-width: 130px;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.mrm-stat:hover { transform: translateY(-2px); }
+
+.mrm-stat__icon { font-size: 1.4rem; }
+
+.mrm-stat__num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.mrm-stat__label {
+  font-size: 0.71rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.mrm-stat--rojo  { border-color: rgba(255, 59, 48, 0.25); }
+.mrm-stat--rojo  .mrm-stat__num { color: var(--mrm-danger-lt); }
+
+.mrm-stat--naranja { border-color: rgba(255, 149, 0, 0.25); }
+.mrm-stat--naranja .mrm-stat__num { color: var(--mrm-warn-lt); }
+
+.mrm-stat--amarillo { border-color: rgba(255, 214, 10, 0.25); }
+.mrm-stat--amarillo .mrm-stat__num {
+  color: var(--mrm-yellow);
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   SECTION HEADER (compartido por gráfico + formulario)
+   ============================================================ */
+.mrm-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mrm-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.mrm-section-title__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   SECCIÓN GRÁFICO
+   ============================================================ */
+.mrm-chart-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 1.5rem 3rem;
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mrm-btn-reload {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    transform 0.35s ease;
+}
+
+.mrm-btn-reload:hover {
+  background: var(--color-card-hover);
+  color: var(--color-text);
+  transform: rotate(180deg);
+}
+
+/* Loading / Error comunes */
+.mrm-chart-loading,
+.mrm-chart-error,
+.mrm-historial-loading,
+.mrm-historial-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 3.5rem 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.mrm-chart-error span,
+.mrm-historial-empty span { font-size: 2rem; }
+
+.mrm-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--mrm-danger-lt);
+  border-radius: 50%;
+  animation: mrmSpin 0.8s linear infinite;
+}
+
+@keyframes mrmSpin { to { transform: rotate(360deg); } }
+
+.mrm-btn-retry {
+  padding: 0.45rem 1.3rem;
+  border-radius: var(--radius-badge);
+  border: 1px solid rgba(255, 59, 48, 0.35);
+  background: var(--mrm-danger-bg);
+  color: var(--mrm-danger-lt);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+.mrm-btn-retry:hover { opacity: 0.8; }
+
+/* Card que envuelve el canvas */
+.mrm-chart-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1.75rem 1.5rem;
+  box-shadow: var(--shadow-card);
+  animation: fadeInUp 0.55s ease both;
+}
+
+/* ============================================================
+   SECCIÓN FORMULARIO
+   ============================================================ */
+.mrm-form-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 1.5rem 3rem;
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Contenedor principal del form */
+.mrm-form {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 2rem 2rem 1.5rem;
+  box-shadow: var(--shadow-card);
+  animation: fadeInUp 0.6s ease 0.1s both;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.mrm-form__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+.mrm-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mrm-form__group--sm { min-width: 180px; max-width: 240px; }
+.mrm-form__group--full { grid-column: 1 / -1; }
+
+.mrm-form__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.mrm-required { color: var(--mrm-danger-lt); margin-left: 2px; }
+
+/* Inputs y selects */
+.mrm-form__input,
+.mrm-form__select,
+.mrm-form__textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.mrm-form__input::placeholder,
+.mrm-form__textarea::placeholder { color: var(--color-text-muted); opacity: 0.6; }
+
+.mrm-form__input:focus,
+.mrm-form__select:focus,
+.mrm-form__textarea:focus {
+  border-color: var(--mrm-danger-lt);
+  background: rgba(255, 59, 48, 0.04);
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.12);
+}
+
+/* Select nativo */
+.mrm-form__select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.2rem;
+}
+
+.mrm-form__select option {
+  background: #1a1a1a;
+  color: var(--color-text);
+}
+
+/* Input con badge de unidad */
+.mrm-input-unit-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mrm-input-unit-wrap .mrm-form__input {
+  padding-right: 3.5rem;
+}
+
+.mrm-unit-badge {
+  position: absolute;
+  right: 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mrm-warn-lt);
+  background: rgba(255, 149, 0, 0.1);
+  border-radius: 6px;
+  padding: 0.15em 0.45em;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+
+/* Textarea */
+.mrm-form__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Conteo de caracteres */
+.mrm-form__charcount {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: right;
+  margin-top: -0.2rem;
+}
+
+/* Hint de validación */
+.mrm-form__hint {
+  font-size: 0.78rem;
+  color: var(--mrm-danger-lt);
+  min-height: 1em;
+  transition: opacity 0.2s;
+}
+
+/* Footer del form */
+.mrm-form__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.mrm-btn-reset {
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-badge);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.mrm-btn-reset:hover {
+  background: var(--color-card-hover);
+  color: var(--color-text);
+}
+
+.mrm-btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1.8rem;
+  border-radius: var(--radius-badge);
+  border: none;
+  background: linear-gradient(135deg, var(--mrm-danger) 0%, #c0392b 100%);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255, 59, 48, 0.28);
+  transition:
+    opacity var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+.mrm-btn-submit:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(255, 59, 48, 0.38);
+}
+.mrm-btn-submit:active { transform: translateY(0); }
+.mrm-btn-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Toast de feedback */
+.mrm-toast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  animation: mrmToastIn 0.3s ease both;
+}
+
+.mrm-toast--ok {
+  background: rgba(52, 199, 89, 0.12);
+  border: 1px solid rgba(52, 199, 89, 0.3);
+  color: #4cd964;
+}
+
+.mrm-toast--err {
+  background: var(--mrm-danger-bg);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: var(--mrm-danger-lt);
+}
+
+@keyframes mrmToastIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   SECCIÓN HISTORIAL
+   ============================================================ */
+.mrm-historial-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 1.5rem 5rem;
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mrm-historial-table-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  overflow-x: auto;
+  background: var(--color-card);
+  box-shadow: var(--shadow-card);
+  animation: fadeInUp 0.6s ease 0.15s both;
+}
+
+.mrm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.mrm-th {
+  padding: 0.85rem 1.2rem;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mrm-th--id     { width: 50px; }
+.mrm-th--center { text-align: center; }
+
+.mrm-tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+.mrm-tr:last-child { border-bottom: none; }
+.mrm-tr:hover { background: var(--color-card-hover); }
+
+.mrm-td {
+  padding: 0.85rem 1.2rem;
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.mrm-td--id {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.mrm-td--center { text-align: center; }
+.mrm-td--nombre { font-weight: 500; }
+
+.mrm-td--cantidad {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--mrm-danger-lt);
+  text-align: center;
+}
+
+/* Badge de motivo */
+.mrm-motivo-badge {
+  display: inline-block;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-badge);
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: var(--mrm-danger-bg);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  color: var(--mrm-danger-lt);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .mrm-hero { padding: 3.5rem 1.2rem 2rem; }
+
+  .mrm-stats { gap: 0.6rem; }
+  .mrm-stat  { padding: 0.8rem 1.2rem; min-width: 100px; }
+  .mrm-stat__num { font-size: 1.3rem; }
+
+  .mrm-chart-section,
+  .mrm-form-section,
+  .mrm-historial-section { padding-left: 0.9rem; padding-right: 0.9rem; }
+
+  .mrm-form { padding: 1.4rem 1.2rem; }
+
+  .mrm-form__row {
+    grid-template-columns: 1fr;
+  }
+
+  .mrm-form__group--sm {
+    max-width: 100%;
+    min-width: unset;
+  }
+
+  .mrm-section-title { font-size: 1.2rem; }
+
+  .mrm-form__footer { flex-wrap: wrap; }
+  .mrm-btn-submit   { width: 100%; justify-content: center; }
+  .mrm-btn-reset    { width: 100%; text-align: center; }
+}

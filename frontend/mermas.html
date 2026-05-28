@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Reporte de Mermas — Gastro-Sys-Fusion. Visualiza los insumos perdidos de la semana y registra mermas manualmente." />
+  <title>Reporte de Mermas | Gastro-Sys-Fusion</title>
+
+  <!-- CSS: base + mermas -->
+  <link rel="stylesheet" href="css/base/index.css" />
+  <link rel="stylesheet" href="css/mermas.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📉</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+
+      <ul class="navbar__nav" role="list">
+        <li><a href="../index.html#menu" id="nav-inicio-link">Inicio</a></li>
+        <li><a href="menu.html"          id="nav-carta-link">Carta</a></li>
+        <li><a href="inventario.html"    id="nav-inventario-link">Inventario</a></li>
+        <li><a href="mermas.html"        id="nav-mermas-link" aria-current="page"
+            style="color:var(--color-danger-lt)">Mermas</a></li>
+        <li><a href="../index.html#contacto" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===========================
+       MAIN
+  ============================ -->
+  <main>
+
+    <!-- Hero -->
+    <section class="mrm-hero" aria-labelledby="mrm-title">
+      <p class="mrm-hero__eyebrow">
+        <span aria-hidden="true">📉</span>
+        Control de Pérdidas — Módulo de Mermas
+      </p>
+      <h1 class="mrm-hero__title" id="mrm-title">
+        Reporte de <span>Mermas</span>
+      </h1>
+      <p class="mrm-hero__subtitle">
+        Top 5 insumos perdidos esta semana y registro de pérdidas manuales.
+        Conectado a <code>POST /api/mermas.php</code>
+      </p>
+    </section>
+
+    <!-- ===========================
+         STATS
+    ============================ -->
+    <div class="mrm-stats" id="mrm-stats" aria-live="polite" aria-label="Resumen de mermas semanales">
+
+      <div class="mrm-stat mrm-stat--rojo" id="mrm-stat-eventos">
+        <span class="mrm-stat__icon" aria-hidden="true">🗑️</span>
+        <span class="mrm-stat__num" id="mrm-stat-eventos-num">—</span>
+        <span class="mrm-stat__label">Mermas esta semana</span>
+      </div>
+
+      <div class="mrm-stat mrm-stat--naranja" id="mrm-stat-cantidad">
+        <span class="mrm-stat__icon" aria-hidden="true">⚖️</span>
+        <span class="mrm-stat__num" id="mrm-stat-cantidad-num">—</span>
+        <span class="mrm-stat__label">Unidades perdidas</span>
+      </div>
+
+      <div class="mrm-stat mrm-stat--amarillo" id="mrm-stat-motivo">
+        <span class="mrm-stat__icon" aria-hidden="true">🔍</span>
+        <span class="mrm-stat__num" id="mrm-stat-motivo-num">—</span>
+        <span class="mrm-stat__label">Motivo frecuente</span>
+      </div>
+
+    </div>
+
+    <!-- ===========================
+         GRÁFICO TOP 5
+    ============================ -->
+    <section class="mrm-chart-section" aria-labelledby="mrm-chart-title">
+      <div class="mrm-section-header">
+        <h2 class="mrm-section-title" id="mrm-chart-title">
+          <span aria-hidden="true">📊</span> Top 5 Insumos Perdidos
+          <span class="mrm-section-title__sub">— semana actual</span>
+        </h2>
+        <button class="mrm-btn-reload" id="mrm-btn-reload" aria-label="Recargar gráfico" title="Recargar">↻</button>
+      </div>
+
+      <!-- Estado loading chart -->
+      <div class="mrm-chart-loading" id="mrm-chart-loading" aria-live="polite">
+        <div class="mrm-spinner" aria-hidden="true"></div>
+        <p>Cargando datos de mermas…</p>
+      </div>
+
+      <!-- Estado error chart -->
+      <div class="mrm-chart-error" id="mrm-chart-error" hidden>
+        <span aria-hidden="true">⚠️</span>
+        <p id="mrm-chart-error-msg">No se pudo cargar el gráfico.</p>
+        <button class="mrm-btn-retry" id="mrm-btn-retry-chart">Reintentar</button>
+      </div>
+
+      <!-- Canvas del gráfico -->
+      <div class="mrm-chart-card" id="mrm-chart-card" hidden>
+        <canvas id="mrm-chart-canvas" role="img" aria-label="Gráfico de barras: top 5 insumos con más mermas"></canvas>
+      </div>
+    </section>
+
+    <!-- ===========================
+         FORMULARIO MERMA MANUAL
+    ============================ -->
+    <section class="mrm-form-section" aria-labelledby="mrm-form-title">
+      <div class="mrm-section-header">
+        <h2 class="mrm-section-title" id="mrm-form-title">
+          <span aria-hidden="true">📝</span> Registrar Merma Manual
+        </h2>
+      </div>
+
+      <form class="mrm-form" id="mrm-form" novalidate aria-label="Formulario para registrar una merma">
+
+        <!-- Fila 1: Insumo + Cantidad -->
+        <div class="mrm-form__row">
+          <div class="mrm-form__group">
+            <label class="mrm-form__label" for="mrm-insumo">
+              Insumo <span class="mrm-required" aria-hidden="true">*</span>
+            </label>
+            <select class="mrm-form__select" id="mrm-insumo" name="insumo_id" required aria-required="true">
+              <option value="">— Selecciona un insumo —</option>
+              <!-- Opciones cargadas dinámicamente desde API -->
+            </select>
+            <span class="mrm-form__hint" id="mrm-insumo-hint" aria-live="polite"></span>
+          </div>
+
+          <div class="mrm-form__group mrm-form__group--sm">
+            <label class="mrm-form__label" for="mrm-cantidad">
+              Cantidad perdida <span class="mrm-required" aria-hidden="true">*</span>
+            </label>
+            <div class="mrm-input-unit-wrap">
+              <input
+                class="mrm-form__input"
+                type="number"
+                id="mrm-cantidad"
+                name="cantidad"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00"
+                required
+                aria-required="true"
+                aria-describedby="mrm-unidad-display"
+              />
+              <span class="mrm-unit-badge" id="mrm-unidad-display" aria-live="polite">unid.</span>
+            </div>
+            <span class="mrm-form__hint" id="mrm-cantidad-hint" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <!-- Fila 2: Motivo -->
+        <div class="mrm-form__row">
+          <div class="mrm-form__group">
+            <label class="mrm-form__label" for="mrm-motivo">
+              Motivo de la merma <span class="mrm-required" aria-hidden="true">*</span>
+            </label>
+            <select class="mrm-form__select" id="mrm-motivo" name="motivo" required aria-required="true">
+              <option value="">— Selecciona un motivo —</option>
+              <option value="vencimiento">📅 Vencimiento / Expiración</option>
+              <option value="danio_fisico">💥 Daño físico</option>
+              <option value="error_preparacion">🍳 Error de preparación</option>
+              <option value="contaminacion">🦠 Contaminación</option>
+              <option value="exceso_produccion">📦 Exceso de producción</option>
+              <option value="otro">🔖 Otro</option>
+            </select>
+            <span class="mrm-form__hint" id="mrm-motivo-hint" aria-live="polite"></span>
+          </div>
+
+          <div class="mrm-form__group mrm-form__group--sm">
+            <label class="mrm-form__label" for="mrm-fecha">Fecha del evento</label>
+            <input
+              class="mrm-form__input"
+              type="date"
+              id="mrm-fecha"
+              name="fecha"
+              aria-describedby="mrm-fecha-hint"
+            />
+            <span class="mrm-form__hint" id="mrm-fecha-hint">Por defecto: hoy</span>
+          </div>
+        </div>
+
+        <!-- Fila 3: Observaciones -->
+        <div class="mrm-form__group mrm-form__group--full">
+          <label class="mrm-form__label" for="mrm-observaciones">Observaciones adicionales</label>
+          <textarea
+            class="mrm-form__textarea"
+            id="mrm-observaciones"
+            name="observaciones"
+            rows="3"
+            placeholder="Ej: Los tomates llegaron en mal estado del proveedor…"
+            maxlength="500"
+          ></textarea>
+          <span class="mrm-form__charcount" id="mrm-charcount">0 / 500</span>
+        </div>
+
+        <!-- Footer del formulario -->
+        <div class="mrm-form__footer">
+          <button type="reset" class="mrm-btn-reset" id="mrm-btn-reset">Limpiar</button>
+          <button type="submit" class="mrm-btn-submit" id="mrm-btn-submit">
+            <span class="mrm-btn-submit__text">Registrar Merma</span>
+            <span class="mrm-btn-submit__icon" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <!-- Toast de feedback -->
+        <div class="mrm-toast" id="mrm-toast" role="alert" aria-live="assertive" hidden></div>
+
+      </form>
+
+    </section>
+
+    <!-- ===========================
+         HISTORIAL RECIENTE
+    ============================ -->
+    <section class="mrm-historial-section" aria-labelledby="mrm-historial-title">
+      <div class="mrm-section-header">
+        <h2 class="mrm-section-title" id="mrm-historial-title">
+          <span aria-hidden="true">🕓</span> Historial Reciente
+          <span class="mrm-section-title__sub">— últimas 10 mermas</span>
+        </h2>
+      </div>
+
+      <div class="mrm-historial-loading" id="mrm-historial-loading" aria-live="polite">
+        <div class="mrm-spinner" aria-hidden="true"></div>
+        <p>Cargando historial…</p>
+      </div>
+
+      <div class="mrm-historial-empty" id="mrm-historial-empty" hidden>
+        <span aria-hidden="true">📋</span>
+        <p>Sin registros de mermas todavía.</p>
+      </div>
+
+      <div class="mrm-historial-table-wrap" id="mrm-historial-table-wrap" hidden>
+        <table class="mrm-table" id="mrm-historial-table" aria-label="Historial reciente de mermas">
+          <thead>
+            <tr>
+              <th scope="col" class="mrm-th mrm-th--id">#</th>
+              <th scope="col" class="mrm-th">Insumo</th>
+              <th scope="col" class="mrm-th mrm-th--center">Cantidad</th>
+              <th scope="col" class="mrm-th">Motivo</th>
+              <th scope="col" class="mrm-th mrm-th--center">Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="mrm-historial-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+    <ul class="footer__links" role="list">
+      <li><a href="../index.html"      id="footer-inicio-link">Inicio</a></li>
+      <li><a href="inventario.html"    id="footer-inventario-link">Inventario</a></li>
+      <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/mermas.js"></script>
+
+</body>
+
+</html>

@@ -35,7 +35,6 @@
         <li><a href="../index.html#nosotros" id="nav-nosotros-link">Nosotros</a></li>
         <li><a href="../index.html#contacto" id="nav-contacto-link">Contacto</a></li>
         <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
-        <li><a href="cocina.html" class="navbar__cta" style="background: #10b981; border: none; color: white;">Cocina</a></li>
       </ul>
     </nav>
   </header>
@@ -122,7 +121,7 @@
     <div class="custom-modal__overlay" id="custom-modal-overlay"></div>
     <div class="custom-modal__content" role="dialog" aria-modal="true" aria-labelledby="modal-dish-name">
       <button class="custom-modal__close" id="custom-modal-close" aria-label="Cerrar modal">&times;</button>
-      
+
       <div class="custom-modal__header">
         <div class="custom-modal__image-placeholder" aria-hidden="true">🍽️</div>
         <div class="custom-modal__header-info">
@@ -133,10 +132,11 @@
 
       <div class="custom-modal__body">
         <div id="modal-modifiers-container"></div>
-        
+
         <div class="custom-modal__notes-group">
           <label for="modal-notes" class="custom-modal__label">Instrucciones especiales</label>
-          <textarea id="modal-notes" class="custom-modal__textarea" placeholder="Ej: Sin cebolla, aderezo aparte..." rows="3"></textarea>
+          <textarea id="modal-notes" class="custom-modal__textarea" placeholder="Ej: Sin cebolla, aderezo aparte..."
+            rows="3"></textarea>
         </div>
       </div>
 
@@ -172,118 +172,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-<<<<<<< HEAD
-    /* ====================================================
-       DATA — 10 platos de ejemplo con categoría y precio.
-       ¡Modifica los nombres, descripciones y precios
-       directamente aquí para ir probando!
-    ==================================================== */
-    const menuData = [
-      {
-        id: 1,
-        nombre: 'Plato 1 ',
-        descripcion: 'Descripción.',
-        categoria: 'entrada',
-        precio: 8500,
-        modificadores: [
-          {
-            id: 'size',
-            nombre: 'Tamaño de la porción',
-            requerido: true,
-            opciones: [
-              { id: 'normal', nombre: 'Normal', precio: 0 },
-              { id: 'grande', nombre: 'Familiar', precio: 2500 }
-            ]
-          }
-        ]
-      },
-      {
-        id: 2,
-        nombre: 'Plato 2',
-        descripcion: 'Descripción.',
-        categoria: 'entrada',
-        precio: 7200
-      },
-      {
-        id: 3,
-        nombre: 'Plato 3 ',
-        descripcion: 'Descripción.',
-        categoria: 'principal',
-        precio: 16900,
-        modificadores: [
-          {
-            id: 'termino',
-            nombre: 'Término de la carne',
-            requerido: true,
-            opciones: [
-              { id: 'ingles', nombre: 'A la inglesa', precio: 0 },
-              { id: 'medio', nombre: 'Término medio', precio: 0 },
-              { id: 'tres_cuartos', nombre: 'Tres cuartos', precio: 0 },
-              { id: 'bien_cocida', nombre: 'Bien cocida', precio: 0 }
-            ]
-          },
-          {
-            id: 'extras',
-            nombre: 'Agrega Extras',
-            requerido: false,
-            multiple: true,
-            opciones: [
-              { id: 'huevo', nombre: 'Huevo frito', precio: 1000 },
-              { id: 'tocino', nombre: 'Doble tocino', precio: 1500 },
-              { id: 'papas', nombre: 'Papas rústicas', precio: 2000 }
-            ]
-          }
-        ]
-      },
-      {
-        id: 4,
-        nombre: 'Plato 4 ',
-        descripcion: 'Descripción.',
-        categoria: 'principal',
-        precio: 18500
-      },
-      {
-        id: 5,
-        nombre: 'Plato 5 ',
-        descripcion: 'Descripción.',
-        categoria: 'principal',
-        precio: 21000
-      },
-      {
-        id: 6,
-        nombre: 'Plato 6 ',
-        descripcion: 'Descripción.',
-        categoria: 'principal',
-        precio: 14800
-      },
-      {
-        id: 7,
-        nombre: 'Plato 7 ',
-        descripcion: 'Descripción.',
-        categoria: 'postre',
-        precio: 6500
-      },
-      {
-        id: 8,
-        nombre: 'Plato 8 ',
-        descripcion: 'Descripción.',
-        categoria: 'postre',
-        precio: 7800
-      },
-      {
-        id: 9,
-        nombre: 'Plato 9 ',
-        descripcion: 'Descripción.',
-        categoria: 'bebida',
-        precio: 4500
-      },
-      {
-        id: 10,
-        nombre: 'Plato 10 ',
-        descripcion: 'Descripción.',
-        categoria: 'bebida',
-        precio: 5200
-=======
       /* ====================================================
          DATA — 10 platos de ejemplo con categoría y precio.
          ¡Modifica los nombres, descripciones y precios
@@ -295,7 +183,18 @@
           nombre: 'Plato 1 ',
           descripcion: 'Descripción.',
           categoria: 'entrada',
-          precio: 8500
+          precio: 8500,
+          modificadores: [
+            {
+              id: 'size',
+              nombre: 'Tamaño de la porción',
+              requerido: true,
+              opciones: [
+                { id: 'normal', nombre: 'Normal', precio: 0 },
+                { id: 'grande', nombre: 'Familiar', precio: 2500 }
+              ]
+            }
+          ]
         },
         {
           id: 2,
@@ -309,7 +208,31 @@
           nombre: 'Plato 3 ',
           descripcion: 'Descripción.',
           categoria: 'principal',
-          precio: 16900
+          precio: 16900,
+          modificadores: [
+            {
+              id: 'termino',
+              nombre: 'Término de la carne',
+              requerido: true,
+              opciones: [
+                { id: 'ingles', nombre: 'A la inglesa', precio: 0 },
+                { id: 'medio', nombre: 'Término medio', precio: 0 },
+                { id: 'tres_cuartos', nombre: 'Tres cuartos', precio: 0 },
+                { id: 'bien_cocida', nombre: 'Bien cocida', precio: 0 }
+              ]
+            },
+            {
+              id: 'extras',
+              nombre: 'Agrega Extras',
+              requerido: false,
+              multiple: true,
+              opciones: [
+                { id: 'huevo', nombre: 'Huevo frito', precio: 1000 },
+                { id: 'tocino', nombre: 'Doble tocino', precio: 1500 },
+                { id: 'papas', nombre: 'Papas rústicas', precio: 2000 }
+              ]
+            }
+          ]
         },
         {
           id: 4,
@@ -384,7 +307,6 @@
       ==================================================== */
       function formatPrecio(valor) {
         return '$' + Number(valor).toLocaleString('es-CL');
->>>>>>> Feature/RVasquez/2026-05-26/Task-2.1/insumos-stock_actual/alertas-stock_minimo
       }
 
       /* ====================================================
@@ -490,33 +412,23 @@
       ==================================================== */
       renderMenu('all');
 
-    });
-<<<<<<< HEAD
+      /* ====================================================
+         EVENT DELEGATION FOR MODAL (US-H1.3)
+      ==================================================== */
+      container.addEventListener('click', (e) => {
+        const itemNode = e.target.closest('.menu-item');
+        if (itemNode) {
+          const idStr = itemNode.getAttribute('id').replace('menu-item-', '');
+          const dishId = parseInt(idStr, 10);
+          const dishData = menuData.find(d => d.id === dishId);
 
-    /* ====================================================
-       INITIAL RENDER
-    ==================================================== */
-    renderMenu('all');
-
-    /* ====================================================
-       EVENT DELEGATION FOR MODAL (US-H1.3)
-    ==================================================== */
-    container.addEventListener('click', (e) => {
-      const itemNode = e.target.closest('.menu-item');
-      if (itemNode) {
-        const idStr = itemNode.getAttribute('id').replace('menu-item-', '');
-        const dishId = parseInt(idStr, 10);
-        const dishData = menuData.find(d => d.id === dishId);
-        
-        if (dishData && typeof window.openCustomizationModal === 'function') {
-          window.openCustomizationModal(dishData);
+          if (dishData && typeof window.openCustomizationModal === 'function') {
+            window.openCustomizationModal(dishData);
+          }
         }
-      }
-    });
+      });
 
-  });
-=======
->>>>>>> Feature/RVasquez/2026-05-26/Task-2.1/insumos-stock_actual/alertas-stock_minimo
+    });
   </script>
 
   <!-- Script del Modal de Personalización -->

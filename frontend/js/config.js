@@ -21,6 +21,7 @@ window.API = {
   menu:       _base + '/api/menu.php',
   platos:     _base + '/api/platos.php',
   inventario: _base + '/api/inventario.php',
+  mermas:     _base + '/api/mermas.php',
   agente:     _base + '/api/agente/query.php',
 };
 
