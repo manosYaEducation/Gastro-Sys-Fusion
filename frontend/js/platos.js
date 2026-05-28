@@ -148,8 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
     weatherIcon.textContent     = cfg.icono;
   }
 
-  /** Renderiza el menú principal con todos los platos. */
+  /**
+   * Renderiza el menú principal con todos los platos.
+   * Solo se usa cuando la grid principal está visible (ej: página de menú).
+   * En el home la sección está oculta, por lo que esta función no se invoca.
+   */
   function renderMenuPrincipal() {
+    if (!grid || grid.hidden) return; // no renderizar si la sección está oculta
     grid.innerHTML = '';
     if (!todosLosPlatos.length) {
       grid.innerHTML = '<p style="color:var(--color-text-muted);text-align:center;grid-column:1/-1">No hay platos disponibles.</p>';
@@ -171,9 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     weatherConditionSpan.innerHTML = `${cfg.nombre} ${cfg.icono}`;
     platosClima.forEach((p, i) => suggestionsGrid.appendChild(buildCard(p, i, true)));
     suggestionsSection.hidden = false;
-
-    // Re-renderiza el menú para actualizar los badges "Ideal hoy"
-    renderMenuPrincipal();
+    // No se re-renderiza el menú principal porque está oculto en el home
   }
 
   /** Marca el botón activo en el simulador. */
@@ -284,9 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Inicialización ─────────────────────────────────────────────────────────
   async function init() {
     try {
-      // 1. Cargar todos los platos
+      // 1. Cargar todos los platos (la grid principal está oculta en el home)
       todosLosPlatos = await fetchTodosLosPlatos();
-      renderMenuPrincipal();
+      // renderMenuPrincipal() se omite: la sección de platos destacados está hidden
 
       // 2. Obtener clima real desde el servidor
       const climaData = await fetchClima();
@@ -300,7 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (err) {
       console.error('[Gastro-Sys-Fusion] Error de inicialización:', err);
-      if (grid)    grid.innerHTML = '';
       if (errorEl) errorEl.hidden = false;
     }
   }
