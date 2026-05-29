@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Gestión de Proveedores — Gastro-Sys-Fusion. CRUD completo de proveedores, asociación con insumos y registro de órdenes de compra." />
+  <title>Proveedores | Gastro-Sys-Fusion</title>
+
+  <link rel="stylesheet" href="css/base/index.css" />
+  <link rel="stylesheet" href="css/proveedores.css?v=6" />
+
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>" />
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+      <ul class="navbar__nav" role="list">
+        <li><a href="../index.html#menu" id="nav-inicio-link">Inicio</a></li>
+        <li><a href="menu.html" id="nav-carta-link">Carta</a></li>
+        <li><a href="inventario.html" id="nav-inventario-link">Inventario</a></li>
+        <li><a href="mermas.html" id="nav-mermas-link">Mermas</a></li>
+        <li><a href="proveedores.html" id="nav-proveedores-link" aria-current="page"
+            style="color:var(--prv-accent-lt, #a78bfa)">Proveedores</a></li>
+        <li><a href="../index.html#contacto" class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="prv-hero" aria-labelledby="prv-title">
+      <p class="prv-hero__eyebrow">
+        <span aria-hidden="true">🏭</span>
+        Cadena de Suministro — Módulo de Proveedores
+      </p>
+      <h1 class="prv-hero__title" id="prv-title">
+        Gestión de <span>Proveedores</span>
+      </h1>
+      <p class="prv-hero__subtitle">
+        Administra tu red de proveedores, asocia insumos y registra órdenes de compra.
+        Conectado a <code>/api/proveedores.php</code>
+      </p>
+    </section>
+
+    <!-- Stats -->
+    <div class="prv-stats" id="prv-stats" aria-live="polite">
+      <div class="prv-stat prv-stat--purple">
+        <span class="prv-stat__icon" aria-hidden="true">🏭</span>
+        <span class="prv-stat__num" id="stat-total-proveedores">—</span>
+        <span class="prv-stat__label">Proveedores</span>
+      </div>
+      <div class="prv-stat prv-stat--green">
+        <span class="prv-stat__icon" aria-hidden="true">📦</span>
+        <span class="prv-stat__num" id="stat-total-ordenes">—</span>
+        <span class="prv-stat__label">Órdenes registradas</span>
+      </div>
+      <div class="prv-stat prv-stat--amber">
+        <span class="prv-stat__icon" aria-hidden="true">💰</span>
+        <span class="prv-stat__num" id="stat-monto-total">—</span>
+        <span class="prv-stat__label">Inversión total</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="prv-tabs-bar" role="tablist" aria-label="Secciones de proveedores">
+      <button class="prv-tab-btn active" id="tab-btn-proveedores" role="tab" aria-selected="true"
+        aria-controls="tab-panel-proveedores">
+        🏭 Proveedores
+      </button>
+      <button class="prv-tab-btn" id="tab-btn-ordenes" role="tab" aria-selected="false"
+        aria-controls="tab-panel-ordenes">
+        📦 Historial de Compras
+      </button>
+    </div>
+
+    <!-- Tab Panel: Proveedores -->
+    <div class="prv-tab-panel active" id="tab-panel-proveedores" role="tabpanel" aria-labelledby="tab-btn-proveedores">
+      <section class="prv-section" aria-labelledby="prv-list-title">
+
+        <div class="prv-section-header">
+          <h2 class="prv-section-title" id="prv-list-title">
+            <span aria-hidden="true">🏭</span> Directorio de Proveedores
+            <span class="prv-section-title__sub">— todos los activos</span>
+          </h2>
+          <button class="prv-btn-primary" id="btn-nuevo-proveedor">
+            <span aria-hidden="true">＋</span> Nuevo Proveedor
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <div class="prv-loading" id="prv-table-loading" aria-live="polite">
+          <div class="prv-spinner" aria-hidden="true"></div>
+          <p>Cargando proveedores…</p>
+        </div>
+
+        <!-- Empty -->
+        <div class="prv-empty" id="prv-table-empty" hidden>
+          <span aria-hidden="true">🏭</span>
+          <p>Sin proveedores registrados todavía.</p>
+          <button class="prv-btn-primary" id="btn-nuevo-proveedor-empty">＋ Agregar primero</button>
+        </div>
+
+        <!-- Tabla -->
+        <div class="prv-table-wrap" id="prv-table-wrap" hidden>
+          <table class="prv-table" id="prv-table" aria-label="Lista de proveedores">
+            <colgroup>
+              <col /><!-- # -->
+              <col /><!-- Nombre -->
+              <col /><!-- Contacto -->
+              <col /><!-- Teléfono -->
+              <col /><!-- Email -->
+              <col /><!-- Insumos asociados -->
+              <col /><!-- Órdenes -->
+              <col /><!-- Inversión -->
+              <col /><!-- Acciones -->
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col" class="prv-th">#</th>
+                <th scope="col" class="prv-th">Nombre</th>
+                <th scope="col" class="prv-th">Contacto</th>
+                <th scope="col" class="prv-th">Teléfono</th>
+                <th scope="col" class="prv-th">Email</th>
+                <th scope="col" class="prv-th">Insumos asociados</th>
+                <th scope="col" class="prv-th prv-th--center">Órdenes</th>
+                <th scope="col" class="prv-th prv-th--right">Inversión</th>
+                <th scope="col" class="prv-th prv-th--center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="prv-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Toast global -->
+        <div class="prv-toast" id="prv-toast-global" role="alert" aria-live="assertive" hidden></div>
+
+      </section>
+    </div>
+
+    <!-- Tab Panel: Órdenes de Compra -->
+    <div class="prv-tab-panel" id="tab-panel-ordenes" role="tabpanel" aria-labelledby="tab-btn-ordenes">
+      <section class="prv-section" aria-labelledby="prv-ordenes-title">
+
+        <div class="prv-section-header">
+          <h2 class="prv-section-title" id="prv-ordenes-title">
+            <span aria-hidden="true">📦</span> Historial de Órdenes
+            <span class="prv-section-title__sub">— últimas 50</span>
+          </h2>
+          <button class="prv-btn-primary" id="btn-nueva-orden">
+            <span aria-hidden="true">＋</span> Nueva Orden
+          </button>
+        </div>
+
+        <!-- Filtro -->
+        <div class="prv-filter-bar">
+          <label for="filtro-proveedor">Filtrar por proveedor:</label>
+          <select class="prv-form__select" id="filtro-proveedor" style="min-width:200px;max-width:320px">
+            <option value="">— Todos —</option>
+          </select>
+        </div>
+
+        <!-- Loading -->
+        <div class="prv-loading" id="ord-loading" aria-live="polite">
+          <div class="prv-spinner" aria-hidden="true"></div>
+          <p>Cargando órdenes…</p>
+        </div>
+
+        <!-- Empty -->
+        <div class="prv-empty" id="ord-empty" hidden>
+          <span aria-hidden="true">📦</span>
+          <p>Sin órdenes registradas todavía.</p>
+        </div>
+
+        <!-- Tabla -->
+        <div class="prv-table-wrap" id="ord-table-wrap" hidden>
+          <table class="prv-table" id="ord-table" aria-label="Historial de órdenes de compra">
+            <thead>
+              <tr>
+                <th scope="col" class="prv-th">#</th>
+                <th scope="col" class="prv-th">Proveedor</th>
+                <th scope="col" class="prv-th">Insumo</th>
+                <th scope="col" class="prv-th prv-th--center">Fecha</th>
+                <th scope="col" class="prv-th prv-th--center">Cantidad</th>
+                <th scope="col" class="prv-th prv-th--right">Precio/u</th>
+                <th scope="col" class="prv-th prv-th--right">Total</th>
+                <th scope="col" class="prv-th prv-th--center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="ord-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="prv-toast" id="prv-toast-ord" role="alert" aria-live="assertive" hidden></div>
+
+      </section>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+    <ul class="footer__links" role="list">
+      <li><a href="../index.html" id="footer-inicio-link">Inicio</a></li>
+      <li><a href="inventario.html" id="footer-inventario-link">Inventario</a></li>
+      <li><a href="mermas.html" id="footer-mermas-link">Mermas</a></li>
+      <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- ============================================================
+       MODAL: Crear / Editar Proveedor
+  ============================================================ -->
+  <div id="modal-proveedor" class="prv-modal-overlay" hidden role="dialog" aria-modal="true"
+    aria-labelledby="modal-prv-title">
+    <div class="prv-modal">
+      <div class="prv-modal__header">
+        <h2 class="prv-modal__title" id="modal-prv-title">Nuevo Proveedor</h2>
+        <button class="prv-modal__close" id="modal-prv-close" aria-label="Cerrar modal">✕</button>
+      </div>
+
+      <form class="prv-form" id="form-proveedor" novalidate>
+        <input type="hidden" id="prv-id" value="" />
+
+        <div class="prv-form__row">
+          <div class="prv-form__group prv-form__group--full">
+            <label class="prv-form__label" for="prv-nombre">
+              Nombre <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="text" id="prv-nombre" placeholder="Ej: Distribuidora El Sol"
+              required />
+            <span class="prv-form__hint" id="prv-nombre-hint" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="prv-form__row">
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="prv-contacto">Persona de contacto</label>
+            <input class="prv-form__input" type="text" id="prv-contacto" placeholder="Ej: Juan Pérez" />
+          </div>
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="prv-telefono">Teléfono</label>
+            <input class="prv-form__input" type="tel" id="prv-telefono" placeholder="Ej: +51 999 888 777" />
+          </div>
+        </div>
+
+        <div class="prv-form__row">
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="prv-email">Email</label>
+            <input class="prv-form__input" type="email" id="prv-email" placeholder="proveedor@empresa.com" />
+          </div>
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="prv-ruc">RUC / NIT</label>
+            <input class="prv-form__input" type="text" id="prv-ruc" placeholder="Ej: 20123456789" />
+          </div>
+        </div>
+
+        <div class="prv-form__group prv-form__group--full">
+          <label class="prv-form__label" for="prv-direccion">Dirección</label>
+          <textarea class="prv-form__textarea" id="prv-direccion" rows="2"
+            placeholder="Av. Los Industriales 450, Lima"></textarea>
+        </div>
+
+        <!-- Asociación insumo principal -->
+        <div class="prv-form__group prv-form__group--full">
+          <label class="prv-form__label" for="prv-insumo-principal">
+            Insumo principal asociado
+          </label>
+          <select class="prv-form__select" id="prv-insumo-principal">
+            <option value="">— Sin asignar —</option>
+          </select>
+          <span class="prv-form__hint" style="color:var(--color-text-muted)">
+            Al guardar, este insumo quedará vinculado a este proveedor como su fuente principal.
+            Un proveedor puede tener varios insumos; selecciona uno por vez.
+          </span>
+        </div>
+
+        <div class="prv-form__footer">
+          <button type="button" class="prv-btn-cancel" id="modal-prv-cancel">Cancelar</button>
+          <button type="submit" class="prv-btn-save" id="modal-prv-save">
+            <span id="modal-prv-save-text">Guardar</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div class="prv-toast" id="prv-toast-modal" role="alert" aria-live="assertive" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: Registrar Orden de Compra
+  ============================================================ -->
+  <div id="modal-orden" class="prv-modal-overlay" hidden role="dialog" aria-modal="true"
+    aria-labelledby="modal-ord-title">
+    <div class="prv-modal">
+      <div class="prv-modal__header">
+        <h2 class="prv-modal__title" id="modal-ord-title">Nueva Orden de Compra</h2>
+        <button class="prv-modal__close" id="modal-ord-close" aria-label="Cerrar modal">✕</button>
+      </div>
+
+      <form class="prv-form" id="form-orden" novalidate>
+        <div class="prv-form__row">
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="ord-proveedor">
+              Proveedor <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <select class="prv-form__select" id="ord-proveedor" required>
+              <option value="">— Selecciona —</option>
+            </select>
+            <span class="prv-form__hint" id="ord-proveedor-hint" aria-live="polite"></span>
+          </div>
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="ord-insumo">
+              Insumo <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <select class="prv-form__select" id="ord-insumo" required>
+              <option value="">— Selecciona —</option>
+            </select>
+            <span class="prv-form__hint" id="ord-insumo-hint" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="prv-form__row">
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="ord-fecha">
+              Fecha <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="date" id="ord-fecha" required />
+          </div>
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="ord-cantidad">
+              Cantidad <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="number" id="ord-cantidad" min="0.01" step="0.01" placeholder="0.00"
+              required />
+            <span class="prv-form__hint" id="ord-cantidad-hint" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="prv-form__row">
+          <div class="prv-form__group">
+            <label class="prv-form__label" for="ord-precio">
+              Precio unitario (S/) <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="number" id="ord-precio" min="0" step="0.01" placeholder="0.00"
+              required />
+            <span class="prv-form__hint" id="ord-precio-hint" aria-live="polite"></span>
+          </div>
+          <div class="prv-form__group">
+            <label class="prv-form__label">Total estimado</label>
+            <div class="prv-form__input" id="ord-total-display" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.25);
+                        color:var(--prv-green-lt);font-weight:700;cursor:default">
+              S/ 0.00
+            </div>
+          </div>
+        </div>
+
+        <div class="prv-form__group prv-form__group--full">
+          <label class="prv-form__label" for="ord-observaciones">Observaciones</label>
+          <textarea class="prv-form__textarea" id="ord-observaciones" rows="2"
+            placeholder="Ej: Entrega urgente, fraccionado en 2 lotes…"></textarea>
+        </div>
+
+        <div class="prv-form__footer">
+          <button type="button" class="prv-btn-cancel" id="modal-ord-cancel">Cancelar</button>
+          <button type="submit" class="prv-btn-save" id="modal-ord-save">
+            <span>Registrar Orden</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div class="prv-toast" id="prv-toast-ord-modal" role="alert" aria-live="assertive" hidden></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js?v=3"></script>
+  <script src="js/proveedores.js?v=3"></script>
+
+</body>
+
+</html>

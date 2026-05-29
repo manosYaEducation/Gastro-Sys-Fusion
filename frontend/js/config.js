@@ -21,8 +21,9 @@ window.API = {
   menu:       _base + '/api/menu.php',
   platos:     _base + '/api/platos.php',
   inventario: _base + '/api/inventario.php',
-  mermas:     _base + '/api/mermas.php',
-  agente:     _base + '/api/agente/query.php',
+  mermas:       _base + '/api/mermas.php',
+  proveedores:  _base + '/api/proveedores.php',
+  agente:       _base + '/api/agente/query.php',
 };
 
 /** URL del agente Next.js */
