@@ -23,6 +23,7 @@ window.API = {
   inventario: _base + '/api/inventario.php',
   mermas:     _base + '/api/mermas.php',
   agente:     _base + '/api/agente/query.php',
+  auth:       _base + '/api/auth.php',
 };
 
 /** URL del agente Next.js */

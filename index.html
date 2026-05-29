@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="frontend/css/base/index.css" />
   <link rel="stylesheet" href="frontend/css/modal.css" />
   <link rel="stylesheet" href="frontend/css/cart.css" />
+  <link rel="stylesheet" href="frontend/css/login.css" />
 
   <!-- Favicon -->
   <link rel="icon"
@@ -34,7 +35,7 @@
         <li><a href="#menu"                id="nav-menu-link">Menú</a></li>
         <li><a href="#nosotros"            id="nav-nosotros-link">Nosotros</a></li>
         <li><a href="#contacto"            id="nav-contacto-link">Contacto</a></li>
-        <li><a href="frontend/login.html"      class="navbar__cta" id="nav-reservar-link">Reservar</a></li>
+        <li><a href="frontend/login.html"      class="navbar__cta" id="nav-reservar-link">Iniciar Sesión</a></li>
         <li><a href="frontend/cocina.html"     class="navbar__cta navbar__cta--green">Cocina</a></li>
         <li><a href="frontend/inventario.html" class="navbar__cta navbar__cta--amber">Inventario</a></li>
         <li><a href="frontend/mermas.html"     class="navbar__cta navbar__cta--danger" id="nav-mermas-link">Mermas</a></li>
@@ -229,7 +230,12 @@
   <!-- ===========================
        SCRIPTS
   ============================ -->
-  <script src="frontend/js/config.js"></script>
+  <script>
+    window.__PAGINA_PUBLICA = true;
+    window.__ROLES_PERMITIDOS = [];
+  </script>
+  <script src="frontend/js/config.js?v=1.0.1"></script>
+  <script src="frontend/js/auth-guard.js?v=1.0.1"></script>
   <script src="frontend/js/platos.js"></script>
   <script src="frontend/js/modal.js"></script>
   <script src="frontend/js/cart.js"></script>

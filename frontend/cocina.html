@@ -50,7 +50,9 @@
     </template>
 
     <!-- Scripts -->
-    <script src="js/config.js"></script>
+    <script>window.__ROLES_PERMITIDOS = ['jefe_cocina', 'administrador', 'gerente'];</script>
+    <script src="js/config.js?v=1.0.1"></script>
+    <script src="js/auth-guard.js?v=1.0.1"></script>
     <script src="js/cocina.js"></script>
 </body>
 </html>

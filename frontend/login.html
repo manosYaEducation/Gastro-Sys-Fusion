@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Iniciar sesión en Gastro-Sys-Fusion — Plataforma gastronómica inteligente." />
+  <title>Iniciar Sesión | Gastro-Sys-Fusion</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base/index.css" />
+  <link rel="stylesheet" href="css/login.css" />
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+</head>
+
+<body class="login-page">
+
+  <!-- Animated Background -->
+  <div class="login-bg" aria-hidden="true"></div>
+
+  <!-- Toast notification container -->
+  <div id="login-toast" class="login-toast" role="alert" aria-live="assertive">
+    <span class="login-toast__icon" id="login-toast-icon"></span>
+    <span id="login-toast-msg"></span>
+  </div>
+
+  <!-- ===========================
+       LOGIN CONTAINER
+  ============================ -->
+  <div class="login-container">
+
+    <!-- Brand -->
+    <div class="login-brand">
+      <div class="login-brand__icon" aria-hidden="true">🍽️</div>
+      <h1 class="login-brand__title">Gastro-Sys-Fusion</h1>
+      <p class="login-brand__subtitle">Inicia sesión para acceder al sistema</p>
+    </div>
+
+    <!-- Glassmorphism Card -->
+    <div class="login-card">
+
+      <!-- Role Selector -->
+      <div class="login-roles" id="login-roles" role="radiogroup" aria-label="Selecciona tu perfil">
+        <div class="login-role-card" data-role="cliente" tabindex="0" role="radio" aria-checked="false"
+             id="role-cliente">
+          <span class="login-role-card__icon">🧑‍💼</span>
+          <span class="login-role-card__label">Cliente</span>
+        </div>
+        <div class="login-role-card" data-role="jefe_cocina" tabindex="0" role="radio" aria-checked="false"
+             id="role-jefe-cocina">
+          <span class="login-role-card__icon">👨‍🍳</span>
+          <span class="login-role-card__label">Jefe de Cocina</span>
+        </div>
+        <div class="login-role-card" data-role="administrador" tabindex="0" role="radio" aria-checked="false"
+             id="role-administrador">
+          <span class="login-role-card__icon">⚙️</span>
+          <span class="login-role-card__label">Admin</span>
+        </div>
+        <div class="login-role-card" data-role="gerente" tabindex="0" role="radio" aria-checked="false"
+             id="role-gerente">
+          <span class="login-role-card__icon">📊</span>
+          <span class="login-role-card__label">Gerente</span>
+        </div>
+      </div>
+
+      <div class="login-divider">Credenciales</div>
+
+      <!-- Login Form -->
+      <form id="login-form" autocomplete="on" novalidate>
+        <div class="login-field">
+          <span class="login-field__icon" aria-hidden="true">✉️</span>
+          <input
+            type="email"
+            id="login-email"
+            class="login-field__input"
+            placeholder="Correo electrónico"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="login-field">
+          <span class="login-field__icon" aria-hidden="true">🔒</span>
+          <input
+            type="password"
+            id="login-password"
+            class="login-field__input"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" class="login-field__toggle" id="toggle-password"
+                  aria-label="Mostrar/ocultar contraseña" title="Mostrar contraseña">👁️</button>
+        </div>
+
+        <button type="submit" class="login-btn" id="login-btn">
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <!-- Dev credentials hint -->
+      <div class="login-dev-hint" id="login-dev-hint">
+        <span class="login-dev-hint__title">🔑 Credenciales de prueba</span>
+        <span id="dev-hint-content">Selecciona un perfil arriba para ver las credenciales.</span>
+      </div>
+
+    </div>
+
+    <!-- Back to homepage -->
+    <div class="login-footer">
+      <a href="../index.html" class="login-footer__link" id="login-back-link">
+        <span aria-hidden="true">←</span> Volver al inicio
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ===========================
+       SCRIPTS
+  ============================ -->
+  <script src="js/config.js"></script>
+  <script src="js/login.js"></script>
+
+</body>
+
+</html>
