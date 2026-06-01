@@ -17,19 +17,14 @@ window.API_URL_PHP = _base + '/backend/';
 
 /** Endpoints del nuevo contrato de API */
 window.API = {
-  clima:      _base + '/api/clima.php',
-  menu:       _base + '/api/menu.php',
-  platos:     _base + '/api/platos.php',
+  clima: _base + '/api/clima.php',
+  menu: _base + '/api/menu.php',
+  platos: _base + '/api/platos.php',
   inventario: _base + '/api/inventario.php',
-<<<<<<< HEAD
-  mermas:     _base + '/api/mermas.php',
-  agente:     _base + '/api/agente/query.php',
-  auth:       _base + '/api/auth.php',
-=======
-  mermas:       _base + '/api/mermas.php',
-  proveedores:  _base + '/api/proveedores.php',
-  agente:       _base + '/api/agente/query.php',
->>>>>>> Feature/FGonzalez/2026-05-29/Task-2.4-proveedores
+  mermas: _base + '/api/mermas.php',
+  auth: _base + '/api/auth.php',
+  proveedores: _base + '/api/proveedores.php',
+  agente: _base + '/api/agente/query.php',
 };
 
 /** URL del agente Next.js */

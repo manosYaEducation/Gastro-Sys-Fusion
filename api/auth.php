@@ -9,7 +9,20 @@
  */
 
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+
+// CORS: permitir credenciales (cookies de sesión) — wildcard '*' no funciona con credentials
+$origin = $_SERVER['HTTP_ORIGIN'] ?? 'http://localhost';
+$allowed_origins = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://localhost:80',
+];
+if (in_array($origin, $allowed_origins, true)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+} else {
+    header('Access-Control-Allow-Origin: http://localhost');
+}
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -20,6 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/../backend/conexion.php';
 
+// Configurar sesión antes de iniciarla (necesario para que las cookies funcionen
+// correctamente con fetch credentials:'include' en localhost)
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path'     => '/',
+    'domain'   => '',
+    'secure'   => false,   // false en localhost (sin HTTPS)
+    'httponly' => true,
+    'samesite' => 'Lax',   // Lax permite peticiones same-site con fetch
+]);
 session_start();
 
 // Determinar la acción

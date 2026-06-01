@@ -39,7 +39,9 @@
    */
   async function guardarSesion() {
     try {
-      const res  = await fetch(window.API.auth + '?action=check');
+      const res  = await fetch(window.API.auth + '?action=check', {
+        credentials: 'include',
+      });
       const json = await res.json();
 
       if (!json.success) {
@@ -87,9 +89,12 @@
    * Actualiza el navbar para mostrar el usuario logueado o el botón de iniciar sesión.
    */
   function actualizarNavbar(user) {
+    // Roles definidos una sola vez para evitar re-declaración (fix SyntaxError strict mode)
+    const rolesInternos = ['jefe_cocina', 'administrador', 'gerente'];
+    const rolesMermas   = ['administrador', 'gerente'];
+
     // Buscar conmutador central y mostrarlo/ocultarlo según rol
     const switcher = document.getElementById('navbar-center-switcher');
-    const rolesInternos = ['jefe_cocina', 'administrador', 'gerente'];
     if (switcher) {
       if (user && rolesInternos.includes(user.rol)) {
         switcher.style.display = 'flex';
@@ -105,9 +110,6 @@
     const enlacesCocina     = nav.querySelector('a[href*="cocina"]');
     const enlacesInventario = nav.querySelector('a[href*="inventario"]');
     const enlacesMermas     = nav.querySelector('a[href*="mermas"]');
-
-    const rolesInternos = ['jefe_cocina', 'administrador', 'gerente'];
-    const rolesMermas   = ['administrador', 'gerente'];
 
     if (!user) {
       // Si no está logueado, ocultar todas las opciones administrativas
@@ -180,6 +182,7 @@
     try {
       await fetch(window.API.auth, {
         method: 'POST',
+        credentials: 'include',          // <-- envía la cookie de sesión PHP
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'logout' }),
       });
