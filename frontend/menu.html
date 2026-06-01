@@ -30,11 +30,26 @@
         <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
       </a>
 
+      <!-- Conmutador central para personal de cocina -->
+      <div class="navbar__center-switcher" id="navbar-center-switcher" style="display: none;">
+        <div class="nav-switcher">
+          <a href="cocina.html" class="nav-switcher-btn" id="switcher-cocina">
+            <span>🍳</span> Cocina
+          </a>
+          <a href="inventario.html" class="nav-switcher-btn" id="switcher-inventario">
+            <span>📦</span> Inventario
+          </a>
+        </div>
+      </div>
+
       <ul class="navbar__nav" role="list">
         <li><a href="../index.html#menu" id="nav-menu-link">Inicio</a></li>
         <li><a href="../index.html#nosotros" id="nav-nosotros-link">Nosotros</a></li>
         <li><a href="../index.html#contacto" id="nav-contacto-link">Contacto</a></li>
         <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Iniciar Sesión</a></li>
+        <li><a href="cocina.html" class="navbar__cta navbar__cta--green">Cocina</a></li>
+        <li><a href="inventario.html" class="navbar__cta navbar__cta--amber" id="nav-inventario-link">Inventario</a></li>
+        <li><a href="mermas.html" class="navbar__cta navbar__cta--danger" id="nav-mermas-link">Mermas</a></li>
       </ul>
     </nav>
   </header>

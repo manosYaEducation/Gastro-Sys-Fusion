@@ -87,6 +87,17 @@
    * Actualiza el navbar para mostrar el usuario logueado o el botón de iniciar sesión.
    */
   function actualizarNavbar(user) {
+    // Buscar conmutador central y mostrarlo/ocultarlo según rol
+    const switcher = document.getElementById('navbar-center-switcher');
+    const rolesInternos = ['jefe_cocina', 'administrador', 'gerente'];
+    if (switcher) {
+      if (user && rolesInternos.includes(user.rol)) {
+        switcher.style.display = 'flex';
+      } else {
+        switcher.style.display = 'none';
+      }
+    }
+
     const nav = document.querySelector('.navbar__nav');
     if (!nav) return;
 

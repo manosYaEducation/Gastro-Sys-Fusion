@@ -220,3 +220,82 @@
 .btn-ready:active {
     transform: scale(0.98);
 }
+
+/* ============================================================
+   CONMUTADOR CENTRAL DE NAVEGACIÓN (COCINA ↔ INVENTARIO)
+   ============================================================ */
+.navbar__center-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-switcher {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px;
+  border-radius: 50px;
+  gap: 4px;
+}
+
+.nav-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #888;
+  text-decoration: none;
+  border-radius: 50px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-switcher-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Activo - Verde (Cocina) */
+.nav-switcher-btn.active--green {
+  color: #fff !important;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+}
+
+/* Activo - Ámbar (Inventario) */
+.nav-switcher-btn.active--amber {
+  color: #fff !important;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+}
+
+/* Botón de Logout Cocina */
+.kitchen-logout-btn {
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: 0.45rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.kitchen-logout-btn:hover {
+  background: var(--color-danger);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .navbar__center-switcher {
+    display: none !important;
+  }
+}
+

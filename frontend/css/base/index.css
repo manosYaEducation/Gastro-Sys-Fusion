@@ -758,3 +758,65 @@ body::before {
   }
 }
 
+/* ============================================================
+   CONMUTADOR CENTRAL DE NAVEGACIÓN (COCINA ↔ INVENTARIO)
+   ============================================================ */
+.navbar__center-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.nav-switcher {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px;
+  border-radius: 50px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  gap: 4px;
+}
+
+.nav-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #9a9082);
+  text-decoration: none;
+  border-radius: 50px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-switcher-btn:hover {
+  color: var(--color-text, #f0ebe4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Activo - Verde (Cocina) */
+.nav-switcher-btn.active--green {
+  color: #fff !important;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+}
+
+/* Activo - Ámbar (Inventario) */
+.nav-switcher-btn.active--amber {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--color-primary, #d4920a), var(--color-accent, #b5451b));
+  border: 1px solid rgba(212, 146, 10, 0.4);
+  box-shadow: 0 4px 15px rgba(212, 146, 10, 0.3);
+}
+
+@media (max-width: 768px) {
+  .navbar__center-switcher {
+    display: none !important; /* Ocultar switcher en pantallas móviles pequeñas para evitar desbordes */
+  }
+}
+
+
