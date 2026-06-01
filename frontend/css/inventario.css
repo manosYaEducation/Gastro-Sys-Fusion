@@ -413,3 +413,146 @@
   .inv-table-section { padding: 0 0.8rem 4rem; }
   .inv-th, .inv-td { padding: 0.75rem 0.9rem; }
 }
+
+/* ============================================================
+   COLUMNAS DE TESTING (T2.5) — Agregar / Reducir stock
+   ============================================================ */
+
+/* Tabla más ancha para acomodar las 2 columnas extra */
+.inv-table-section {
+  max-width: 1180px;
+}
+
+/* Cabecera de las columnas de test — tinte azul discreto */
+.inv-th--test {
+  color: rgba(120, 180, 255, 0.7);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  min-width: 130px;
+}
+
+/* Celda de acción */
+.inv-td--accion {
+  padding: 0.55rem 0.8rem;
+}
+
+/* Grupo: input + botón en línea */
+.inv-accion-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Input numérico compacto */
+.inv-accion-input {
+  width: 60px;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  text-align: center;
+  transition: border-color var(--transition), background var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+.inv-accion-input::-webkit-inner-spin-button,
+.inv-accion-input::-webkit-outer-spin-button { display: none; }
+
+.inv-accion-input:focus {
+  border-color: rgba(120, 180, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Botón de acción base */
+.inv-accion-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition),
+    transform 0.15s ease,
+    box-shadow var(--transition),
+    opacity var(--transition);
+}
+
+.inv-accion-btn:active { transform: scale(0.92); }
+
+/* Botón + (agregar) — verde */
+.inv-accion-btn--add {
+  background: rgba(52, 199, 89, 0.15);
+  border-color: rgba(52, 199, 89, 0.3);
+  color: #4cd964;
+}
+.inv-accion-btn--add:hover:not(:disabled) {
+  background: rgba(52, 199, 89, 0.28);
+  box-shadow: 0 0 10px rgba(52, 199, 89, 0.25);
+}
+
+/* Botón − (reducir) — rojo */
+.inv-accion-btn--sub {
+  background: rgba(255, 69, 58, 0.12);
+  border-color: rgba(255, 69, 58, 0.28);
+  color: #ff6b60;
+}
+.inv-accion-btn--sub:hover:not(:disabled) {
+  background: rgba(255, 69, 58, 0.24);
+  box-shadow: 0 0 10px rgba(255, 69, 58, 0.2);
+}
+
+/* ============================================================
+   TOAST DE FEEDBACK GLOBAL
+   ============================================================ */
+.inv-toast {
+  position: fixed;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 40px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.87rem;
+  font-weight: 500;
+  max-width: min(90vw, 540px);
+  white-space: normal;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.inv-toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.inv-toast--ok {
+  background: rgba(20, 35, 20, 0.96);
+  border: 1px solid rgba(52, 199, 89, 0.4);
+  color: #4cd964;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 12px rgba(52, 199, 89, 0.15);
+}
+
+.inv-toast--error {
+  background: rgba(40, 18, 18, 0.96);
+  border: 1px solid rgba(255, 69, 58, 0.4);
+  color: #ff6b60;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 12px rgba(255, 69, 58, 0.15);
+}
+
+.inv-toast span { font-size: 1rem; flex-shrink: 0; }
