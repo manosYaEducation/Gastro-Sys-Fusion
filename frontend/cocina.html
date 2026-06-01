@@ -17,9 +17,27 @@
             <span class="kitchen-icon">👨‍🍳</span>
             <h1>Cocina en vivo</h1>
         </div>
-        <div class="kitchen-status">
-            <span class="status-indicator live"></span>
-            Conectado - Actualizando cada 10s
+
+        <!-- Conmutador central para personal de cocina -->
+        <div class="navbar__center-switcher" id="navbar-center-switcher">
+            <div class="nav-switcher">
+                <a href="cocina.html" class="nav-switcher-btn active--green" id="switcher-cocina">
+                    <span>🍳</span> Cocina
+                </a>
+                <a href="inventario.html" class="nav-switcher-btn" id="switcher-inventario">
+                    <span>📦</span> Inventario
+                </a>
+            </div>
+        </div>
+
+        <div class="kitchen-status-group" style="display: flex; align-items: center; gap: 1.5rem;">
+            <div class="kitchen-status">
+                <span class="status-indicator live"></span>
+                Conectado - Actualizando cada 10s
+            </div>
+            <button class="kitchen-logout-btn" id="kitchen-logout-btn" onclick="window.cerrarSesion()" title="Cerrar sesión">
+                Salir
+            </button>
         </div>
     </header>
 
