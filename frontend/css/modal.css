@@ -61,7 +61,7 @@
   height: 32px;
   border-radius: 50%;
   border: none;
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
   color: var(--color-text, #333);
   font-size: 20px;
   display: flex;
@@ -73,15 +73,15 @@
 }
 
 .custom-modal__close:hover {
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
   transform: scale(1.1);
 }
 
 /* Header */
 .custom-modal__header {
   padding: 24px;
-  background: linear-gradient(to right, rgba(200,200,200,0.1), transparent);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: linear-gradient(to right, rgba(200, 200, 200, 0.1), transparent);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   gap: 16px;
   align-items: flex-start;
@@ -124,14 +124,15 @@
   padding: 24px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.2) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 .custom-modal__body::-webkit-scrollbar {
   width: 6px;
 }
+
 .custom-modal__body::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
@@ -180,7 +181,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -189,7 +190,7 @@
 
 .custom-option-label:hover {
   background: #f0f0f0;
-  border-color: rgba(0,0,0,0.2);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .custom-option-label input {
@@ -223,7 +224,8 @@
 }
 
 .custom-option-label:has(input[type="checkbox"]) .custom-option-icon {
-  border-radius: 6px; /* square for checkbox */
+  border-radius: 6px;
+  /* square for checkbox */
 }
 
 .custom-option-label:has(input:checked) .custom-option-icon {
@@ -280,7 +282,7 @@
 .custom-modal__textarea {
   width: 100%;
   padding: 14px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   font-family: inherit;
   font-size: 0.95rem;
@@ -301,7 +303,7 @@
 .custom-modal__footer {
   padding: 20px 24px;
   background: var(--color-bg, #1a1a1a);
-  border-top: 1px solid rgba(128,128,128,0.2);
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -327,7 +329,8 @@
 }
 
 .custom-modal__add-btn {
-  background: var(--color-primary, #e29524); /* Ajuste al color principal del botón */
+  background: var(--color-primary, #e29524);
+  /* Ajuste al color principal del botón */
   color: #fff;
   border: none;
   padding: 14px 28px;
@@ -344,7 +347,7 @@
 .custom-modal__add-btn:hover {
   background: #333;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .custom-modal__add-btn:active {
@@ -360,7 +363,7 @@
     max-height: none;
     border-radius: 0;
   }
-  
+
   .custom-modal__content {
     transform: translateY(100%);
   }

@@ -2,7 +2,8 @@
 /**
  * api/mermas.php — T2.3 / US-2.3
  *
- * GET  /api/mermas.php?top5=1&periodo=semana   → Top 5 insumos con más mermas esta semana
+ * GET  /api/mermas.php?periodo=semana          → Top 5 insumos con más mermas (semana/mes/anio)
+ * GET  /api/mermas.php?top5=1&periodo=semana   → Alias del anterior (retrocompatible)
  * GET  /api/mermas.php?historial=1&limit=10    → Últimas N mermas registradas
  * POST /api/mermas.php                         → Registrar una merma manual
  *
@@ -91,8 +92,9 @@ if ($method === 'POST') {
 if ($method === 'GET') {
     try {
 
-        // ── Top 5 insumos perdidos esta semana ──────────────────────────────
-        if (isset($_GET['top5'])) {
+        // ── Top 5 insumos perdidos ─────────────────────────────────────────
+        // Acepta ?periodo=semana (forma corta) o ?top5=1&periodo=semana (legado)
+        if (isset($_GET['top5']) || isset($_GET['periodo'])) {
             $periodo = $_GET['periodo'] ?? 'semana';
 
             $intervalo = match($periodo) {
@@ -165,7 +167,7 @@ if ($method === 'GET') {
         }
 
         // Sin parámetros reconocidos → error descriptivo
-        respuestaError('Usa ?top5=1 o ?historial=1', 400);
+        respuestaError('Usa ?periodo=semana (o ?top5=1&periodo=semana) para el top5, o ?historial=1 para el historial.', 400);
 
     } catch (\PDOException $e) {
         respuestaError('Error de base de datos: ' . $e->getMessage(), 500);

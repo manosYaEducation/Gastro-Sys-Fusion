@@ -386,9 +386,10 @@ body::before {
   border-top: 1px solid var(--color-border);
   padding: 2rem 2.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
   gap: 1rem;
   margin-top: auto;
   background: rgba(15,14,13,0.6);
@@ -478,7 +479,6 @@ body::before {
   .hero { padding: 4rem 1.2rem 2.5rem; }
   .dishes-section { padding: 2rem 1.2rem 4rem; }
   .dishes-grid { grid-template-columns: 1fr; }
-  .footer { flex-direction: column; text-align: center; }
 }
 
 /* ============================================================
