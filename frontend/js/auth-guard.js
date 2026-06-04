@@ -115,14 +115,11 @@
       }
     }
 
-    const nav = document.querySelector('.navbar__nav');
-    if (!nav) return;
-
-    // Buscar enlaces de perfil (ya ocultos por CSS si tienen clase --admin)
-    const enlacesCocina      = nav.querySelector('a[href*="cocina"]');
-    const enlacesInventario  = nav.querySelector('a[href*="inventario"]');
-    const enlacesMermas      = nav.querySelector('a[href*="mermas"]');
-    const enlacesProveedores = nav.querySelector('a[href*="proveedores"]');
+    // Buscar enlaces de perfil dentro del conmutador central
+    const enlacesCocina      = switcher ? switcher.querySelector('a[href*="cocina"]') : null;
+    const enlacesInventario  = switcher ? switcher.querySelector('a[href*="inventario"]') : null;
+    const enlacesMermas      = switcher ? switcher.querySelector('a[href*="mermas"]') : null;
+    const enlacesProveedores = switcher ? switcher.querySelector('a[href*="proveedores"]') : null;
 
     if (!user) {
       setAdminLink(enlacesCocina, false);
@@ -130,22 +127,25 @@
       setAdminLink(enlacesMermas, false);
       setAdminLink(enlacesProveedores, false);
 
-      let loginLink = nav.querySelector('a[href*="login"]') || nav.querySelector('#nav-reservar-link') || nav.querySelector('#nav-login-link');
-      if (loginLink) {
-        loginLink.textContent = 'Iniciar Sesión';
-        loginLink.setAttribute('href', loginUrl());
-        loginLink.style.display = 'inline-block';
+      const navList = document.querySelector('.navbar__nav');
+      if (navList) {
+        let loginLink = navList.querySelector('a[href*="login"]') || navList.querySelector('#nav-reservar-link') || navList.querySelector('#nav-login-link');
+        if (loginLink) {
+          loginLink.textContent = 'Iniciar Sesión';
+          loginLink.setAttribute('href', loginUrl());
+          loginLink.style.display = 'inline-block';
 
-        const li = loginLink.parentElement;
-        const userWidget = li.querySelector('.navbar__user');
-        if (userWidget) {
-          li.innerHTML = '';
-          const a = document.createElement('a');
-          a.href = loginUrl();
-          a.className = 'navbar__cta';
-          a.id = 'nav-login-link';
-          a.textContent = 'Iniciar Sesión';
-          li.appendChild(a);
+          const li = loginLink.parentElement;
+          const userWidget = li.querySelector('.navbar__user');
+          if (userWidget) {
+            li.innerHTML = '';
+            const a = document.createElement('a');
+            a.href = loginUrl();
+            a.className = 'navbar__cta';
+            a.id = 'nav-login-link';
+            a.textContent = 'Iniciar Sesión';
+            li.appendChild(a);
+          }
         }
       }
       return;
@@ -157,15 +157,16 @@
     setAdminLink(enlacesMermas,     rolesMermas.includes(user.rol));
     setAdminLink(enlacesProveedores, rolesProveedores.includes(user.rol));
 
-    // Reemplazar enlace de login por widget de usuario
-    const loginLink = nav.querySelector('a[href*="login"]') || nav.querySelector('#nav-reservar-link') || nav.querySelector('#nav-login-link');
-    if (loginLink) {
-      const li = loginLink.parentElement;
-      li.innerHTML = '';
+    const navList = document.querySelector('.navbar__nav');
+    if (navList) {
+      const loginLink = navList.querySelector('a[href*="login"]') || navList.querySelector('#nav-reservar-link') || navList.querySelector('#nav-login-link');
+      if (loginLink) {
+        const li = loginLink.parentElement;
+        li.innerHTML = '';
 
-      const userWidget = document.createElement('div');
-      userWidget.className = 'navbar__user';
-      userWidget.innerHTML = `
+        const userWidget = document.createElement('div');
+        userWidget.className = 'navbar__user';
+        userWidget.innerHTML = `
         <div class="navbar__user-info">
           <span class="navbar__user-name">${user.nombre}</span>
           <span class="navbar__user-role">${ROLE_DISPLAY[user.rol] || user.rol}</span>
@@ -174,9 +175,10 @@
           Salir
         </button>
       `;
-      li.appendChild(userWidget);
+        li.appendChild(userWidget);
 
-      document.getElementById('navbar-logout-btn').addEventListener('click', cerrarSesion);
+        document.getElementById('navbar-logout-btn').addEventListener('click', cerrarSesion);
+      }
     }
   }
 
