@@ -143,10 +143,8 @@ body::before {
 .navbar__cta::after { display: none !important; }
 .navbar__cta:hover  { opacity: 0.9; transform: translateY(-1px); }
 
-/* Variantes de color para botones de acceso rápido */
-.navbar__cta--green  { background: #10b981 !important; }
-.navbar__cta--amber  { background: #f59e0b !important; }
-.navbar__cta--danger { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; box-shadow: 0 0 14px rgba(239,68,68,0.25); }
+/* Botones de perfil ocultos por defecto → respaldo por si el inline falla */
+.navbar__cta--admin { display: none !important; }
 
 /* ============================================================
    HERO
@@ -797,20 +795,12 @@ body::before {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* Activo - Verde (Cocina) */
-.nav-switcher-btn.active--green {
+/* Activo - Dorado (estilo unificado) */
+.nav-switcher-btn.active--gold {
   color: #fff !important;
-  background: linear-gradient(135deg, #10b981, #059669);
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
-}
-
-/* Activo - Ámbar (Inventario) */
-.nav-switcher-btn.active--amber {
-  color: #fff !important;
-  background: linear-gradient(135deg, var(--color-primary, #d4920a), var(--color-accent, #b5451b));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   border: 1px solid rgba(212, 146, 10, 0.4);
-  box-shadow: 0 4px 15px rgba(212, 146, 10, 0.3);
+  box-shadow: 0 4px 15px rgba(212, 146, 10, 0.35);
 }
 
 @media (max-width: 768px) {

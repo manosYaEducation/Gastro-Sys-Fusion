@@ -6,43 +6,53 @@
     <title>Dashboard de Cocina | Gastro-Sys-Fusion</title>
     <!-- CSS Base -->
     <link rel="stylesheet" href="css/base/index.css" />
+    <link rel="stylesheet" href="css/login.css" />
     <!-- CSS Específico -->
     <link rel="stylesheet" href="css/cocina.css" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🍳</text></svg>" />
 </head>
-<body class="kitchen-body">
-    <!-- Header Minimalista -->
-    <header class="kitchen-header">
-        <div class="kitchen-brand">
-            <span class="kitchen-icon">👨‍🍳</span>
-            <h1>Cocina en vivo</h1>
-        </div>
+<body>
+    <!-- ===========================
+         NAVBAR
+    ============================ -->
+    <header>
+        <nav class="navbar" role="navigation" aria-label="Navegación principal">
+            <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+                <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+                <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+            </a>
 
-        <!-- Conmutador central para personal de cocina -->
-        <div class="navbar__center-switcher" id="navbar-center-switcher">
-            <div class="nav-switcher">
-                <a href="cocina.html" class="nav-switcher-btn active--green" id="switcher-cocina">
-                    <span>🍳</span> Cocina
-                </a>
-                <a href="inventario.html" class="nav-switcher-btn" id="switcher-inventario">
-                    <span>📦</span> Inventario
-                </a>
+            <!-- Conmutador central para personal de cocina -->
+            <div class="navbar__center-switcher" id="navbar-center-switcher">
+                <div class="nav-switcher">
+                    <a href="cocina.html" class="nav-switcher-btn active--gold" id="switcher-cocina">
+                        <span>🍳</span> Cocina
+                    </a>
+                    <a href="inventario.html" class="nav-switcher-btn" id="switcher-inventario">
+                        <span>📦</span> Inventario
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <div class="kitchen-status-group" style="display: flex; align-items: center; gap: 1.5rem;">
-            <div class="kitchen-status">
-                <span class="status-indicator live"></span>
-                Conectado - Actualizando cada 10s
-            </div>
-            <button class="kitchen-logout-btn" id="kitchen-logout-btn" onclick="window.cerrarSesion()" title="Cerrar sesión">
-                Salir
-            </button>
-        </div>
+            <ul class="navbar__nav" role="list">
+                <li><a href="../index.html#menu" id="nav-menu-link">Menú</a></li>
+                <li><a href="../index.html#nosotros" id="nav-nosotros-link">Nosotros</a></li>
+                <li><a href="../index.html#contacto" id="nav-contacto-link">Contacto</a></li>
+                <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Iniciar Sesión</a></li>
+                <li><a href="cocina.html" class="navbar__cta navbar__cta--admin" id="nav-cocina-link">Cocina</a></li>
+                <li><a href="inventario.html" class="navbar__cta navbar__cta--admin" id="nav-inventario-link">Inventario</a></li>
+                <li><a href="mermas.html" class="navbar__cta navbar__cta--admin" id="nav-mermas-link">Mermas</a></li>
+                <li><a href="proveedores.html" class="navbar__cta navbar__cta--admin" id="nav-proveedores-link">Proveedores</a></li>
+            </ul>
+        </nav>
     </header>
 
     <!-- Contenedor Principal -->
     <main class="kitchen-main">
+        <div class="kitchen-status-bar" id="kitchen-status-bar">
+            <span class="status-indicator live"></span>
+            <span id="kitchen-status-text">Conectado — Actualizando cada 10s</span>
+        </div>
         <div id="loading-state" class="kitchen-loading">Cargando pedidos activos...</div>
         <div id="empty-state" class="kitchen-empty" hidden>
             <h2>No hay pedidos pendientes</h2>

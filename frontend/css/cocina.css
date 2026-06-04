@@ -8,55 +8,20 @@
     --card-bg: #1a1a1a;
     --card-border: #333;
     --color-text-kitchen: #f4f4f5;
-    --color-ready: #10b981; /* Verde */
-    --color-warning: #f59e0b; /* Naranja/Amarillo */
-    --color-danger: #ef4444; /* Rojo (atrasado) */
+    --color-ready: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
 }
 
-.kitchen-body {
-    background-color: var(--bg-kitchen);
-    color: var(--color-text-kitchen);
-    font-family: 'Inter', system-ui, sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.kitchen-header {
-    background: #000;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--card-border);
-}
-
-.kitchen-brand {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.kitchen-brand h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.kitchen-icon {
-    font-size: 2rem;
-}
-
-.kitchen-status {
+.kitchen-status-bar {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     color: #888;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--card-border);
 }
 
 .status-indicator {
@@ -80,6 +45,7 @@
     flex: 1;
     padding: 2rem;
     overflow-y: auto;
+    margin-top: 68px;
 }
 
 .kitchen-loading, .kitchen-empty {
@@ -221,81 +187,5 @@
     transform: scale(0.98);
 }
 
-/* ============================================================
-   CONMUTADOR CENTRAL DE NAVEGACIÓN (COCINA ↔ INVENTARIO)
-   ============================================================ */
-.navbar__center-switcher {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.nav-switcher {
-  display: flex;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 4px;
-  border-radius: 50px;
-  gap: 4px;
-}
-
-.nav-switcher-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 16px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #888;
-  text-decoration: none;
-  border-radius: 50px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.nav-switcher-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* Activo - Verde (Cocina) */
-.nav-switcher-btn.active--green {
-  color: #fff !important;
-  background: linear-gradient(135deg, #10b981, #059669);
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
-}
-
-/* Activo - Ámbar (Inventario) */
-.nav-switcher-btn.active--amber {
-  color: #fff !important;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
-}
-
-/* Botón de Logout Cocina */
-.kitchen-logout-btn {
-  background: transparent;
-  border: 1px solid var(--color-danger);
-  color: var(--color-danger);
-  padding: 0.45rem 1.25rem;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.kitchen-logout-btn:hover {
-  background: var(--color-danger);
-  color: #fff;
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-  transform: translateY(-1px);
-}
-
-@media (max-width: 768px) {
-  .navbar__center-switcher {
-    display: none !important;
-  }
-}
 

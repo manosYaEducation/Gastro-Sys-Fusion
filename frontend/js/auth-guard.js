@@ -86,12 +86,24 @@
   }
 
   /**
+   * Muestra/oculta un enlace de perfil añadiendo o quitando la clase que lo oculta por CSS.
+   */
+  function setAdminLink(link, show) {
+    if (!link) return;
+    if (show) {
+      link.classList.remove('navbar__cta--admin');
+    } else {
+      link.classList.add('navbar__cta--admin');
+    }
+  }
+
+  /**
    * Actualiza el navbar para mostrar el usuario logueado o el botón de iniciar sesión.
    */
   function actualizarNavbar(user) {
-    // Roles definidos una sola vez para evitar re-declaración (fix SyntaxError strict mode)
-    const rolesInternos = ['jefe_cocina', 'administrador', 'gerente'];
-    const rolesMermas   = ['administrador', 'gerente'];
+    const rolesInternos    = ['jefe_cocina', 'administrador', 'gerente'];
+    const rolesMermas      = ['administrador', 'gerente'];
+    const rolesProveedores = ['administrador', 'gerente'];
 
     // Buscar conmutador central y mostrarlo/ocultarlo según rol
     const switcher = document.getElementById('navbar-center-switcher');
@@ -106,25 +118,24 @@
     const nav = document.querySelector('.navbar__nav');
     if (!nav) return;
 
-    // Buscar y ocultar/mostrar enlaces según rol
-    const enlacesCocina     = nav.querySelector('a[href*="cocina"]');
-    const enlacesInventario = nav.querySelector('a[href*="inventario"]');
-    const enlacesMermas     = nav.querySelector('a[href*="mermas"]');
+    // Buscar enlaces de perfil (ya ocultos por CSS si tienen clase --admin)
+    const enlacesCocina      = nav.querySelector('a[href*="cocina"]');
+    const enlacesInventario  = nav.querySelector('a[href*="inventario"]');
+    const enlacesMermas      = nav.querySelector('a[href*="mermas"]');
+    const enlacesProveedores = nav.querySelector('a[href*="proveedores"]');
 
     if (!user) {
-      // Si no está logueado, ocultar todas las opciones administrativas
-      if (enlacesCocina) enlacesCocina.parentElement.style.display = 'none';
-      if (enlacesInventario) enlacesInventario.parentElement.style.display = 'none';
-      if (enlacesMermas) enlacesMermas.parentElement.style.display = 'none';
+      setAdminLink(enlacesCocina, false);
+      setAdminLink(enlacesInventario, false);
+      setAdminLink(enlacesMermas, false);
+      setAdminLink(enlacesProveedores, false);
 
-      // Asegurar que exista el botón "Iniciar Sesión"
       let loginLink = nav.querySelector('a[href*="login"]') || nav.querySelector('#nav-reservar-link') || nav.querySelector('#nav-login-link');
       if (loginLink) {
         loginLink.textContent = 'Iniciar Sesión';
         loginLink.setAttribute('href', loginUrl());
         loginLink.style.display = 'inline-block';
-        
-        // Si había un widget de usuario antes, limpiarlo y restaurar el link original
+
         const li = loginLink.parentElement;
         const userWidget = li.querySelector('.navbar__user');
         if (userWidget) {
@@ -140,18 +151,13 @@
       return;
     }
 
-    // Si está logueado:
-    if (enlacesCocina) {
-      enlacesCocina.parentElement.style.display = rolesInternos.includes(user.rol) ? 'block' : 'none';
-    }
-    if (enlacesInventario) {
-      enlacesInventario.parentElement.style.display = rolesInternos.includes(user.rol) ? 'block' : 'none';
-    }
-    if (enlacesMermas) {
-      enlacesMermas.parentElement.style.display = rolesMermas.includes(user.rol) ? 'block' : 'none';
-    }
+    // Logueado: mostrar según el rol
+    setAdminLink(enlacesCocina,     rolesInternos.includes(user.rol));
+    setAdminLink(enlacesInventario, rolesInternos.includes(user.rol));
+    setAdminLink(enlacesMermas,     rolesMermas.includes(user.rol));
+    setAdminLink(enlacesProveedores, rolesProveedores.includes(user.rol));
 
-    // Reemplazar enlace "Reservar" / login por info del usuario
+    // Reemplazar enlace de login por widget de usuario
     const loginLink = nav.querySelector('a[href*="login"]') || nav.querySelector('#nav-reservar-link') || nav.querySelector('#nav-login-link');
     if (loginLink) {
       const li = loginLink.parentElement;
@@ -170,7 +176,6 @@
       `;
       li.appendChild(userWidget);
 
-      // Evento de logout
       document.getElementById('navbar-logout-btn').addEventListener('click', cerrarSesion);
     }
   }
