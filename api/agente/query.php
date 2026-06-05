@@ -82,8 +82,14 @@ foreach ($palabrasProhibidas as $kw) {
     }
 }
 
-// Limitar a tablas permitidas del dominio gastronómico
-$tablasPermitidas = ['cat_platos', 'cat_categorias', 'inv_insumos', 'inv_recetas', 'ven_pedidos', 'ven_detalle_pedido', 'v_platos_disponibles'];
+// Limitar a tablas permitidas del dominio gastronómico y contable
+$tablasPermitidas = [
+    'cat_platos', 'cat_categorias',
+    'inv_insumos', 'inv_recetas', 'inv_lotes_insumo', 'inv_alertas_inventario', 'inv_movimientos_stock',
+    'ven_pedidos', 'ven_detalle_pedido', 'ven_pagos', 'ven_dtes',
+    'fin_gastos', 'fin_categorias_gasto', 'fin_resumen_diario',
+    'usuarios', 'mermas', 'v_platos_disponibles', 'ia_consultas_agente'
+];
 $mencionaTablaPermitida = false;
 foreach ($tablasPermitidas as $tabla) {
     if (str_contains($sqlNorm, strtoupper($tabla))) {
@@ -102,8 +108,25 @@ try {
         $sqlRaw .= ' LIMIT 200';
     }
 
+    // --- Transformar parámetros del formato [{name, value}] al formato flat asociativo ---
+    $flatParams = [];
+    foreach ($params as $p) {
+        if (is_array($p) && isset($p['name']) && isset($p['value'])) {
+            $key = $p['name'];
+            if (!str_starts_with($key, ':')) {
+                $key = ':' . $key;
+            }
+            $flatParams[$key] = $p['value'];
+        } elseif (is_array($p)) {
+            foreach ($p as $k => $v) {
+                $key = str_starts_with((string)$k, ':') ? $k : ':' . $k;
+                $flatParams[$key] = $v;
+            }
+        }
+    }
+
     $stmt = $conn->prepare($sqlRaw);
-    $stmt->execute($params);
+    $stmt->execute($flatParams);
     $resultado = $stmt->fetchAll();
 
     respuestaOk($resultado, [
