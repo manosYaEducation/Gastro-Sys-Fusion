@@ -129,36 +129,84 @@ document.addEventListener('DOMContentLoaded', () => {
     successProgress.style.width = progress;
   }
 
-  cartCheckoutBtn.addEventListener('click', () => {
-    // Guardar pedido en localStorage ANTES de limpiar el carrito
-    const cartSnapshot = getCart();
-    if (cartSnapshot.length > 0) {
-      try {
-        const pendingOrders = JSON.parse(localStorage.getItem('gastro_pending_orders') || '[]');
-        pendingOrders.push({
-          id:         'LOCAL-' + Date.now(),
-          estado:     'pendiente',
-          creado_en:  new Date().toISOString(),
-          platos:     cartSnapshot.map(item => ({
-            nombre:       item.nombre,
-            cantidad:     1,
-            precio_total: item.precio_total,
-            modificadores: item.modificadores || [],
-            notas:        item.notas || ''
+  /* ── Persistir pedido en BD (fire-and-forget) ───────────── */
+  async function guardarPedidoEnBD(cartSnapshot) {
+    const BASE = window.API || {};
+    if (!BASE.clientes || !BASE.pedidos) return;
+
+    try {
+      const raw = sessionStorage.getItem('gastro_usuario');
+      if (!raw) return;
+      const usuario = JSON.parse(raw);
+      if (!usuario || usuario.rol !== 'cliente' || !usuario.email) return;
+
+      // 1. Upsert cliente → obtener cliente_id
+      const rc = await fetch(BASE.clientes, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ action: 'upsert', email: usuario.email, nombre: usuario.nombre || '' }),
+      });
+      const jc = await rc.json();
+      if (!jc.success) return;
+
+      const clienteId  = jc.data.id;
+      const total      = cartSnapshot.reduce((s, i) => s + i.precio_total, 0);
+
+      // 2. Confirmar pedido en BD
+      const rp = await fetch(BASE.pedidos, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          action:      'confirmar',
+          cliente_id:  clienteId,
+          total_pedido: total,
+          items:       cartSnapshot.map(item => ({
+            plato_id:   item.plato_id || item.id,
+            cantidad:   item.cantidad || 1,
+            precio_unit: item.precio_unit || Math.round(item.precio_total / (item.cantidad || 1)),
+            subtotal:   item.precio_total,
           })),
-          total:  cartSnapshot.reduce((s, i) => s + i.precio_total, 0),
-          _local: true
-        });
-        localStorage.setItem('gastro_pending_orders', JSON.stringify(pendingOrders));
-      } catch (e) {
-        console.error('Error al guardar pedido pendiente:', e);
-      }
+        }),
+      });
+      const jp = await rp.json();
+      if (!jp.success) console.warn('[cart] pedido BD error:', jp.error);
+    } catch (err) {
+      console.warn('[cart] guardarPedidoEnBD:', err);
+    }
+  }
+
+  cartCheckoutBtn.addEventListener('click', () => {
+    const cartSnapshot = getCart();
+    if (!cartSnapshot.length) return;
+
+    // Guardar en local (cocina.html)
+    try {
+      const pendingOrders = JSON.parse(localStorage.getItem('gastro_pending_orders') || '[]');
+      pendingOrders.push({
+        id:        'LOCAL-' + Date.now(),
+        estado:    'pendiente',
+        creado_en: new Date().toISOString(),
+        platos:    cartSnapshot.map(item => ({
+          nombre:        item.nombre,
+          cantidad:      item.cantidad || 1,
+          precio_total:  item.precio_total,
+          modificadores: item.modificadores || [],
+          notas:         item.notas || ''
+        })),
+        total:  cartSnapshot.reduce((s, i) => s + i.precio_total, 0),
+        _local: true
+      });
+      localStorage.setItem('gastro_pending_orders', JSON.stringify(pendingOrders));
+    } catch (e) {
+      console.error('[cart] pendingOrders:', e);
     }
 
-    // Animación de confirmación paso a paso
+    // Persistir en BD con cliente_id (async, no bloquea la animación)
+    guardarPedidoEnBD(cartSnapshot);
+
+    // Animación de confirmación
     successOverlay.classList.add('cart-success-overlay--visible');
     successIcon.style.animation = 'pulseCartEmpty 1s infinite alternate';
-
     showSuccess('🍳', 'Enviando a cocina...', 'Preparando la conexión segura con los fogones...', '30%');
 
     setTimeout(() =>

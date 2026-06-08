@@ -17,14 +17,16 @@ window.API_URL_PHP = _base + '/backend/';
 
 /** Endpoints del nuevo contrato de API */
 window.API = {
-  clima: _base + '/api/clima.php',
-  menu: _base + '/api/menu.php',
-  platos: _base + '/api/platos.php',
-  inventario: _base + '/api/inventario.php',
-  mermas: _base + '/api/mermas.php',
-  auth: _base + '/api/auth.php',
+  clima:       _base + '/api/clima.php',
+  menu:        _base + '/api/menu.php',
+  platos:      _base + '/api/platos.php',
+  inventario:  _base + '/api/inventario.php',
+  mermas:      _base + '/api/mermas.php',
+  auth:        _base + '/api/auth.php',
   proveedores: _base + '/api/proveedores.php',
-  agente: _base + '/api/agente/query.php',
+  pedidos:     _base + '/api/pedidos.php',
+  clientes:    _base + '/api/clientes.php',   // T1.6 US-1.5
+  agente:      _base + '/api/agente/query.php',
 };
 
 /** URL del agente Next.js */

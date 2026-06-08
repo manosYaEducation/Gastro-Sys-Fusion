@@ -56,6 +56,7 @@
 
         // Si es pública, actualizar navbar para modo anónimo
         actualizarNavbar(null);
+        window.dispatchEvent(new CustomEvent('gastro:auth-ready', { detail: { user: null } }));
         return;
       }
 
@@ -75,12 +76,16 @@
       // Actualizar el navbar si existe
       actualizarNavbar(user);
 
+      // Notificar a otros módulos que el auth check completó
+      window.dispatchEvent(new CustomEvent('gastro:auth-ready', { detail: { user } }));
+
     } catch (err) {
       console.error('[auth-guard] Error verificando sesión:', err);
       if (!window.__PAGINA_PUBLICA) {
         window.location.href = loginUrl();
       } else {
         actualizarNavbar(null);
+        window.dispatchEvent(new CustomEvent('gastro:auth-ready', { detail: { user: null } }));
       }
     }
   }
@@ -127,6 +132,10 @@
       setAdminLink(enlacesMermas, false);
       setAdminLink(enlacesProveedores, false);
 
+      // Quitar "Mis Pedidos" si existía
+      const mpLiOut = document.getElementById('nav-mis-pedidos-li');
+      if (mpLiOut) mpLiOut.remove();
+
       const navList = document.querySelector('.navbar__nav');
       if (navList) {
         let loginLink = navList.querySelector('a[href*="login"]') || navList.querySelector('#nav-reservar-link') || navList.querySelector('#nav-login-link');
@@ -159,6 +168,30 @@
 
     const navList = document.querySelector('.navbar__nav');
     if (navList) {
+      // ── Link "Mis Pedidos" solo para clientes ─────────────────
+      const isInFrontend = window.location.pathname.includes('/frontend/');
+      const mpHref = isInFrontend ? 'mis-pedidos.html' : 'frontend/mis-pedidos.html';
+      let mpLi = document.getElementById('nav-mis-pedidos-li');
+
+      if (user.rol === 'cliente') {
+        if (!mpLi) {
+          mpLi = document.createElement('li');
+          mpLi.id = 'nav-mis-pedidos-li';
+          // Insertar antes del último <li> (el de login/usuario)
+          const lastLi = navList.querySelector('li:last-child');
+          if (lastLi) navList.insertBefore(mpLi, lastLi);
+          else navList.appendChild(mpLi);
+        }
+        const isCurrent = window.location.pathname.endsWith('mis-pedidos.html');
+        mpLi.innerHTML = `<a href="${mpHref}" id="nav-mispedidos-link"
+          style="${isCurrent ? 'color:var(--color-primary-lt)' : ''}"
+        >📋 Mis Pedidos</a>`;
+      } else {
+        // No es cliente: quitar el link si existe
+        if (mpLi) mpLi.remove();
+      }
+
+      // ── Widget de usuario ─────────────────────────────────────
       const loginLink = navList.querySelector('a[href*="login"]') || navList.querySelector('#nav-reservar-link') || navList.querySelector('#nav-login-link');
       if (loginLink) {
         const li = loginLink.parentElement;

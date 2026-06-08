@@ -115,6 +115,7 @@ elseif ($method === 'POST') {
         }
 
         $usuarioId   = isset($input['usuario_id']) ? (int) $input['usuario_id'] : null;
+        $clienteId   = isset($input['cliente_id']) ? (int) $input['cliente_id'] : null; // T1.6
         $totalPedido = (int)   $input['total_pedido'];
         $climaPedir  = $input['clima_al_pedir'] ?? null;
         $tempPedir   = isset($input['temp_al_pedir']) ? (float) $input['temp_al_pedir'] : null;
@@ -127,11 +128,12 @@ elseif ($method === 'POST') {
             // 1. Crear cabecera del pedido
             $conn->prepare("
                 INSERT INTO ven_pedidos
-                    (usuario_id, total_pedido, estado, clima_al_pedir, temp_al_pedir, creado_en)
+                    (usuario_id, cliente_id, total_pedido, estado, clima_al_pedir, temp_al_pedir, creado_en)
                 VALUES
-                    (:usuario_id, :total_pedido, 'pendiente', :clima, :temp, NOW())
+                    (:usuario_id, :cliente_id, :total_pedido, 'pendiente', :clima, :temp, NOW())
             ")->execute([
                 ':usuario_id'   => $usuarioId,
+                ':cliente_id'   => $clienteId,
                 ':total_pedido' => $totalPedido,
                 ':clima'        => $climaPedir,
                 ':temp'         => $tempPedir,

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Tu historial de pedidos en Gastro-Sys-Fusion. Revisa tus pedidos anteriores y vuelve a pedirlos con un clic." />
+  <title>Mis Pedidos | Gastro-Sys-Fusion</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base/index.css?v=1.0.2" />
+  <link rel="stylesheet" href="css/mis-pedidos.css" />
+
+  <!-- Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+      <a class="navbar__brand" href="../index.html" id="navbar-brand-link">
+        <div class="navbar__brand-icon" aria-hidden="true">🍽️</div>
+        <span class="navbar__brand-name">Gastro-Sys-Fusion</span>
+      </a>
+
+      <div class="navbar__center-switcher" id="navbar-center-switcher" style="display:none">
+        <div class="nav-switcher">
+          <a href="cocina.html" class="nav-switcher-btn navbar__cta--admin" id="switcher-cocina"><span>🍳</span>
+            Cocina</a>
+          <a href="inventario.html" class="nav-switcher-btn navbar__cta--admin" id="switcher-inventario"><span>📦</span>
+            Inventario</a>
+          <a href="mermas.html" class="nav-switcher-btn navbar__cta--admin" id="switcher-mermas"><span>📉</span>
+            Mermas</a>
+          <a href="proveedores.html" class="nav-switcher-btn navbar__cta--admin"
+            id="switcher-proveedores"><span>🏭</span> Proveedores</a>
+        </div>
+      </div>
+
+      <ul class="navbar__nav" role="list">
+        <li><a href="../index.html#menu" id="nav-menu-link">Menú</a></li>
+        <li><a href="../index.html#menu" id="nav-carta-link">Carta</a></li>
+        <!-- auth-guard.js inyecta "Mis Pedidos" y widget de usuario -->
+        <li><a href="login.html" class="navbar__cta" id="nav-reservar-link">Iniciar Sesión</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ===========================
+         HERO
+    ============================ -->
+    <section class="mp-hero" aria-labelledby="mp-main-title">
+      <p class="mp-hero__eyebrow">
+        <span aria-hidden="true">🧾</span> Historial Personal
+      </p>
+      <h1 class="mp-hero__title" id="mp-main-title">
+        Mis <span>Pedidos</span>
+      </h1>
+      <p class="mp-hero__subtitle" id="mp-hero-subtitle">
+        Cargando tu historial…
+      </p>
+    </section>
+
+    <!-- ===========================
+         PERFIL DEL CLIENTE
+    ============================ -->
+    <div class="mp-profile-bar" id="mp-profile-bar" aria-live="polite">
+      <div class="mp-profile-card">
+        <div class="mp-profile-avatar" aria-hidden="true">👤</div>
+        <div class="mp-profile-info">
+          <div class="mp-profile-name" id="mp-profile-name">—</div>
+          <div class="mp-profile-contact" id="mp-profile-contact"></div>
+        </div>
+        <div class="mp-profile-stats">
+          <div class="mp-profile-stat">
+            <div class="mp-profile-stat__num" id="mp-profile-total">0</div>
+            <div class="mp-profile-stat__label">Pedidos</div>
+          </div>
+          <div class="mp-profile-stat">
+            <div class="mp-profile-stat__num" id="mp-profile-gasto">$0</div>
+            <div class="mp-profile-stat__label">Gasto total</div>
+          </div>
+        </div>
+        <button class="mp-btn-logout" id="mp-btn-logout" type="button" title="Cerrar sesión">
+          Salir
+        </button>
+      </div>
+    </div>
+
+    <!-- ===========================
+         HISTORIAL DE PEDIDOS
+    ============================ -->
+    <section class="mp-history-section" id="mp-history-section" aria-label="Historial de pedidos">
+      <div class="mp-section-header">
+        <h2 class="mp-section-title">
+          Historial
+          <span class="mp-section-title__count" id="mp-section-count"></span>
+        </h2>
+        <a href="../index.html" class="mp-btn-reorder" style="text-decoration:none">
+          🛒 Ir al Menú
+        </a>
+      </div>
+
+      <!-- Pedidos renderizados por JS -->
+      <div id="mp-orders-container" aria-live="polite">
+        <div class="mp-state">
+          <div class="mp-spinner"></div>
+          <p>Cargando historial…</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__copy">
+      © 2026 <span>Gastro-Sys-Fusion</span> — Todos los derechos reservados.
+    </p>
+    <ul class="footer__links" role="list">
+      <li><a href="../index.html" id="footer-inicio-link">Inicio</a></li>
+      <li><a href="../index.html#menu" id="footer-menu-link">Menú</a></li>
+      <li><a href="../index.html#contacto" id="footer-contacto-link">Contacto</a></li>
+    </ul>
+  </footer>
+
+  <!-- ===========================
+       TOAST "PEDIR NUEVAMENTE"
+  ============================ -->
+  <div class="mp-reorder-toast" id="mp-reorder-toast" role="status" aria-live="polite">
+    <span class="mp-reorder-toast__icon">🛒</span>
+    <span id="mp-reorder-toast-text">Platos agregados al carrito</span>
+    <a href="../index.html" class="mp-reorder-toast__cta" id="mp-reorder-toast-cta">
+      Ver menú →
+    </a>
+  </div>
+
+  <!-- ===========================
+       SCRIPTS
+       Página protegida: solo rol 'cliente'
+  ============================ -->
+  <script>
+    window.__PAGINA_PUBLICA = false;
+    window.__ROLES_PERMITIDOS = ['cliente'];
+  </script>
+  <script src="js/config.js?v=1.0.2"></script>
+  <script src="js/auth-guard.js?v=1.0.3"></script>
+  <script src="js/mis-pedidos.js?v=1.1.0"></script>
+
+</body>
+
+</html>
