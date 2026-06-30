@@ -267,6 +267,11 @@ function renderHistorial(mermas) {
         <span class="mrm-motivo-badge">${escHtml(MOTIVOS[m.motivo] ?? m.motivo ?? '—')}</span>
       </td>
       <td class="mrm-td mrm-td--center">${escHtml(formatFecha(m.fecha))}</td>
+      <td class="mrm-td mrm-td--center">
+        <button class="mrm-btn-delete" data-id="${m.id}" aria-label="Eliminar merma de ${escHtml(m.insumo ?? m.nombre_insumo ?? '—')}">
+          🗑️ Eliminar
+        </button>
+      </td>
     `;
     el.histTbody.appendChild(tr);
   });
@@ -506,8 +511,69 @@ async function manejarSubmit(e) {
 }
 
 /* ============================================================
+   ELIMINAR MERMA (DELETE /api/mermas.php?id=...)
+   ============================================================ */
+async function eliminarMerma(id, insumoNombre) {
+  if (!confirm(`¿Estás seguro de que deseas eliminar la merma de "${insumoNombre}"?`)) {
+    return;
+  }
+
+  const apiUrl = (window.API?.mermas) ?? null;
+
+  try {
+    if (apiUrl) {
+      const resp = await fetch(`${apiUrl}?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (resp.ok) {
+        const json = await resp.json();
+        if (!json.success) throw new Error(json.error ?? 'Error al eliminar');
+      } else {
+        throw new Error(`Error en el servidor: HTTP ${resp.status}`);
+      }
+    }
+
+    // Actualizar historial localmente
+    historialData = historialData.filter(m => m.id !== id);
+    
+    if (historialData.length === 0) {
+      mostrarHistorial('empty');
+    } else {
+      renderHistorial(historialData);
+      mostrarHistorial('table');
+    }
+
+    // Recargar gráfico y stats
+    cargarMermas();
+    mostrarToast(`Merma eliminada correctamente.`, 'ok');
+
+  } catch (err) {
+    console.error(err);
+    if (id < 10) {
+      // Remover de manera local e interactiva si es mock/prueba
+      historialData = historialData.filter(m => m.id !== id);
+      renderHistorial(historialData);
+      actualizarStats(historialData);
+      mostrarToast(`Merma de prueba eliminada localmente.`, 'ok');
+    } else {
+      mostrarToast(err.message || 'No se pudo eliminar la merma.', 'err');
+    }
+  }
+}
+
+/* ============================================================
    EVENTOS
    ============================================================ */
+// Click en botón eliminar (delegación)
+el.histTbody.addEventListener('click', (e) => {
+  const btn = e.target.closest('.mrm-btn-delete');
+  if (!btn) return;
+  const id = parseInt(btn.dataset.id, 10);
+  const item = historialData.find(m => m.id === id);
+  const nombre = item ? (item.insumo ?? item.nombre_insumo ?? '') : '';
+  eliminarMerma(id, nombre);
+});
 // Reload gráfico
 el.btnReload.addEventListener('click', () => {
   el.btnReload.style.transform = 'rotate(360deg)';

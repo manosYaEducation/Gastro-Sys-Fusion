@@ -570,6 +570,29 @@
   white-space: nowrap;
 }
 
+/* Botón Eliminar en Historial */
+.mrm-btn-delete {
+  background: rgba(255, 59, 48, 0.05);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: var(--mrm-danger-lt);
+  border-radius: var(--radius-badge);
+  padding: 0.35rem 0.8rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.mrm-btn-delete:hover {
+  background: var(--mrm-danger-bg);
+  border-color: var(--mrm-danger);
+  color: #fff;
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */

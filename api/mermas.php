@@ -13,7 +13,7 @@
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
@@ -81,6 +81,69 @@ if ($method === 'POST') {
     } catch (\PDOException $e) {
         respuestaError('Error de base de datos: ' . $e->getMessage(), 500);
     } catch (\Throwable $e) {
+        respuestaError('Error interno: ' . $e->getMessage(), 500);
+    }
+    exit;
+}
+
+/* ============================================================
+   DELETE — Eliminar una merma y restaurar stock
+   ============================================================ */
+if ($method === 'DELETE') {
+    try {
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+        if ($id <= 0) {
+            $body = json_decode(file_get_contents('php://input'), true);
+            $id = isset($body['id']) ? (int) $body['id'] : 0;
+        }
+
+        if ($id <= 0) {
+            respuestaError('id de merma es requerido.', 422);
+        }
+
+        // 1. Obtener los detalles de la merma para saber qué insumo y qué cantidad restaurar
+        $stmtSel = $conn->prepare("SELECT insumo_id, cantidad FROM mermas WHERE id = :id");
+        $stmtSel->execute([':id' => $id]);
+        $merma = $stmtSel->fetch();
+
+        if (!$merma) {
+            respuestaError('No se encontró la merma especificada.', 404);
+        }
+
+        $insumoId = (int) $merma['insumo_id'];
+        $cantidad = (float) $merma['cantidad'];
+
+        $conn->beginTransaction();
+
+        // 2. Eliminar la merma de la tabla mermas
+        $stmtDel = $conn->prepare("DELETE FROM mermas WHERE id = :id");
+        $stmtDel->execute([':id' => $id]);
+
+        // 3. Restaurar stock del insumo correspondiente
+        $stmtRestore = $conn->prepare("
+            UPDATE inv_insumos
+            SET stock_actual = stock_actual + :cantidad
+            WHERE id = :insumo_id
+        ");
+        $stmtRestore->execute([
+            ':cantidad'  => $cantidad,
+            ':insumo_id' => $insumoId
+        ]);
+
+        $conn->commit();
+
+        respuestaOk(['id' => $id, 'mensaje' => 'Merma eliminada y stock restaurado correctamente.']);
+
+    } catch (\PDOException $e) {
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+        respuestaError('Error de base de datos: ' . $e->getMessage(), 500);
+    } catch (\Throwable $e) {
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
         respuestaError('Error interno: ' . $e->getMessage(), 500);
     }
     exit;
