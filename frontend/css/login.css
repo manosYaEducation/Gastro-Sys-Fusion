@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* --- Animated Background --- */
