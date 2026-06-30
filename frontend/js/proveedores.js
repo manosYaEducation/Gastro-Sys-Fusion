@@ -225,7 +225,10 @@ function cerrarModalProveedor() {
 }
 
 function limpiarHints() {
-  ['prv-nombre-hint'].forEach(id => { $(id).textContent = ''; });
+  ['prv-nombre-hint', 'prv-contacto-hint', 'prv-telefono-hint', 'prv-email-hint', 'prv-ruc-hint', 'prv-direccion-hint', 'prv-insumo-principal-hint'].forEach(id => {
+    const el = $(id);
+    if (el) el.textContent = '';
+  });
 }
 
 /* ============================================================
@@ -235,25 +238,62 @@ $('form-proveedor').addEventListener('submit', async (e) => {
   e.preventDefault();
   limpiarHints();
 
+  let valid = true;
+
   const nombre = $('prv-nombre').value.trim();
   if (!nombre) {
     $('prv-nombre-hint').textContent = 'El nombre es obligatorio.';
-    $('prv-nombre').focus();
-    return;
+    if (valid) { $('prv-nombre').focus(); valid = false; }
   }
 
+  const contacto = $('prv-contacto').value.trim();
+  if (!contacto) {
+    $('prv-contacto-hint').textContent = 'El contacto es obligatorio.';
+    if (valid) { $('prv-contacto').focus(); valid = false; }
+  }
+
+  const telefono = $('prv-telefono').value.trim();
+  if (!telefono) {
+    $('prv-telefono-hint').textContent = 'El teléfono es obligatorio.';
+    if (valid) { $('prv-telefono').focus(); valid = false; }
+  }
+
+  const email = $('prv-email').value.trim();
+  if (!email) {
+    $('prv-email-hint').textContent = 'El email es obligatorio.';
+    if (valid) { $('prv-email').focus(); valid = false; }
+  }
+
+  const ruc = $('prv-ruc').value.trim();
+  if (!ruc) {
+    $('prv-ruc-hint').textContent = 'El RUC / NIT es obligatorio.';
+    if (valid) { $('prv-ruc').focus(); valid = false; }
+  }
+
+  const direccion = $('prv-direccion').value.trim();
+  if (!direccion) {
+    $('prv-direccion-hint').textContent = 'La dirección es obligatoria.';
+    if (valid) { $('prv-direccion').focus(); valid = false; }
+  }
+
+  const insumoId = $('prv-insumo-principal').value;
+  if (!insumoId) {
+    $('prv-insumo-principal-hint').textContent = 'El insumo asociado es obligatorio.';
+    if (valid) { $('prv-insumo-principal').focus(); valid = false; }
+  }
+
+  if (!valid) return;
+
   const id = $('prv-id').value;
-  const insumoId = $('prv-insumo-principal').value;   // puede ser ''
   const body = {
     id:         id ? parseInt(id) : undefined,
     nombre,
-    contacto:   $('prv-contacto').value.trim(),
-    telefono:   $('prv-telefono').value.trim(),
-    email:      $('prv-email').value.trim(),
-    direccion:  $('prv-direccion').value.trim(),
-    ruc:        $('prv-ruc').value.trim(),
-    // Enviar insumo_id para que la API persista la asociación
-    insumo_id:  insumoId ? parseInt(insumoId) : undefined,
+    contacto,
+    telefono,
+    email,
+    direccion,
+    ruc,
+    insumo_id:  parseInt(insumoId, 10),
   };
 
   const btn = $('modal-prv-save');
