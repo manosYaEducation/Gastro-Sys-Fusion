@@ -205,7 +205,7 @@
 
 .custom-option-name {
   font-size: 0.95rem;
-  color: var(--color-text, #333);
+  color: #2645c2;
   font-weight: 500;
   display: flex;
   align-items: center;
