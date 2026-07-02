@@ -106,6 +106,16 @@ if ($method === 'PUT') {
         if ($id <= 0)          respuestaError('id es requerido.', 422);
         if ($nombre === '')    respuestaError('nombre es requerido.', 422);
 
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            respuestaError('El formato del correo electrónico es inválido.', 422);
+        }
+        if ($telefono !== '' && !preg_match('/^\+?[0-9\s\-()]{7,20}$/', $telefono)) {
+            respuestaError('El formato del teléfono es inválido.', 422);
+        }
+        if ($ruc !== '' && !preg_match('/^[0-9\-]{8,15}$/', $ruc)) {
+            respuestaError('El formato del RUC / NIT es inválido.', 422);
+        }
+
         $sql = "
             UPDATE proveedores
             SET nombre    = :nombre,
@@ -210,6 +220,16 @@ if ($method === 'POST') {
         $ruc       = sanitizeStr($body['ruc'] ?? '');
 
         if ($nombre === '') respuestaError('nombre es requerido.', 422);
+
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            respuestaError('El formato del correo electrónico es inválido.', 422);
+        }
+        if ($telefono !== '' && !preg_match('/^\+?[0-9\s\-()]{7,20}$/', $telefono)) {
+            respuestaError('El formato del teléfono es inválido.', 422);
+        }
+        if ($ruc !== '' && !preg_match('/^[0-9\-]{8,15}$/', $ruc)) {
+            respuestaError('El formato del RUC / NIT es inválido.', 422);
+        }
 
         $sql = "
             INSERT INTO proveedores (nombre, contacto, telefono, email, direccion, ruc, creado_en, actualizado_en)

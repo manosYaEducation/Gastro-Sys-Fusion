@@ -225,7 +225,10 @@ function cerrarModalProveedor() {
 }
 
 function limpiarHints() {
-  ['prv-nombre-hint'].forEach(id => { $(id).textContent = ''; });
+  ['prv-nombre-hint', 'prv-contacto-hint', 'prv-telefono-hint', 'prv-email-hint', 'prv-ruc-hint', 'prv-direccion-hint'].forEach(id => {
+    const el = $(id);
+    if (el) el.textContent = '';
+  });
 }
 
 /* ============================================================
@@ -235,12 +238,43 @@ $('form-proveedor').addEventListener('submit', async (e) => {
   e.preventDefault();
   limpiarHints();
 
+  let valid = true;
+
   const nombre = $('prv-nombre').value.trim();
   if (!nombre) {
     $('prv-nombre-hint').textContent = 'El nombre es obligatorio.';
     $('prv-nombre').focus();
-    return;
+    valid = false;
   }
+
+  const email = $('prv-email').value.trim();
+  if (email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      $('prv-email-hint').textContent = 'Ingresa un correo electrónico válido (ej: proveedor@empresa.com).';
+      if (valid) { $('prv-email').focus(); valid = false; }
+    }
+  }
+
+  const telefono = $('prv-telefono').value.trim();
+  if (telefono) {
+    const telefonoRegex = /^\+?[0-9\s\-()]{7,20}$/;
+    if (!telefonoRegex.test(telefono)) {
+      $('prv-telefono-hint').textContent = 'Ingresa un teléfono válido (de 7 a 20 dígitos, opcional +).';
+      if (valid) { $('prv-telefono').focus(); valid = false; }
+    }
+  }
+
+  const ruc = $('prv-ruc').value.trim();
+  if (ruc) {
+    const rucRegex = /^[0-9\-]{8,15}$/;
+    if (!rucRegex.test(ruc)) {
+      $('prv-ruc-hint').textContent = 'Ingresa un RUC / NIT válido (de 8 a 15 dígitos y guiones).';
+      if (valid) { $('prv-ruc').focus(); valid = false; }
+    }
+  }
+
+  if (!valid) return;
 
   const id = $('prv-id').value;
   const insumoId = $('prv-insumo-principal').value;   // puede ser ''
@@ -248,10 +282,10 @@ $('form-proveedor').addEventListener('submit', async (e) => {
     id:         id ? parseInt(id) : undefined,
     nombre,
     contacto:   $('prv-contacto').value.trim(),
-    telefono:   $('prv-telefono').value.trim(),
-    email:      $('prv-email').value.trim(),
+    telefono,
+    email,
     direccion:  $('prv-direccion').value.trim(),
-    ruc:        $('prv-ruc').value.trim(),
+    ruc,
     // Enviar insumo_id para que la API persista la asociación
     insumo_id:  insumoId ? parseInt(insumoId) : undefined,
   };
