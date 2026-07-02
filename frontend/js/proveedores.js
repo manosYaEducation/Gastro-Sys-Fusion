@@ -392,7 +392,7 @@ function abrirModalOrden() {
   $('ord-precio').value       = '';
   $('ord-total-display').textContent = 'S/ 0.00';
   $('ord-observaciones').value = '';
-  ['ord-proveedor-hint','ord-cantidad-hint','ord-precio-hint','ord-insumo-hint']
+  ['ord-proveedor-hint','ord-cantidad-hint','ord-precio-hint','ord-insumo-hint','ord-fecha-hint']
     .forEach(id => { $(id).textContent = ''; });
   $('prv-toast-ord-modal').hidden = true;
   $('modal-orden').hidden = false;
@@ -427,6 +427,27 @@ $('form-orden').addEventListener('submit', async (e) => {
   if (!insumoId)    { $('ord-insumo-hint').textContent    = 'Requerido.'; valid = false; }
   if (!(cantidad > 0)) { $('ord-cantidad-hint').textContent = 'Debe ser > 0.'; valid = false; }
   if (precio < 0)   { $('ord-precio-hint').textContent    = 'No puede ser negativo.'; valid = false; }
+  
+  if (!fecha) {
+    $('ord-fecha-hint').textContent = 'Requerido.';
+    valid = false;
+  } else {
+    const dateVal = new Date(fecha + 'T00:00:00');
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const fiveYearsAgo = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+
+    if (dateVal > today) {
+      $('ord-fecha-hint').textContent = 'La fecha no puede ser futura.';
+      valid = false;
+    } else if (dateVal < fiveYearsAgo) {
+      $('ord-fecha-hint').textContent = 'La fecha no puede ser anterior a 5 años.';
+      valid = false;
+    } else {
+      $('ord-fecha-hint').textContent = '';
+    }
+  }
+
   if (!valid) return;
 
   const btn = $('modal-ord-save');
