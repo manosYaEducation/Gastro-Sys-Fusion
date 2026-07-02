@@ -52,6 +52,18 @@ if ($method === 'POST') {
             respuestaError('motivo inválido.', 422);
         }
 
+        if ($fecha !== '') {
+            try {
+                $fechaObj = new DateTime($fecha);
+                $hoyObj = new DateTime('today');
+                if ($fechaObj > $hoyObj) {
+                    respuestaError('La fecha de la merma no puede ser futura.', 422);
+                }
+            } catch (Exception $e) {
+                respuestaError('Formato de fecha de la merma es inválido.', 422);
+            }
+        }
+
         // Insertar en la tabla mermas
         $sql = "
             INSERT INTO mermas (insumo_id, cantidad, motivo, fecha, observaciones, creado_en)
