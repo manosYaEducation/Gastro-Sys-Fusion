@@ -161,13 +161,23 @@ if ($method === 'POST') {
             $insumoId       = (int) ($body['insumo_id'] ?? 0);
             $fecha          = sanitizeStr($body['fecha'] ?? date('Y-m-d'));
             $cantidad       = (float) ($body['cantidad'] ?? 0);
-            $precioUnitario = (float) ($body['precio_unitario'] ?? 0);
+            $precioRaw      = $body['precio_unitario'] ?? null;
             $observaciones  = sanitizeStr($body['observaciones'] ?? '', 500);
 
             if ($proveedorId <= 0)    respuestaError('proveedor_id es requerido.', 422);
             if ($insumoId <= 0)       respuestaError('insumo_id es requerido.', 422);
             if ($cantidad <= 0)       respuestaError('cantidad debe ser mayor a 0.', 422);
-            if ($precioUnitario < 0)  respuestaError('precio_unitario no puede ser negativo.', 422);
+
+            if ($precioRaw === null || trim((string)$precioRaw) === '') {
+                respuestaError('precio_unitario es requerido.', 422);
+            }
+            if (!is_numeric($precioRaw)) {
+                respuestaError('precio_unitario debe ser un valor numérico.', 422);
+            }
+            $precioUnitario = (float)$precioRaw;
+            if ($precioUnitario < 0) {
+                respuestaError('precio_unitario no puede ser negativo.', 422);
+            }
 
             $total = $cantidad * $precioUnitario;
             $sql = "

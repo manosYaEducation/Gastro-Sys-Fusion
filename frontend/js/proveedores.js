@@ -420,13 +420,24 @@ $('form-orden').addEventListener('submit', async (e) => {
   const insumoId    = parseInt($('ord-insumo').value);
   const fecha       = $('ord-fecha').value;
   const cantidad    = parseFloat($('ord-cantidad').value);
-  const precio      = parseFloat($('ord-precio').value);
+  const precioRaw   = $('ord-precio').value.trim();
+  const precio      = parseFloat(precioRaw);
 
   let valid = true;
   if (!proveedorId) { $('ord-proveedor-hint').textContent = 'Requerido.'; valid = false; }
   if (!insumoId)    { $('ord-insumo-hint').textContent    = 'Requerido.'; valid = false; }
   if (!(cantidad > 0)) { $('ord-cantidad-hint').textContent = 'Debe ser > 0.'; valid = false; }
-  if (precio < 0)   { $('ord-precio-hint').textContent    = 'No puede ser negativo.'; valid = false; }
+
+  if (precioRaw === '' || isNaN(precio)) {
+    $('ord-precio-hint').textContent = 'Requerido y debe ser un número válido.';
+    valid = false;
+  } else if (precio < 0) {
+    $('ord-precio-hint').textContent = 'No puede ser negativo.';
+    valid = false;
+  } else {
+    $('ord-precio-hint').textContent = '';
+  }
+
   if (!valid) return;
 
   const btn = $('modal-ord-save');
