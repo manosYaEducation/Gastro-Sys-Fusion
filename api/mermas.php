@@ -52,6 +52,20 @@ if ($method === 'POST') {
             respuestaError('motivo inválido.', 422);
         }
 
+        // Validar contra stock disponible
+        $stmtStock = $conn->prepare("SELECT stock_actual, nombre, unidad_medida FROM inv_insumos WHERE id = :id");
+        $stmtStock->execute([':id' => $insumoId]);
+        $insumoDb = $stmtStock->fetch(PDO::FETCH_ASSOC);
+
+        if (!$insumoDb) {
+            respuestaError('El insumo especificado no existe.', 422);
+        }
+
+        $stockActual = (float)$insumoDb['stock_actual'];
+        if ($cantidad > $stockActual) {
+            respuestaError("La cantidad de merma ({$cantidad}) supera el stock disponible ({$stockActual} {$insumoDb['unidad_medida']}).", 422);
+        }
+
         // Insertar en la tabla mermas
         $sql = "
             INSERT INTO mermas (insumo_id, cantidad, motivo, fecha, observaciones, creado_en)
