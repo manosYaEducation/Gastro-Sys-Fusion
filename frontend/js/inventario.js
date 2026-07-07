@@ -140,6 +140,14 @@ function renderTabla(insumos) {
     `;
 
     elems.tbody.appendChild(tr);
+
+enforcePositiveNumberInput(
+  document.getElementById(`input-add-${insumo.id}`)
+);
+
+enforcePositiveNumberInput(
+  document.getElementById(`input-sub-${insumo.id}`)
+);
   });
 
   // Delegación de eventos en el tbody
@@ -217,6 +225,32 @@ async function onAccionClick(e) {
     btn.textContent   = op === 'add' ? '+' : '−';
     btn.style.opacity = '';
   }
+}
+
+
+
+/* ============================================================
+   BLOQUEAR VALORES NEGATIVOS
+   ============================================================ */
+function enforcePositiveNumberInput(input) {
+  input.addEventListener('keydown', (e) => {
+    if (
+      e.key === '-' ||
+      e.key === 'Subtract' ||
+      e.key === 'e' ||
+      e.key === 'E'
+    ) {
+      e.preventDefault();
+    }
+  });
+
+  input.addEventListener('paste', (e) => {
+    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+
+    if (Number(pasted) < 0) {
+      e.preventDefault();
+    }
+  });
 }
 
 /* ============================================================
