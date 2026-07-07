@@ -199,6 +199,7 @@ if ($method === 'GET') {
             $sql = "
                 SELECT
                     m.id,
+                    m.insumo_id,
                     i.nombre      AS insumo,
                     i.unidad_medida AS unidad,
                     m.cantidad,
@@ -218,6 +219,7 @@ if ($method === 'GET') {
 
             $data = array_map(fn($r) => [
                 'id'       => (int) $r['id'],
+                'insumo_id' => (int) $r['insumo_id'],
                 'insumo'   => $r['insumo'],
                 'unidad'   => $r['unidad'],
                 'cantidad' => (float) $r['cantidad'],
