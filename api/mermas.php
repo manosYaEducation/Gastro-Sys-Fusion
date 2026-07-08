@@ -13,7 +13,7 @@
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
@@ -148,6 +148,144 @@ if ($method === 'DELETE') {
     }
     exit;
 }
+
+/* ============================================================
+   PUT — Editar una merma
+   ============================================================ */
+if ($method === 'PUT') {
+    try {
+
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        $id = (int)($body['id'] ?? 0);
+        $insumoId = (int)($body['insumo_id'] ?? 0);
+        $cantidad = (float)($body['cantidad'] ?? 0);
+        $motivo = trim($body['motivo'] ?? '');
+        $fecha = trim($body['fecha'] ?? date('Y-m-d'));
+        $obs = trim($body['observaciones'] ?? '');
+
+        // Validaciones
+        if ($id <= 0) {
+            respuestaError('ID inválido.', 422);
+        }
+
+        if ($insumoId <= 0) {
+            respuestaError('insumo_id es requerido.', 422);
+        }
+
+        if ($cantidad <= 0) {
+            respuestaError('cantidad debe ser mayor a 0.', 422);
+        }
+
+        $motivosValidos = [
+            'vencimiento',
+            'danio_fisico',
+            'error_preparacion',
+            'contaminacion',
+            'exceso_produccion',
+            'otro'
+        ];
+
+        if (!in_array($motivo, $motivosValidos, true)) {
+            respuestaError('motivo inválido.', 422);
+        }
+
+        // Buscar la merma antigua
+        $stmtSel = $conn->prepare("
+            SELECT insumo_id, cantidad
+            FROM mermas
+            WHERE id = :id
+        ");
+
+        $stmtSel->execute([
+            ':id' => $id
+        ]);
+
+        $mermaAnterior = $stmtSel->fetch();
+
+        if (!$mermaAnterior) {
+            respuestaError('No se encontró la merma.', 404);
+        }
+
+        $conn->beginTransaction();
+
+        // Restaurar el stock anterior
+        $stmtRestore = $conn->prepare("
+            UPDATE inv_insumos
+            SET stock_actual = stock_actual + :cantidad
+            WHERE id = :id
+        ");
+
+        $stmtRestore->execute([
+            ':cantidad' => $mermaAnterior['cantidad'],
+            ':id' => $mermaAnterior['insumo_id']
+        ]);
+
+        // Actualizar la merma
+        $stmtUpdate = $conn->prepare("
+            UPDATE mermas
+            SET
+                insumo_id = :insumo_id,
+                cantidad = :cantidad,
+                motivo = :motivo,
+                fecha = :fecha,
+                observaciones = :observaciones
+            WHERE id = :id
+        ");
+
+        $stmtUpdate->execute([
+            ':insumo_id' => $insumoId,
+            ':cantidad' => $cantidad,
+            ':motivo' => $motivo,
+            ':fecha' => $fecha,
+            ':observaciones' => $obs,
+            ':id' => $id
+        ]);
+
+        // Descontar nuevamente el stock
+        $stmtStock = $conn->prepare("
+            UPDATE inv_insumos
+            SET stock_actual = GREATEST(stock_actual - :cantidad, 0)
+            WHERE id = :id
+        ");
+
+        $stmtStock->execute([
+            ':cantidad' => $cantidad,
+            ':id' => $insumoId
+        ]);
+
+        $conn->commit();
+
+        respuestaOk([
+            'mensaje' => 'Merma actualizada correctamente.'
+        ]);
+
+    } catch (\PDOException $e) {
+
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        respuestaError(
+            'Error de base de datos: ' . $e->getMessage(),
+            500
+        );
+
+    } catch (\Throwable $e) {
+
+        if ($conn->inTransaction()) {
+            $conn->rollBack();
+        }
+
+        respuestaError(
+            'Error interno: ' . $e->getMessage(),
+            500
+        );
+    }
+
+    exit;
+}
+
 
 /* ============================================================
    GET — Consultas de mermas

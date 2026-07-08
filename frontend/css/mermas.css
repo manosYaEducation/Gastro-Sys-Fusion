@@ -571,6 +571,7 @@
 }
 
 /* Botón Eliminar en Historial */
+.mrm-btn-edit,
 .mrm-btn-delete {
   background: rgba(255, 59, 48, 0.05);
   border: 1px solid rgba(255, 59, 48, 0.3);
