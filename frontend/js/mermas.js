@@ -466,6 +466,9 @@ async function manejarSubmit(e) {
   const optSel       = el.selInsumo.options[el.selInsumo.selectedIndex];
   const insumoNombre = optSel?.text ?? '';
   const editando = el.id.value;
+  // Construye el objeto enviado a la API.
+// Si existe un ID se trata de una modificación (PUT),
+// de lo contrario se registra una nueva merma (POST).
   const payload = {
     id: editando ? parseInt(editando,10) : null,
     insumo_id: parseInt(el.selInsumo.value, 10),
@@ -572,7 +575,8 @@ async function manejarSubmit(e) {
 el.btnSubmit
     .querySelector(".mrm-btn-submit__text")
     .textContent = "Registrar Merma";
-
+// Restaurar la interfaz al modo de registro
+// después de guardar los cambios.
     document.getElementById('mrm-form-title').innerHTML =
     '<span aria-hidden="true">📝</span> Registrar Merma Manual';
 
@@ -598,6 +602,9 @@ function editarMerma(id) {
 
     if (!merma) return;
 
+    // Guardar el ID de la merma para que el formulario
+  // sepa que debe actualizar un registro existente.
+
     el.id.value = merma.id;
 
     el.selInsumo.value = merma.insumo_id;
@@ -617,12 +624,14 @@ function editarMerma(id) {
     el.btnSubmit
     .querySelector('.mrm-btn-submit__text')
     .textContent = "Modificar Merma";
-
+// Cambiar el título para indicar visualmente
+// que el formulario está en modo edición.
     document.getElementById('mrm-form-title').innerHTML =
     '<span aria-hidden="true">✏️</span> Modificar Merma';
 
     const section = document.querySelector('.mrm-form-section');
-
+// Llevar automáticamente al usuario al formulario
+// para evitar confusión al entrar en modo edición.
     window.scrollTo({
     top: section.offsetTop - 80, 
     behavior: 'smooth'
