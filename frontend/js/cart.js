@@ -30,8 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── Helpers ─────────────────────────────────────────────── */
   const formatCL = v => '$' + Number(v).toLocaleString('es-CL');
 
+  const CART_EXPIRATION_MS =  24 * 60 * 60 * 1000; // 24 horas
   const getCart = () => JSON.parse(localStorage.getItem('gastro_cart') || '[]');
   const setCart = cart => localStorage.setItem('gastro_cart', JSON.stringify(cart));
+
+  function validarExpiracionCarrito() {
+  const timestamp = Number(localStorage.getItem('gastro_cart_timestamp'));
+
+  if (!timestamp) return;
+
+  const expirado = (Date.now() - timestamp) > CART_EXPIRATION_MS;
+
+  if (expirado) {
+    localStorage.removeItem('gastro_cart');
+    localStorage.removeItem('gastro_cart_timestamp');
+
+    alert('Tu carrito tenía más de 24 horas y fue limpiado automáticamente.');
+  }
+}
 
   /* ── Renderizar carrito ──────────────────────────────────── */
   function renderCart() {
@@ -240,5 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ── Init ────────────────────────────────────────────────── */
+  validarExpiracionCarrito();
   renderCart();
 });
