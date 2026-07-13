@@ -378,23 +378,27 @@
          INITIAL RENDER
       ==================================================== */
       cargarMenu();
-      /* ====================================================
-         EVENT DELEGATION FOR MODAL (US-H1.3)
-      ==================================================== */
-      container.addEventListener('click', (e) => {
-        const itemNode = e.target.closest('.menu-item');
-        if (itemNode) {
-          const idStr = itemNode.getAttribute('id').replace('menu-item-', '');
-          const dishId = parseInt(idStr, 10);
-          const dishData = menuData.find(d => d.id === dishId);
 
-          if (dishData && typeof window.openCustomizationModal === 'function') {
-            window.openCustomizationModal(dishData);
-          }
-        }
-      });
+/* ====================================================
+   EVENT DELEGATION FOR MODAL (US-H1.3)
+==================================================== */
+container.addEventListener('click', (e) => {
+  const itemNode = e.target.closest('.menu-item');
 
-    });
+  if (itemNode) {
+    const idStr = itemNode.getAttribute('id').replace('menu-item-', '');
+    const dishId = parseInt(idStr, 10);
+    const dishData = menuData.find(d => d.id === dishId);
+
+    if (typeof window.openCustomizationModal === 'function') {
+      window.openCustomizationModal(dishData);
+    } else {
+      alert('No fue posible abrir el personalizador porque no se pudo establecer conexión con la base de datos. Inténtelo nuevamente más tarde.');
+    }
+  }
+});
+
+});
   </script>
 
   <!-- Script del Modal de Personalización -->
