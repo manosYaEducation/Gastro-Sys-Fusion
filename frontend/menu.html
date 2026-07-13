@@ -85,22 +85,35 @@
          CATEGORY FILTERS
     ============================ -->
     <div class="menu-filters" id="menu-filters" role="tablist" aria-label="Filtrar por categoría">
-      <button class="menu-filter-btn menu-filter-btn--active" data-category="all" id="filter-all" role="tab"
-        aria-selected="true">
-        Todos
-      </button>
-      <button class="menu-filter-btn" data-category="entrada" id="filter-entrada" role="tab" aria-selected="false">
-        🥗 Entradas
-      </button>
-      <button class="menu-filter-btn" data-category="principal" id="filter-principal" role="tab" aria-selected="false">
-        🥩 Principales
-      </button>
-      <button class="menu-filter-btn" data-category="postre" id="filter-postre" role="tab" aria-selected="false">
-        🍰 Postres
-      </button>
-      <button class="menu-filter-btn" data-category="bebida" id="filter-bebida" role="tab" aria-selected="false">
-        🍷 Bebidas
-      </button>
+      <button class="menu-filter-btn menu-filter-btn--active"
+        data-category="all">
+    Todos
+</button>
+
+<button class="menu-filter-btn"
+        data-category="Pastas">
+    🍝 Pastas
+</button>
+
+<button class="menu-filter-btn"
+        data-category="Pescados">
+    🐟 Pescados
+</button>
+
+<button class="menu-filter-btn"
+        data-category="Sopas & Cremas">
+    🍲 Sopas & Cremas
+</button>
+
+<button class="menu-filter-btn"
+        data-category="Ensaladas & Frescos">
+    🥗 Ensaladas
+</button>
+
+<button class="menu-filter-btn"
+        data-category="Postres">
+    🍰 Postres
+</button>
     </div>
 
     <!-- ===========================
@@ -191,135 +204,36 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
+        // API
+  const API = window.API || {};
+  const imgBase = window.API_URL || 'http://localhost/Gastro-Sys-Fusion/';
+  const URL_PLATOS = API.platos || `${imgBase}api/platos.php`;
+
       /* ====================================================
          DATA — 10 platos de ejemplo con categoría y precio.
          ¡Modifica los nombres, descripciones y precios
          directamente aquí para ir probando!
       ==================================================== */
-      const menuData = [
-        {
-          id: 1,
-          nombre: 'Plato 1 ',
-          descripcion: 'Descripción.',
-          categoria: 'entrada',
-          precio: 8500,
-          modificadores: [
-            {
-              id: 'size',
-              nombre: 'Tamaño de la porción',
-              requerido: true,
-              opciones: [
-                { id: 'normal', nombre: 'Normal', precio: 0 },
-                { id: 'grande', nombre: 'Familiar', precio: 2500 }
-              ]
-            }
-          ]
-        },
-        {
-          id: 2,
-          nombre: 'Plato 2',
-          descripcion: 'Descripción.',
-          categoria: 'entrada',
-          precio: 7200
-        },
-        {
-          id: 3,
-          nombre: 'Plato 3 ',
-          descripcion: 'Descripción.',
-          categoria: 'principal',
-          precio: 16900,
-          modificadores: [
-            {
-              id: 'termino',
-              nombre: 'Término de la carne',
-              requerido: true,
-              opciones: [
-                { id: 'ingles', nombre: 'A la inglesa', precio: 0 },
-                { id: 'medio', nombre: 'Término medio', precio: 0 },
-                { id: 'tres_cuartos', nombre: 'Tres cuartos', precio: 0 },
-                { id: 'bien_cocida', nombre: 'Bien cocida', precio: 0 }
-              ]
-            },
-            {
-              id: 'extras',
-              nombre: 'Agrega Extras',
-              requerido: false,
-              multiple: true,
-              opciones: [
-                { id: 'huevo', nombre: 'Huevo frito', precio: 1000 },
-                { id: 'tocino', nombre: 'Doble tocino', precio: 1500 },
-                { id: 'papas', nombre: 'Papas rústicas', precio: 2000 }
-              ]
-            }
-          ]
-        },
-        {
-          id: 4,
-          nombre: 'Plato 4 ',
-          descripcion: 'Descripción.',
-          categoria: 'principal',
-          precio: 18500
-        },
-        {
-          id: 5,
-          nombre: 'Plato 5 ',
-          descripcion: 'Descripción.',
-          categoria: 'principal',
-          precio: 21000
-        },
-        {
-          id: 6,
-          nombre: 'Plato 6 ',
-          descripcion: 'Descripción.',
-          categoria: 'principal',
-          precio: 14800
-        },
-        {
-          id: 7,
-          nombre: 'Plato 7 ',
-          descripcion: 'Descripción.',
-          categoria: 'postre',
-          precio: 6500
-        },
-        {
-          id: 8,
-          nombre: 'Plato 8 ',
-          descripcion: 'Descripción.',
-          categoria: 'postre',
-          precio: 7800
-        },
-        {
-          id: 9,
-          nombre: 'Plato 9 ',
-          descripcion: 'Descripción.',
-          categoria: 'bebida',
-          precio: 4500
-        },
-        {
-          id: 10,
-          nombre: 'Plato 10 ',
-          descripcion: 'Descripción.',
-          categoria: 'bebida',
-          precio: 5200
-        }
-      ];
+      let menuData = [];
 
       /* ====================================================
          CATEGORY ICONS
       ==================================================== */
       const categoryIcons = {
-        entrada: '🥗',
-        principal: '🥩',
-        postre: '🍰',
-        bebida: '🍷'
-      };
+  "Pastas": "🍝",
+  "Pescados": "🐟",
+  "Sopas & Cremas": "🍲",
+  "Ensaladas & Frescos": "🥗",
+  "Postres": "🍰"
+};
 
       const categoryLabels = {
-        entrada: 'Entradas',
-        principal: 'Platos Principales',
-        postre: 'Postres',
-        bebida: 'Bebidas'
-      };
+  "Pastas": "Pastas",
+  "Pescados": "Pescados",
+  "Sopas & Cremas": "Sopas & Cremas",
+  "Ensaladas & Frescos": "Ensaladas & Frescos",
+  "Postres": "Postres"
+};
 
       /* ====================================================
          FORMAT PRICE — Chilean peso format
@@ -327,6 +241,40 @@
       function formatPrecio(valor) {
         return '$' + Number(valor).toLocaleString('es-CL');
       }
+/* ====================================================
+   MENU FROM API
+==================================================== */
+      async function cargarMenu() {
+  try {
+    const response = await fetch(`${URL_PLATOS}?disponible=true`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const json = await response.json();
+
+    if (!json.success || !Array.isArray(json.data)) {
+      throw new Error("Respuesta inesperada");
+    }
+
+    menuData = json.data;
+
+    renderMenu(activeFilter);
+
+  } catch (error) {
+    console.error("Error cargando menú:", error);
+
+    container.innerHTML = `
+      <div class="menu-empty">
+        <div class="menu-empty__icon">⚠️</div>
+        <p class="menu-empty__text">
+          No se pudieron cargar los platos.
+        </p>
+      </div>
+    `;
+  }
+}
 
       /* ====================================================
          RENDER MENU ITEMS
@@ -355,7 +303,7 @@
 
         // Group by category if showing "all"
         if (filter === 'all') {
-          const categories = ['entrada', 'principal', 'postre', 'bebida'];
+          const categories = [...new Set(menuData.map(item => item.categoria))];
           let globalIndex = 1;
 
           categories.forEach(cat => {
@@ -429,8 +377,7 @@
       /* ====================================================
          INITIAL RENDER
       ==================================================== */
-      renderMenu('all');
-
+      cargarMenu();
       /* ====================================================
          EVENT DELEGATION FOR MODAL (US-H1.3)
       ==================================================== */
