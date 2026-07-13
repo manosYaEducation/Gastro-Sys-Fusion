@@ -136,8 +136,15 @@
         <div id="modal-modifiers-container"></div>
         <div class="custom-modal__notes-group">
           <label for="modal-notes" class="custom-modal__label">Instrucciones especiales</label>
-          <textarea id="modal-notes" class="custom-modal__textarea"
-                    placeholder="Ej: Sin cebolla, aderezo aparte..." rows="3"></textarea>
+        <textarea id="modal-notes"
+            class="custom-modal__textarea"
+            maxlength="250"
+            placeholder="Ej: Sin cebolla, aderezo aparte..."
+            rows="3"></textarea>
+
+               <small id="modal-notes-counter" class="custom-modal__counter">
+                250 caracteres restantes
+                  </small>
         </div>
       </div>
 
