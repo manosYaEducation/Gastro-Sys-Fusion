@@ -52,8 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = clone.querySelector('.order-card');
 
         // Datos básicos
-        const idEl = clone.querySelector('.order-id');
-        idEl.textContent = `#${order.id}`;
+         const idEl = clone.querySelector('.order-id');
+
+    let displayId = order.id;
+
+    if (order._local && typeof order.id === "string") {
+        displayId = `LOCAL-${order.id.replace("LOCAL-", "").slice(-6)}`;
+    }
+
+    idEl.textContent = `#${displayId}`;
 
         // Badge LOCAL para pedidos que vienen del carrito (sin API)
         if (order._local) {
