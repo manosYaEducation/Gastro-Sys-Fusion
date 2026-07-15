@@ -186,6 +186,25 @@ if ($method === 'POST') {
             if ($cantidad <= 0)       respuestaError('cantidad debe ser mayor a 0.', 422);
             if ($precioUnitario < 0)  respuestaError('precio_unitario no puede ser negativo.', 422);
 
+            // Validar fecha (no futura, no anterior a 5 años)
+            if ($fecha === '') {
+                respuestaError('fecha es requerida.', 422);
+            }
+            try {
+                $fechaObj = new DateTime($fecha);
+                $hoyObj = new DateTime('today');
+                $hace5Anios = (new DateTime('today'))->modify('-5 years');
+
+                if ($fechaObj > $hoyObj) {
+                    respuestaError('La fecha no puede ser futura.', 422);
+                }
+                if ($fechaObj < $hace5Anios) {
+                    respuestaError('La fecha no puede ser anterior a 5 años.', 422);
+                }
+            } catch (Exception $e) {
+                respuestaError('Formato de fecha inválido.', 422);
+            }
+
             $total = $cantidad * $precioUnitario;
             $sql = "
                 INSERT INTO ordenes_compra
