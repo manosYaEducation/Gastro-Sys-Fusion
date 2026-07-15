@@ -102,9 +102,16 @@ if ($method === 'PUT') {
         $email     = sanitizeStr($body['email'] ?? '');
         $direccion = sanitizeStr($body['direccion'] ?? '', 500);
         $ruc       = sanitizeStr($body['ruc'] ?? '');
+        $insumoId  = (int) ($body['insumo_id'] ?? 0);
 
         if ($id <= 0)          respuestaError('id es requerido.', 422);
         if ($nombre === '')    respuestaError('nombre es requerido.', 422);
+        if ($contacto === '')  respuestaError('contacto es requerido.', 422);
+        if ($telefono === '')  respuestaError('telefono es requerido.', 422);
+        if ($email === '')     respuestaError('email es requerido.', 422);
+        if ($direccion === '') respuestaError('direccion es requerido.', 422);
+        if ($ruc === '')       respuestaError('ruc es requerido.', 422);
+        if ($insumoId <= 0)    respuestaError('insumo_id es requerido.', 422);
 
         $sql = "
             UPDATE proveedores
@@ -208,8 +215,15 @@ if ($method === 'POST') {
         $email     = sanitizeStr($body['email'] ?? '');
         $direccion = sanitizeStr($body['direccion'] ?? '', 500);
         $ruc       = sanitizeStr($body['ruc'] ?? '');
+        $insumoId  = (int) ($body['insumo_id'] ?? 0);
 
-        if ($nombre === '') respuestaError('nombre es requerido.', 422);
+        if ($nombre === '')    respuestaError('nombre es requerido.', 422);
+        if ($contacto === '')  respuestaError('contacto es requerido.', 422);
+        if ($telefono === '')  respuestaError('telefono es requerido.', 422);
+        if ($email === '')     respuestaError('email es requerido.', 422);
+        if ($direccion === '') respuestaError('direccion es requerido.', 422);
+        if ($ruc === '')       respuestaError('ruc es requerido.', 422);
+        if ($insumoId <= 0)    respuestaError('insumo_id es requerido.', 422);
 
         $sql = "
             INSERT INTO proveedores (nombre, contacto, telefono, email, direccion, ruc, creado_en, actualizado_en)

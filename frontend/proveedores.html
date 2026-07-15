@@ -263,44 +263,56 @@
 
         <div class="prv-form__row">
           <div class="prv-form__group">
-            <label class="prv-form__label" for="prv-contacto">Persona de contacto</label>
-            <input class="prv-form__input" type="text" id="prv-contacto" placeholder="Ej: Juan Pérez" />
+            <label class="prv-form__label" for="prv-contacto">
+              Persona de contacto <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="text" id="prv-contacto" placeholder="Ej: Juan Pérez" required />
+            <span class="prv-form__hint" id="prv-contacto-hint" aria-live="polite"></span>
           </div>
           <div class="prv-form__group">
-            <label class="prv-form__label" for="prv-telefono">Teléfono</label>
-            <input class="prv-form__input" type="tel" id="prv-telefono" placeholder="Ej: +51 999 888 777" />
+            <label class="prv-form__label" for="prv-telefono">
+              Teléfono <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="tel" id="prv-telefono" placeholder="Ej: +51 999 888 777" required />
+            <span class="prv-form__hint" id="prv-telefono-hint" aria-live="polite"></span>
           </div>
         </div>
 
         <div class="prv-form__row">
           <div class="prv-form__group">
-            <label class="prv-form__label" for="prv-email">Email</label>
-            <input class="prv-form__input" type="email" id="prv-email" placeholder="proveedor@empresa.com" />
+            <label class="prv-form__label" for="prv-email">
+              Email <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="email" id="prv-email" placeholder="proveedor@empresa.com" required />
+            <span class="prv-form__hint" id="prv-email-hint" aria-live="polite"></span>
           </div>
           <div class="prv-form__group">
-            <label class="prv-form__label" for="prv-ruc">RUC / NIT</label>
-            <input class="prv-form__input" type="text" id="prv-ruc" placeholder="Ej: 20123456789" />
+            <label class="prv-form__label" for="prv-ruc">
+              RUC / NIT <span class="prv-required" aria-hidden="true">*</span>
+            </label>
+            <input class="prv-form__input" type="text" id="prv-ruc" placeholder="Ej: 20123456789" required />
+            <span class="prv-form__hint" id="prv-ruc-hint" aria-live="polite"></span>
           </div>
         </div>
 
         <div class="prv-form__group prv-form__group--full">
-          <label class="prv-form__label" for="prv-direccion">Dirección</label>
+          <label class="prv-form__label" for="prv-direccion">
+            Dirección <span class="prv-required" aria-hidden="true">*</span>
+          </label>
           <textarea class="prv-form__textarea" id="prv-direccion" rows="2"
-            placeholder="Av. Los Industriales 450, Lima"></textarea>
+            placeholder="Av. Los Industriales 450, Lima" required></textarea>
+          <span class="prv-form__hint" id="prv-direccion-hint" aria-live="polite"></span>
         </div>
 
         <!-- Asociación insumo principal -->
         <div class="prv-form__group prv-form__group--full">
           <label class="prv-form__label" for="prv-insumo-principal">
-            Insumo principal asociado
+            Insumo principal asociado <span class="prv-required" aria-hidden="true">*</span>
           </label>
-          <select class="prv-form__select" id="prv-insumo-principal">
-            <option value="">— Sin asignar —</option>
+          <select class="prv-form__select" id="prv-insumo-principal" required>
+            <option value="">— Selecciona un insumo —</option>
           </select>
-          <span class="prv-form__hint" style="color:var(--color-text-muted)">
-            Al guardar, este insumo quedará vinculado a este proveedor como su fuente principal.
-            Un proveedor puede tener varios insumos; selecciona uno por vez.
-          </span>
+          <span class="prv-form__hint" id="prv-insumo-principal-hint" aria-live="polite"></span>
         </div>
 
         <div class="prv-form__footer">
