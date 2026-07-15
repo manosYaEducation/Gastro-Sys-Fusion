@@ -149,6 +149,7 @@ function poblarSelectInsumos(insumos) {
     opt.value       = ins.id;
     opt.textContent = ins.nombre;
     opt.dataset.unidad = ins.unidad_medida ?? ins.unidad ?? 'unid.';
+    opt.dataset.stock = ins.stock_actual ?? 0;
     el.selInsumo.appendChild(opt);
   });
 }
@@ -409,6 +410,15 @@ function validarForm() {
   if (!el.inputCantidad.value || isNaN(cant) || cant <= 0) {
     el.hintCantidad.textContent = 'Ingresa una cantidad mayor a 0.';
     ok = false;
+  } else {
+    const optSel = el.selInsumo.options[el.selInsumo.selectedIndex];
+    if (optSel && optSel.value) {
+      const stockDisponible = parseFloat(optSel.dataset.stock) || 0;
+      if (cant > stockDisponible) {
+        el.hintCantidad.textContent = `La cantidad no puede superar el stock disponible (${stockDisponible} ${optSel.dataset.unidad ?? ''}).`;
+        ok = false;
+      }
+    }
   }
 
   if (!el.selMotivo.value) {

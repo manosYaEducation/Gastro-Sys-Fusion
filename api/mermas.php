@@ -56,12 +56,31 @@ if ($method === 'POST') {
             try {
                 $fechaObj = new DateTime($fecha);
                 $hoyObj = new DateTime('today');
+
                 if ($fechaObj > $hoyObj) {
                     respuestaError('La fecha de la merma no puede ser futura.', 422);
                 }
             } catch (Exception $e) {
                 respuestaError('Formato de fecha de la merma es inválido.', 422);
             }
+        }
+
+        // Validar contra stock disponible
+        $stmtStock = $conn->prepare("SELECT stock_actual, nombre, unidad_medida FROM inv_insumos WHERE id = :id");
+        $stmtStock->execute([':id' => $insumoId]);
+        $insumoDb = $stmtStock->fetch(PDO::FETCH_ASSOC);
+
+        if (!$insumoDb) {
+            respuestaError('El insumo especificado no existe.', 422);
+        }
+
+        $stockActual = (float)$insumoDb['stock_actual'];
+
+        if ($cantidad > $stockActual) {
+            respuestaError(
+                "La cantidad de merma ({$cantidad}) supera el stock disponible ({$stockActual} {$insumoDb['unidad_medida']}).",
+                422
+            );
         }
 
         // Insertar en la tabla mermas
