@@ -135,6 +135,7 @@ function modoMas(arr) {
 function setFechaHoy() {
   const hoy = new Date().toISOString().slice(0, 10);
   el.inputFecha.value = hoy;
+  el.inputFecha.setAttribute('max', hoy);
 }
 
 /* ============================================================
@@ -388,6 +389,11 @@ async function cargarInsumosSelect() {
    ============================================================ */
 function limpiarHints() {
   [el.hintInsumo, el.hintCantidad, el.hintMotivo].forEach(h => (h.textContent = ''));
+  const fechaHint = document.getElementById('mrm-fecha-hint');
+  if (fechaHint) {
+    fechaHint.textContent = 'Por defecto: hoy';
+    fechaHint.style.color = '';
+  }
 }
 
 function validarForm() {
@@ -408,6 +414,21 @@ function validarForm() {
   if (!el.selMotivo.value) {
     el.hintMotivo.textContent = 'Selecciona el motivo de la merma.';
     ok = false;
+  }
+
+  const fechaVal = el.inputFecha.value;
+  if (fechaVal) {
+    const dateVal = new Date(fechaVal + 'T00:00:00');
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (dateVal > today) {
+      const fechaHint = document.getElementById('mrm-fecha-hint');
+      if (fechaHint) {
+        fechaHint.textContent = 'La fecha no puede ser futura.';
+        fechaHint.style.color = 'var(--mrm-danger-lt)';
+      }
+      ok = false;
+    }
   }
 
   return ok;
