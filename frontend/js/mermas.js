@@ -496,14 +496,18 @@ async function manejarSubmit(e) {
 
   const optSel       = el.selInsumo.options[el.selInsumo.selectedIndex];
   const insumoNombre = optSel?.text ?? '';
-
+  const editando = el.id.value;
   const payload = {
-    insumo_id:     parseInt(el.selInsumo.value, 10),
-    cantidad:      parseFloat(el.inputCantidad.value),
-    motivo:        el.selMotivo.value,
-    fecha:         el.inputFecha.value || new Date().toISOString().slice(0, 10),
+    id: editando ? parseInt(editando,10) : null,
+    insumo_id: parseInt(el.selInsumo.value, 10),
+    cantidad: parseFloat(el.inputCantidad.value),
+    motivo: el.selMotivo.value,
+    fecha: el.inputFecha.value || new Date().toISOString().slice(0,10),
     observaciones: el.textarea.value.trim(),
-  };
+};
+
+  
+  const metodo = editando ? 'PUT' : 'POST';
 
   el.btnSubmit.disabled = true;
   el.btnSubmit.querySelector('.mrm-btn-submit__text').textContent = 'Registrando…';
@@ -514,11 +518,13 @@ async function manejarSubmit(e) {
     if (apiUrl) {
       let r;
       try {
-        r = await fetch(apiUrl, {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(payload),
-        });
+        r = await fetch(apiUrl,
+  {
+    method: metodo,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }
+);
       } catch (netErr) {
         // Sin conexión — caemos al update optimista sin error visible
         console.warn('[mermas.js] API no accesible, registro local:', netErr.message);
@@ -540,25 +546,67 @@ async function manejarSubmit(e) {
     }
 
     // ── Update optimista local ─────────────────────────────────────────────
-    const nuevaMerma = {
-      id:       Date.now(),
-      insumo:   insumoNombre,
-      cantidad: payload.cantidad,
-      unidad:   optSel?.dataset?.unidad ?? '',
-      motivo:   payload.motivo,
-      fecha:    payload.fecha,
-    };
+    if (editando) {
 
-    historialData.unshift(nuevaMerma);
-    if (historialData.length > 10) historialData.pop();
+    const index = historialData.findIndex(
+        m => m.id == editando
+    );
+
+    if (index !== -1) {
+
+        historialData[index] = {
+            ...historialData[index],
+            insumo_id: payload.insumo_id,
+            insumo: insumoNombre,
+            cantidad: payload.cantidad,
+            unidad: optSel?.dataset?.unidad ?? '',
+            motivo: payload.motivo,
+            fecha: payload.fecha,
+            observaciones: payload.observaciones
+        };
+
+    }
+
+} else {
+
+    historialData.unshift({
+        id: Date.now(),
+        insumo_id: payload.insumo_id,
+        insumo: insumoNombre,
+        cantidad: payload.cantidad,
+        unidad: optSel?.dataset?.unidad ?? '',
+        motivo: payload.motivo,
+        fecha: payload.fecha,
+        observaciones: payload.observaciones
+    });
+
+    if (historialData.length > 10) {
+        historialData.pop();
+    }
+
+}
 
     renderHistorial(historialData);
     mostrarHistorial('table');
     actualizarStats(historialData);
 
-    mostrarToast(`Merma de "${insumoNombre}" registrada correctamente.`, 'ok');
+    mostrarToast(
+    editando
+        ? `Merma de "${insumoNombre}" modificada correctamente.`
+        : `Merma de "${insumoNombre}" registrada correctamente.`,
+    'ok'
+);
     el.form.reset();
     setFechaHoy();
+    el.id.value = "";
+
+el.btnSubmit
+    .querySelector(".mrm-btn-submit__text")
+    .textContent = "Registrar Merma";
+
+    document.getElementById('mrm-form-title').innerHTML =
+    '<span aria-hidden="true">📝</span> Registrar Merma Manual';
+
     el.unitBadge.textContent = 'unid.';
     limpiarHints();
     el.charcount.textContent = '0 / 500';
@@ -598,12 +646,17 @@ function editarMerma(id) {
     }
 
     el.btnSubmit
-        .querySelector('.mrm-btn-submit__text')
-        .textContent = "Modificar Merma";
+    .querySelector('.mrm-btn-submit__text')
+    .textContent = "Modificar Merma";
+
+    document.getElementById('mrm-form-title').innerHTML =
+    '<span aria-hidden="true">✏️</span> Modificar Merma';
+
+    const section = document.querySelector('.mrm-form-section');
 
     window.scrollTo({
-        top: document.querySelector('#mrm-form').offsetTop,
-        behavior: 'smooth'
+    top: section.offsetTop - 80, 
+    behavior: 'smooth'
     });
 
 }
@@ -734,6 +787,14 @@ el.form.addEventListener('reset', () => {
     el.charcount.textContent = '0 / 500';
     setFechaHoy();
     el.toast.hidden = true;
+    el.id.value = "";
+
+    el.btnSubmit
+      .querySelector('.mrm-btn-submit__text')
+      .textContent = 'Registrar Merma';
+
+    document.getElementById('mrm-form-title').innerHTML =
+      '<span aria-hidden="true">📝</span> Registrar Merma Manual';
   }, 0);
 });
 
