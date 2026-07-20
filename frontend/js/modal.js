@@ -12,13 +12,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const priceEl = document.getElementById('modal-total-price');
   const modifiersContainer = document.getElementById('modal-modifiers-container');
   const notesEl = document.getElementById('modal-notes');
+  const notesCounterEl = document.getElementById('modal-notes-counter');
+  const notesCounter = document.getElementById('modal-notes-counter');
+  const MAX_NOTES = 250;
 
   let currentDish = null;
   
-  // Format price helper
+  
   function formatMoney(value) {
     return '$' + Number(value).toLocaleString('es-CL');
   }
+/**
+ * caracter limit
+ */
+ function updateNotesCounter() {
+  const max = notesEl.maxLength;
+  const remaining = max - notesEl.value.length;
+
+  notesCounterEl.textContent = remaining;
+
+  if (remaining <= 20) {
+    notesCounterEl.style.color = '#dc3545'; // rojo
+  } else if (remaining <= 50) {
+    notesCounterEl.style.color = '#fd7e14'; // naranja
+  } else {
+    notesCounterEl.style.color = '';
+  }
+}
 
   // Calculate and update total price
   function updatePrice() {
@@ -43,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     titleEl.textContent = dishData.nombre;
     descEl.textContent = dishData.descripcion;
     notesEl.value = '';
+    updateNotesCounter();
+
     
     // Clear old modifiers
     modifiersContainer.innerHTML = '';
@@ -118,7 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal();
     }
   });
-
+if (notesEl) {
+  notesEl.addEventListener('input', updateNotesCounter);
+}
   // Add to Cart
   if (addBtn) {
     addBtn.addEventListener('click', () => {
