@@ -190,23 +190,38 @@ if (notesEl) {
       console.log('✅ PLATO LISTO PARA EL CARRITO (US-1.2):');
       console.log(JSON.stringify(cartItem, null, 2));
 
-      // Guardar en localStorage y disparar evento custom para el widget de carrito
-      try {
-        const currentCart = JSON.parse(localStorage.getItem('gastro_cart') || '[]');
+// Guardar en localStorage y preguntar si se reemplaza o acumula el pedido
+try {
+  let currentCart = JSON.parse(localStorage.getItem('gastro_cart') || '[]');
 
-        currentCart.push(cartItem);
+  if (currentCart.length > 0) {
+    const reemplazar = confirm(
+      'Ya existen productos en tu carrito.\n\n' +
+      '¿Deseas reemplazar el pedido actual?\n\n' +
+      'Aceptar = Reemplazar\n' +
+      'Cancelar = Acumular'
+    );
 
-        // Guardar carrito y marca de tiempo
-        localStorage.setItem('gastro_cart', JSON.stringify(currentCart));
-        localStorage.setItem('gastro_cart_timestamp', Date.now());
+    if (reemplazar) {
+      currentCart = [cartItem];
+    } else {
+      currentCart.push(cartItem);
+    }
+  } else {
+    currentCart.push(cartItem);
+  }
 
-        window.dispatchEvent(new CustomEvent('cart-updated'));
-        window.dispatchEvent(new CustomEvent('cart-updated'));
-      } catch (e) {
-        console.error('Error al guardar en el carrito:', e);
-      }
+  // Guardar carrito y marca de tiempo
+  localStorage.setItem('gastro_cart', JSON.stringify(currentCart));
+  localStorage.setItem('gastro_cart_timestamp', Date.now());
+
+  // Notificar al widget del carrito
+  window.dispatchEvent(new CustomEvent('cart-updated'));
+
+} catch (e) {
+  console.error('Error al guardar en el carrito:', e);
+}
       
-      // Provide some visual feedback
       const originalText = addBtn.innerHTML;
       addBtn.innerHTML = '¡Agregado! ✓';
       addBtn.style.background = '#4CAF50';
@@ -214,7 +229,7 @@ if (notesEl) {
       
       setTimeout(() => {
         closeModal();
-        // Reset button style
+       
         setTimeout(() => {
           addBtn.innerHTML = originalText;
           addBtn.style.background = '';
