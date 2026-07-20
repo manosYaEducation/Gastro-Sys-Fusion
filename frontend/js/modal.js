@@ -169,8 +169,14 @@ document.addEventListener('DOMContentLoaded', () => {
       // Guardar en localStorage y disparar evento custom para el widget de carrito
       try {
         const currentCart = JSON.parse(localStorage.getItem('gastro_cart') || '[]');
+
         currentCart.push(cartItem);
+
+        // Guardar carrito y marca de tiempo
         localStorage.setItem('gastro_cart', JSON.stringify(currentCart));
+        localStorage.setItem('gastro_cart_timestamp', Date.now());
+
+        window.dispatchEvent(new CustomEvent('cart-updated'));
         window.dispatchEvent(new CustomEvent('cart-updated'));
       } catch (e) {
         console.error('Error al guardar en el carrito:', e);
