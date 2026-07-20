@@ -78,6 +78,7 @@ const el = {
 
   // Formulario
   form:         $('mrm-form'),
+  id:           $('mrm-id'),
   selInsumo:    $('mrm-insumo'),
   inputCantidad:$('mrm-cantidad'),
   unitBadge:    $('mrm-unidad-display'),
@@ -261,20 +262,49 @@ function renderHistorial(mermas) {
   mermas.forEach((m, i) => {
     const tr = document.createElement('tr');
     tr.className = 'mrm-tr';
+
     tr.innerHTML = `
-      <td class="mrm-td mrm-td--id">${String(i + 1).padStart(2, '0')}</td>
-      <td class="mrm-td mrm-td--nombre">${escHtml(m.insumo ?? m.nombre_insumo ?? '—')}</td>
-      <td class="mrm-td mrm-td--cantidad">${parseFloat(m.cantidad).toLocaleString('es-CL', { maximumFractionDigits: 2 })} ${escHtml(m.unidad ?? m.unidad_medida ?? '')}</td>
-      <td class="mrm-td">
-        <span class="mrm-motivo-badge">${escHtml(MOTIVOS[m.motivo] ?? m.motivo ?? '—')}</span>
+      <td class="mrm-td mrm-td--id">
+        ${String(i + 1).padStart(2, '0')}
       </td>
-      <td class="mrm-td mrm-td--center">${escHtml(formatFecha(m.fecha))}</td>
+
+      <td class="mrm-td mrm-td--nombre">
+        ${escHtml(m.insumo ?? m.nombre_insumo ?? '—')}
+      </td>
+
+      <td class="mrm-td mrm-td--cantidad">
+        ${parseFloat(m.cantidad).toLocaleString('es-CL', {
+          maximumFractionDigits: 2
+        })} ${escHtml(m.unidad ?? m.unidad_medida ?? '')}
+      </td>
+
+      <td class="mrm-td">
+        <span class="mrm-motivo-badge">
+          ${escHtml(MOTIVOS[m.motivo] ?? m.motivo ?? '—')}
+        </span>
+      </td>
+
       <td class="mrm-td mrm-td--center">
-        <button class="mrm-btn-delete" data-id="${m.id}" aria-label="Eliminar merma de ${escHtml(m.insumo ?? m.nombre_insumo ?? '—')}">
+        ${escHtml(formatFecha(m.fecha))}
+      </td>
+
+      <td class="mrm-td mrm-td--center">
+        <button
+          class="mrm-btn-edit"
+          data-id="${m.id}"
+          aria-label="Modificar merma de ${escHtml(m.insumo ?? m.nombre_insumo ?? '—')}">
+          ✏️ Modificar
+        </button>
+
+        <button
+          class="mrm-btn-delete"
+          data-id="${m.id}"
+          aria-label="Eliminar merma de ${escHtml(m.insumo ?? m.nombre_insumo ?? '—')}">
           🗑️ Eliminar
         </button>
       </td>
     `;
+
     el.histTbody.appendChild(tr);
   });
 }
@@ -541,6 +571,44 @@ async function manejarSubmit(e) {
   }
 }
 
+
+/* ============================================================
+   EDITAR MERMA
+   ============================================================ */
+function editarMerma(id) {
+
+    const merma = historialData.find(m => m.id === id);
+
+    if (!merma) return;
+
+    el.id.value = merma.id;
+
+    el.selInsumo.value = merma.insumo_id;
+
+    el.inputCantidad.value = merma.cantidad;
+
+    el.selMotivo.value = merma.motivo;
+
+    el.inputFecha.value = merma.fecha;
+
+    const option = el.selInsumo.selectedOptions[0];
+
+    if (option) {
+        el.unitBadge.textContent = option.dataset.unidad;
+    }
+
+    el.btnSubmit
+        .querySelector('.mrm-btn-submit__text')
+        .textContent = "Modificar Merma";
+
+    window.scrollTo({
+        top: document.querySelector('#mrm-form').offsetTop,
+        behavior: 'smooth'
+    });
+
+}
+
+
 /* ============================================================
    ELIMINAR MERMA (DELETE /api/mermas.php?id=...)
    ============================================================ */
@@ -596,14 +664,34 @@ async function eliminarMerma(id, insumoNombre) {
 /* ============================================================
    EVENTOS
    ============================================================ */
-// Click en botón eliminar (delegación)
+// Click en botón eliminar o modificar (delegación)
 el.histTbody.addEventListener('click', (e) => {
-  const btn = e.target.closest('.mrm-btn-delete');
-  if (!btn) return;
-  const id = parseInt(btn.dataset.id, 10);
-  const item = historialData.find(m => m.id === id);
-  const nombre = item ? (item.insumo ?? item.nombre_insumo ?? '') : '';
-  eliminarMerma(id, nombre);
+
+  const editBtn = e.target.closest('.mrm-btn-edit');
+  const deleteBtn = e.target.closest('.mrm-btn-delete');
+
+  if (editBtn) {
+
+    const id = parseInt(editBtn.dataset.id);
+    editarMerma(id);
+
+    return;
+  }
+
+  if (deleteBtn) {
+
+    const id = parseInt(deleteBtn.dataset.id);
+
+    const item = historialData.find(
+      m => m.id === id
+    );
+
+    const nombre = item ? item.insumo : '';
+
+    eliminarMerma(id, nombre);
+
+  }
+
 });
 // Reload gráfico
 el.btnReload.addEventListener('click', () => {
