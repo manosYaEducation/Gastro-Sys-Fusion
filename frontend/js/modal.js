@@ -194,28 +194,33 @@ if (notesEl) {
 try {
   let currentCart = JSON.parse(localStorage.getItem('gastro_cart') || '[]');
 
-  if (currentCart.length > 0) {
+  // Buscar si el mismo plato ya existe en el carrito
+  const existingIndex = currentCart.findIndex(
+    item => item.plato_id === cartItem.plato_id
+  );
+
+  if (existingIndex !== -1) {
     const reemplazar = confirm(
-      'Ya existen productos en tu carrito.\n\n' +
-      '¿Deseas reemplazar el pedido actual?\n\n' +
+      'Este plato ya existe en tu carrito.\n\n' +
+      '¿Deseas reemplazarlo?\n\n' +
       'Aceptar = Reemplazar\n' +
-      'Cancelar = Acumular'
+      'Cancelar = Agregar otro'
     );
 
     if (reemplazar) {
-      currentCart = [cartItem];
+      // Solo reemplaza ese plato
+      currentCart[existingIndex] = cartItem;
     } else {
       currentCart.push(cartItem);
     }
   } else {
+    // Es un plato distinto, simplemente agregar
     currentCart.push(cartItem);
   }
 
-  // Guardar carrito y marca de tiempo
   localStorage.setItem('gastro_cart', JSON.stringify(currentCart));
   localStorage.setItem('gastro_cart_timestamp', Date.now());
 
-  // Notificar al widget del carrito
   window.dispatchEvent(new CustomEvent('cart-updated'));
 
 } catch (e) {

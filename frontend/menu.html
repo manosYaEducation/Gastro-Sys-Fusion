@@ -162,15 +162,28 @@
         </div>
       </div>
 
-      <div class="custom-modal__body">
-        <div id="modal-modifiers-container"></div>
+<div class="custom-modal__body">
 
-        <div class="custom-modal__notes-group">
-          <label for="modal-notes" class="custom-modal__label">Instrucciones especiales</label>
-          <textarea id="modal-notes" class="custom-modal__textarea" placeholder="Ej: Sin cebolla, aderezo aparte..."
-            rows="3"></textarea>
+    <div id="modal-modifiers-container"></div>
+
+    <div class="custom-modal__notes-group">
+        <label for="modal-notes" class="custom-modal__label">
+            Instrucciones especiales
+        </label>
+
+        <textarea
+            id="modal-notes"
+            class="custom-modal__textarea"
+            rows="3"
+            maxlength="250"
+            placeholder="Ej: Sin cebolla, aderezo aparte..."></textarea>
+
+        <div class="custom-modal__notes-counter">
+            <span id="modal-notes-counter">250</span> caracteres restantes
         </div>
-      </div>
+    </div>
+
+</div>
 
       <div class="custom-modal__footer">
         <div class="custom-modal__price-wrapper">
